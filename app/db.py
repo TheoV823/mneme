@@ -1,8 +1,3 @@
-"""Database connection and schema initialization.
-
-Stub for Task 1 scaffolding. Full implementation in Task 2.
-"""
-
 import sqlite3
 import click
 from flask import current_app, g
@@ -10,11 +5,9 @@ from flask import current_app, g
 
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(
-            current_app.config["DATABASE"],
-            detect_types=sqlite3.PARSE_DECLTYPES,
-        )
+        g.db = sqlite3.connect(current_app.config["DATABASE"])
         g.db.row_factory = sqlite3.Row
+        g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
 
 
@@ -25,12 +18,12 @@ def close_db(e=None):
 
 
 def init_db():
-    """Initialize database from schema.sql. Full implementation in Task 2."""
-    pass
+    db = get_db()
+    with current_app.open_resource("../schema.sql") as f:
+        db.executescript(f.read().decode("utf-8"))
 
 
 @click.command("init-db")
 def init_db_command():
-    """Create database tables from schema.sql."""
     init_db()
     click.echo("Database initialized.")
