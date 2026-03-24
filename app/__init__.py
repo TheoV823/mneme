@@ -12,15 +12,20 @@ def create_app():
     app.cli.add_command(init_db_command)
 
     from app.cli import (add_user_command, add_prompt_command, run_benchmark_command,
-                         generate_assignments_command, report_command, seed_demo_command)
+                         generate_assignments_command, report_command, export_command,
+                         seed_demo_command)
     app.cli.add_command(add_user_command)
     app.cli.add_command(add_prompt_command)
     app.cli.add_command(run_benchmark_command)
     app.cli.add_command(generate_assignments_command)
     app.cli.add_command(report_command)
+    app.cli.add_command(export_command)
     app.cli.add_command(seed_demo_command)
 
     from app.web.scoring_views import scoring
     app.register_blueprint(scoring)
+
+    from app.web.dashboard_views import dashboard
+    app.register_blueprint(dashboard)
 
     return app

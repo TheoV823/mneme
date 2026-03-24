@@ -122,6 +122,30 @@ def report_command(batch_id, scorer_type):
     click.echo()
 
 
+@click.command("export")
+@click.option("--batch-id", required=True)
+@click.option("--format", "fmt", type=click.Choice(["csv", "json"]), default="csv")
+@click.option("--output", "output_path", default=None)
+@with_appcontext
+def export_command(batch_id, fmt, output_path):
+    from app.reporting.export import export_csv, export_json
+    db = get_db()
+    unblinded = unblind_scores(db, batch_id=batch_id)
+
+    if fmt == "csv":
+        content = export_csv(unblinded)
+    else:
+        v = compute_verdict(unblinded)
+        content = export_json(unblinded, v)
+
+    if output_path:
+        with open(output_path, "w") as f:
+            f.write(content)
+        click.echo(f"Exported to {output_path}")
+    else:
+        click.echo(content)
+
+
 @click.command("seed-demo")
 @with_appcontext
 def seed_demo_command():

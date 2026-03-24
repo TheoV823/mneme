@@ -135,3 +135,70 @@ textarea {
 }
 
 .actions { display: flex; gap: 0.5rem; }
+
+/* Dashboard */
+.dashboard-header { margin-bottom: 2rem; }
+.dashboard-header h1 { margin-bottom: 0.25rem; }
+.dashboard-header .meta { color: #6b7280; font-size: 0.9rem; }
+
+.batch-list { list-style: none; margin-top: 1rem; }
+.batch-list li { margin-bottom: 0.5rem; }
+.batch-list a { color: #2563eb; text-decoration: none; font-weight: 600; }
+.batch-list a:hover { text-decoration: underline; }
+
+.verdict-card, .metric-card {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.verdict-card h2, .metric-card h3 { margin-bottom: 0.5rem; }
+.verdict-label {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+.verdict-signal-detected .verdict-label { background: #dcfce7; color: #166534; }
+.verdict-inconclusive .verdict-label { background: #fef9c3; color: #854d0e; }
+.verdict-no-signal .verdict-label { background: #fee2e2; color: #991b1b; }
+.verdict-no-data .verdict-label { background: #e5e7eb; color: #6b7280; }
+
+.verdict-stats { display: flex; gap: 1.5rem; font-size: 0.9rem; color: #374151; margin-bottom: 0.75rem; }
+
+.bar-container {
+    background: #e5e7eb;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+.bar { height: 100%; border-radius: 10px; }
+.bar-win { background: #22c55e; }
+.bar-secondary { background: #60a5fa; }
+
+.section {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.section h2 { margin-bottom: 0.75rem; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e5e7eb; }
+th { font-weight: 600; color: #6b7280; font-size: 0.8rem; text-transform: uppercase; }
+code { background: #f3f4f6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85rem; }
+
+.pattern { padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.8rem; font-weight: 600; }
+.pattern-dominant { background: #dcfce7; color: #166534; }
+.pattern-strong { background: #dbeafe; color: #1e40af; }
+.pattern-moderate { background: #fef9c3; color: #854d0e; }
+.pattern-weak { background: #f3f4f6; color: #6b7280; }
+.pattern-negative { background: #fee2e2; color: #991b1b; }
+
+.warning { color: #dc2626; font-weight: 600; }
