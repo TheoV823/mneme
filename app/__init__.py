@@ -1,6 +1,6 @@
 from flask import Flask
 from app.config import Config
-from app.db import init_db_command, get_db, close_db
+from app.db import init_db_command, close_db
 
 
 def create_app():
@@ -10,5 +10,10 @@ def create_app():
 
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
+    from app.cli import add_user_command, add_prompt_command, run_benchmark_command
+    app.cli.add_command(add_user_command)
+    app.cli.add_command(add_prompt_command)
+    app.cli.add_command(run_benchmark_command)
 
     return app

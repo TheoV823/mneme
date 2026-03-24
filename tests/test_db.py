@@ -1,29 +1,7 @@
-import os
-import tempfile
 import pytest
-from app import create_app
-from app.db import get_db, init_db
-
-
-@pytest.fixture
-def app():
-    db_fd, db_path = tempfile.mkstemp()
-    app = create_app()
-    app.config["DATABASE"] = db_path
-    app.config["TESTING"] = True
-
-    with app.app_context():
-        init_db()
-        yield app
-
-    os.close(db_fd)
-    os.unlink(db_path)
-
-
-@pytest.fixture
-def db(app):
-    with app.app_context():
-        yield get_db()
+from tests.conftest import *
+from app.utils.timestamps import now_iso
+import uuid
 
 
 def test_tables_exist(db):
@@ -40,9 +18,6 @@ def test_tables_exist(db):
 
 def test_runs_unique_constraint(db):
     """Cannot insert two runs with same (batch_id, user_id, prompt_id, model, protocol_version)."""
-    import uuid
-    from app.utils.timestamps import now_iso
-
     user_id = str(uuid.uuid4())
     prompt_id = str(uuid.uuid4())
 
@@ -87,9 +62,6 @@ def test_runs_unique_constraint(db):
 
 def test_score_check_constraints(db):
     """Score values must be 1-5."""
-    import uuid
-    from app.utils.timestamps import now_iso
-
     with pytest.raises(Exception):
         db.execute(
             "INSERT INTO scores (id, assignment_id, closeness_a, closeness_b, usefulness_a, usefulness_b, distinctiveness_a, distinctiveness_b, winner_closeness, winner_usefulness, winner_distinctiveness, preference, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
