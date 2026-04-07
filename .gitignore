@@ -10,6 +10,7 @@ build/
 # Environment
 .env
 .env.*
+!.env.example
 
 # Database
 *.db
@@ -26,3 +27,4 @@ Thumbs.db
 
 # Flask
 *.log
+.worktrees/
