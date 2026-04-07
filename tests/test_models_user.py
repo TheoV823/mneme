@@ -51,3 +51,38 @@ def test_insert_user_with_extra_context_type(db):
 def test_insert_user_extra_context_type_defaults_to_none(db):
     u = insert_user(db, name="Bob", mneme_profile="{}")
     assert u["extra_context_type"] is None
+
+
+def test_add_user_command_stores_extra_context_type(app, db, tmp_path):
+    """--extra-context-type is stored on the created user."""
+    from click.testing import CliRunner
+    from app.cli import add_user_command
+    from unittest.mock import patch
+    from app.models.user import list_users
+
+    profile_file = tmp_path / "profile.json"
+    profile_file.write_text('{"decision_style": "analytical"}')
+
+    extra_file = tmp_path / "notes.txt"
+    extra_file.write_text("I prefer async communication.")
+
+    fake_ec_signals = {
+        "decision_style": None, "risk_tolerance": None, "communication_style": None,
+        "prioritization_rules": [], "constraints": [], "anti_patterns": [],
+    }
+
+    runner = CliRunner()
+    with app.app_context():
+        with patch("app.cli.extract_extra_context_signals", return_value=fake_ec_signals):
+            result = runner.invoke(
+                add_user_command,
+                [str(profile_file), "--name", "Test",
+                 "--extra-context-path", str(extra_file),
+                 "--extra-context-type", "notes"],
+            )
+
+    assert result.exit_code == 0, result.output
+    with app.app_context():
+        users = list_users(db)
+    assert len(users) == 1
+    assert users[0]["extra_context_type"] == "notes"
