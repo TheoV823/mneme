@@ -8,6 +8,7 @@ from app.config import Config
 from app.models.user import insert_user, list_users, get_user
 from app.models.prompt import insert_prompt, get_prompts_for_user
 from app.runner.compare import run_comparison
+from app.models.comparison import insert_comparison
 from app.models.run import insert_run, list_runs
 from app.runner.engine import run_benchmark_for_user
 from app.scoring.assigner import generate_assignments
@@ -248,8 +249,6 @@ def seed_demo_command():
 @with_appcontext
 def compare_command(user_id, prompt_text):
     """Run a prompt against default AI and Mneme AI. Choose which output you prefer."""
-    from app.models.comparison import insert_comparison
-
     db = get_db()
     user = get_user(db, user_id)
     if not user:
@@ -279,11 +278,10 @@ def compare_command(user_id, prompt_text):
     click.echo(sep)
 
     valid = {"a", "b", "tie", "skip"}
-    choice = ""
-    while choice not in valid:
-        raw = click.prompt("Which is better? (A/B/tie/skip)").strip().lower()
-        if raw in valid:
-            choice = raw
+    while True:
+        choice = click.prompt("Which is better? (A/B/tie/skip)").strip().lower()
+        if choice in valid:
+            break
 
     # winner stored as lowercase: 'a', 'b', 'tie', 'skip'
     winner = choice
@@ -312,7 +310,7 @@ def compare_command(user_id, prompt_text):
 
 
 @click.command("compare-stats")
-@click.option("--user-id", required=True)
+@click.option("--user-id", required=False, default=None)
 @with_appcontext
 def compare_stats_command(user_id):
     """Show Mneme win rate for a user."""
