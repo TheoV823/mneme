@@ -128,3 +128,55 @@ def test_legacy_unknown_non_list_field_ignored():
 def test_legacy_empty_profile():
     signals = legacy_profile_to_signals({})
     assert signals == empty_source_signals()
+
+
+from unittest.mock import patch
+from app.profiles.extractors import extract_extra_context_signals
+
+
+def test_extract_extra_context_signals_valid_response():
+    claude_response = (
+        '{"decision_style": "intuitive", "risk_tolerance": "high", '
+        '"communication_style": "brief", '
+        '"prioritization_rules": ["outcomes over process"], '
+        '"constraints": ["budget < 10k"], "anti_patterns": ["endless debate"]}'
+    )
+    with patch("app.profiles.extractors._call_claude_for_extraction", return_value=claude_response):
+        signals = extract_extra_context_signals("some text", api_key="fake")
+
+    assert signals["decision_style"] == "intuitive"
+    assert signals["risk_tolerance"] == "high"
+    assert signals["prioritization_rules"] == ["outcomes over process"]
+    assert signals["constraints"] == ["budget < 10k"]
+    assert signals["anti_patterns"] == ["endless debate"]
+
+
+def test_extract_extra_context_signals_invalid_json_returns_empty():
+    with patch("app.profiles.extractors._call_claude_for_extraction", return_value="not json"):
+        signals = extract_extra_context_signals("some text", api_key="fake")
+    from app.profiles.signals import empty_source_signals
+    assert signals == empty_source_signals()
+
+
+def test_extract_extra_context_signals_api_failure_returns_empty():
+    with patch(
+        "app.profiles.extractors._call_claude_for_extraction",
+        side_effect=Exception("network error"),
+    ):
+        signals = extract_extra_context_signals("some text", api_key="fake")
+    from app.profiles.signals import empty_source_signals
+    assert signals == empty_source_signals()
+
+
+def test_extract_extra_context_signals_partial_response():
+    # Claude returns some fields null, some missing
+    claude_response = (
+        '{"decision_style": null, "risk_tolerance": "low", '
+        '"communication_style": null, '
+        '"prioritization_rules": [], "constraints": [], "anti_patterns": []}'
+    )
+    with patch("app.profiles.extractors._call_claude_for_extraction", return_value=claude_response):
+        signals = extract_extra_context_signals("some text", api_key="fake")
+    assert signals["decision_style"] is None
+    assert signals["risk_tolerance"] == "low"
+    assert signals["prioritization_rules"] == []
