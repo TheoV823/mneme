@@ -88,11 +88,14 @@ def test_extract_qa_signals_single_string_list_field():
 
 
 def test_extract_qa_signals_falls_back_to_legacy_for_unknown_keys():
-    qa = {"style": "analytical", "values": ["clarity", "precision"]}
+    # Neither "style" nor "tone" is in _QA_FIELD_MAP, so matched stays False
+    # and legacy_profile_to_signals() is called
+    qa = {"style": "analytical", "tone": "direct"}
     signals = extract_qa_signals(qa)
-    # Legacy adapter maps style -> decision_style, values -> prioritization_rules
+    # legacy_profile_to_signals maps "style" -> decision_style
     assert signals["decision_style"] == "analytical"
-    assert signals["prioritization_rules"] == ["clarity", "precision"]
+    # "tone" is an unrecognized scalar — not mapped to anything
+    assert signals["prioritization_rules"] == []
 
 
 def test_extract_qa_signals_empty_dict():
