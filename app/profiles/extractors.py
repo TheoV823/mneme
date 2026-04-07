@@ -1,6 +1,7 @@
 import json
 import logging
 from app.profiles.signals import empty_source_signals
+from app.runner.claude_client import call_claude
 
 logger = logging.getLogger(__name__)
 
@@ -99,14 +100,21 @@ _EXTRACTION_SYSTEM_PROMPT = (
     "No explanation. No markdown. JSON only."
 )
 
+_CONTEXT_TYPE_HINTS = {
+    "chat": "Focus on: tone, recurring trade-offs, and decision habits inferred from conversation patterns.",
+    "document": "Focus on: explicitly stated priorities, formal structure, and written constraints.",
+    "notes": "Focus on: heuristics, rules of thumb, and personal working-style principles.",
+}
 
-def _call_claude_for_extraction(text, api_key):
+
+def _call_claude_for_extraction(text, api_key, context_type=None):
     """Private: call Claude API to extract signals. Returns raw response string."""
-    from app.runner.claude_client import call_claude
+    hint = _CONTEXT_TYPE_HINTS.get(context_type, "")
+    system_prompt = _EXTRACTION_SYSTEM_PROMPT + (" " + hint if hint else "")
     result = call_claude(
         api_key=api_key,
         model=_EXTRACTION_MODEL,
-        system_prompt=_EXTRACTION_SYSTEM_PROMPT,
+        system_prompt=system_prompt,
         user_prompt=text,
         temperature=0,
         max_tokens=1024,
@@ -114,15 +122,17 @@ def _call_claude_for_extraction(text, api_key):
     return result["output"]
 
 
-def extract_extra_context_signals(text, api_key):
+def extract_extra_context_signals(text, api_key, context_type=None):
     """Extract signals from free-form extra context text via Claude API.
 
+    context_type: 'chat' | 'document' | 'notes' | None
+        When provided, appends a type-specific focus hint to the extraction prompt.
+        None uses the generic base prompt.
+
     Returns empty_source_signals() on any failure — never raises.
-    This is the narrow boundary for the Claude transport: swap _call_claude_for_extraction
-    to change models or providers without touching anything else.
     """
     try:
-        raw = _call_claude_for_extraction(text, api_key)
+        raw = _call_claude_for_extraction(text, api_key, context_type=context_type)
         parsed = json.loads(raw)
     except Exception as e:
         logger.warning("extract_extra_context_signals failed: %s", e)
