@@ -23,7 +23,6 @@ _QA_FIELD_MAP = {
 }
 
 _LIST_FIELDS = {"prioritization_rules", "constraints", "anti_patterns"}
-_SCALAR_FIELDS = {"decision_style", "risk_tolerance", "communication_style"}
 
 
 def extract_qa_signals(qa_input):

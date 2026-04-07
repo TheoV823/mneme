@@ -43,6 +43,9 @@ def add_user_command(profile_path, name, source, extra_context_path, extra_conte
     qa_signals = extract_qa_signals(qa_input)
     signals = {"qa": qa_signals}
 
+    if extra_context_type and not extra_context_path:
+        raise click.UsageError("--extra-context-type requires --extra-context-path")
+
     extra_text = None
     if extra_context_path:
         with open(extra_context_path) as f:

@@ -86,3 +86,22 @@ def test_add_user_command_stores_extra_context_type(app, db, tmp_path):
         users = list_users(db)
     assert len(users) == 1
     assert users[0]["extra_context_type"] == "notes"
+
+
+def test_add_user_command_type_without_path_fails(app, tmp_path):
+    """--extra-context-type without --extra-context-path is a usage error."""
+    from click.testing import CliRunner
+    from app.cli import add_user_command
+
+    profile_file = tmp_path / "profile.json"
+    profile_file.write_text('{"decision_style": "analytical"}')
+
+    runner = CliRunner()
+    with app.app_context():
+        result = runner.invoke(
+            add_user_command,
+            [str(profile_file), "--name", "Test", "--extra-context-type", "notes"],
+        )
+
+    assert result.exit_code != 0
+    assert "extra-context-path" in result.output.lower() or "requires" in result.output.lower()
