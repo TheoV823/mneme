@@ -19,13 +19,43 @@ from app.utils.hashing import canonical_hash
 @click.argument("profile_path")
 @click.option("--name", required=True)
 @click.option("--source", default=None)
+@click.option(
+    "--extra-context-path",
+    default=None,
+    help="Optional path to a plain-text file with extra context (bio, notes, etc.)",
+)
 @with_appcontext
-def add_user_command(profile_path, name, source):
+def add_user_command(profile_path, name, source, extra_context_path):
+    import json
+    from app.profiles.extractors import extract_qa_signals, extract_extra_context_signals
+    from app.profiles.builder import build_mneme_profile
+    from app.config import Config
+
     with open(profile_path) as f:
-        profile = f.read()
-    json.loads(profile)  # validate JSON
+        raw = f.read()
+    qa_input = json.loads(raw)  # validate JSON
+
+    qa_signals = extract_qa_signals(qa_input)
+    signals = {"qa": qa_signals}
+
+    extra_text = None
+    if extra_context_path:
+        with open(extra_context_path) as f:
+            extra_text = f.read()
+        ec_signals = extract_extra_context_signals(extra_text, Config.ANTHROPIC_API_KEY)
+        signals["extra_context"] = ec_signals
+        click.echo(f"  Extra context loaded from {extra_context_path}")
+
+    merged_profile = build_mneme_profile(signals)
+
     db = get_db()
-    user = insert_user(db, name=name, mneme_profile=profile, source=source)
+    user = insert_user(
+        db,
+        name=name,
+        mneme_profile=json.dumps(merged_profile),
+        source=source,
+        extra_context=extra_text,
+    )
     click.echo(f"User created: {user['id']} ({name})")
 
 
