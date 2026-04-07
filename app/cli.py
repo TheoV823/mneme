@@ -310,8 +310,29 @@ def compare_command(user_id, prompt_text):
 
 
 @click.command("compare-stats")
-@click.option("--user-id", required=False, default=None)
+@click.option("--user-id", required=True, help="User ID to show stats for.")
 @with_appcontext
 def compare_stats_command(user_id):
-    """Show Mneme win rate for a user."""
-    click.echo("compare-stats not yet implemented")
+    """Show cumulative Mneme win rate for a user across all comparisons."""
+    from app.models.comparison import get_comparisons_for_user, compute_win_rate
+
+    db = get_db()
+    user = get_user(db, user_id)
+    if not user:
+        raise click.ClickException(f"User not found: {user_id}")
+
+    comparisons = get_comparisons_for_user(db, user_id)
+    if not comparisons:
+        click.echo(f"No comparisons found for {user['name']}.")
+        return
+
+    stats = compute_win_rate(comparisons)
+    wr = f"{stats['win_rate']:.1%}" if stats["win_rate"] is not None else "N/A"
+
+    click.echo(f"\nMneme comparison stats for {user['name']}:")
+    click.echo(f"  Total comparisons : {stats['total']}")
+    click.echo(f"  Mneme wins        : {stats['mneme_wins']}")
+    click.echo(f"  Default wins      : {stats['default_wins']}")
+    click.echo(f"  Ties              : {stats['ties']}")
+    click.echo(f"  Skips             : {stats['skips']}")
+    click.echo(f"  Win rate          : {wr}")

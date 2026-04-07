@@ -101,3 +101,43 @@ def test_compare_command_invalid_choice_reprompts(runner, app, db, user_id):
     with app.app_context():
         rows = get_comparisons_for_user(db, user_id)
     assert rows[0]["winner"] == "a"
+
+
+def test_compare_stats_shows_win_rate(runner, app, db, user_id):
+    from app.models.comparison import insert_comparison
+    with app.app_context():
+        insert_comparison(db, user_id=user_id, prompt="p1", option_a_mode="default",
+                          option_b_mode="mneme", winner="b", preferred_mode="mneme")
+        insert_comparison(db, user_id=user_id, prompt="p2", option_a_mode="default",
+                          option_b_mode="mneme", winner="a", preferred_mode="default")
+        insert_comparison(db, user_id=user_id, prompt="p3", option_a_mode="mneme",
+                          option_b_mode="default", winner="tie", preferred_mode=None)
+        result = runner.invoke(compare_stats_command, ["--user-id", user_id])
+
+    assert result.exit_code == 0
+    assert "50.0%" in result.output or "50%" in result.output
+    assert "Mneme wins" in result.output
+    assert "Total" in result.output
+
+
+def test_compare_stats_no_comparisons(runner, app, db, user_id):
+    with app.app_context():
+        result = runner.invoke(compare_stats_command, ["--user-id", user_id])
+    assert result.exit_code == 0
+    assert "No comparisons" in result.output
+
+
+def test_compare_stats_unknown_user_exits(runner, app):
+    with app.app_context():
+        result = runner.invoke(compare_stats_command, ["--user-id", "bad-id"])
+    assert result.exit_code != 0
+
+
+def test_compare_stats_no_decisive_shows_na(runner, app, db, user_id):
+    from app.models.comparison import insert_comparison
+    with app.app_context():
+        insert_comparison(db, user_id=user_id, prompt="p1", option_a_mode="default",
+                          option_b_mode="mneme", winner="tie", preferred_mode=None)
+        result = runner.invoke(compare_stats_command, ["--user-id", user_id])
+    assert result.exit_code == 0
+    assert "N/A" in result.output or "n/a" in result.output.lower()
