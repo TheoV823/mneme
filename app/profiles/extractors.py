@@ -68,6 +68,8 @@ def legacy_profile_to_signals(profile):
 
     if "style" in profile:
         signals["decision_style"] = str(profile["style"])
+    elif "thinking_style" in profile:
+        signals["decision_style"] = str(profile["thinking_style"])
 
     if "values" in profile:
         v = profile["values"]
