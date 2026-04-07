@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 _QA_FIELD_MAP = {
     "decision_style": "decision_style",
     "thinking_style": "decision_style",
+    "style": "decision_style",
     "risk_tolerance": "risk_tolerance",
     "risk": "risk_tolerance",
     "communication_style": "communication_style",
@@ -68,8 +69,6 @@ def legacy_profile_to_signals(profile):
 
     if "style" in profile:
         signals["decision_style"] = str(profile["style"])
-    elif "thinking_style" in profile:
-        signals["decision_style"] = str(profile["thinking_style"])
 
     if "values" in profile:
         v = profile["values"]

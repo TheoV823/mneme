@@ -1,6 +1,6 @@
 import json
 from app.profiles.signals import is_structured_profile
-from app.profiles.extractors import legacy_profile_to_signals
+from app.profiles.extractors import extract_qa_signals
 from app.profiles.builder import build_mneme_profile
 
 
@@ -52,8 +52,13 @@ def _render_structured(profile):
 
 
 def _normalize_legacy(legacy_dict):
-    """Normalize a legacy profile dict to a structured profile via extractors + builder."""
-    signals = {"qa": legacy_profile_to_signals(legacy_dict)}
+    """Normalize a legacy profile dict to a structured profile via extractors + builder.
+
+    Uses extract_qa_signals (not legacy_profile_to_signals directly) so that recognized
+    QA aliases (e.g. thinking_style, priorities, avoid) are correctly mapped before
+    falling back to the legacy heuristics for truly unrecognized shapes.
+    """
+    signals = {"qa": extract_qa_signals(legacy_dict)}
     return build_mneme_profile(signals)
 
 
