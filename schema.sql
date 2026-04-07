@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     mneme_profile TEXT NOT NULL,
+    extra_context TEXT,
     source TEXT,
     created_at TEXT NOT NULL
 );
