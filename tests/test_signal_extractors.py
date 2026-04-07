@@ -32,3 +32,96 @@ def test_is_structured_profile_false_for_legacy():
 def test_is_structured_profile_false_for_non_dict():
     assert is_structured_profile("raw string") is False
     assert is_structured_profile(None) is False
+
+
+from app.profiles.extractors import extract_qa_signals, legacy_profile_to_signals
+
+
+# --- extract_qa_signals ---
+
+def test_extract_qa_signals_canonical_input():
+    qa = {
+        "decision_style": "analytical",
+        "risk_tolerance": "medium",
+        "communication_style": "direct",
+        "prioritization_rules": ["speed over polish", "depth over breadth"],
+        "constraints": ["no surprise decisions"],
+        "anti_patterns": ["analysis paralysis"],
+    }
+    signals = extract_qa_signals(qa)
+    assert signals["decision_style"] == "analytical"
+    assert signals["risk_tolerance"] == "medium"
+    assert signals["communication_style"] == "direct"
+    assert signals["prioritization_rules"] == ["speed over polish", "depth over breadth"]
+    assert signals["constraints"] == ["no surprise decisions"]
+    assert signals["anti_patterns"] == ["analysis paralysis"]
+
+
+def test_extract_qa_signals_alternate_key_names():
+    qa = {
+        "thinking_style": "intuitive",
+        "risk": "low",
+        "communication": "verbose",
+        "priorities": ["team first"],
+        "avoid": ["micromanagement"],
+    }
+    signals = extract_qa_signals(qa)
+    assert signals["decision_style"] == "intuitive"
+    assert signals["risk_tolerance"] == "low"
+    assert signals["communication_style"] == "verbose"
+    assert signals["prioritization_rules"] == ["team first"]
+    assert signals["anti_patterns"] == ["micromanagement"]
+
+
+def test_extract_qa_signals_partial_input():
+    qa = {"decision_style": "fast"}
+    signals = extract_qa_signals(qa)
+    assert signals["decision_style"] == "fast"
+    assert signals["risk_tolerance"] is None
+    assert signals["prioritization_rules"] == []
+
+
+def test_extract_qa_signals_single_string_list_field():
+    qa = {"prioritization_rules": "speed over polish"}
+    signals = extract_qa_signals(qa)
+    assert signals["prioritization_rules"] == ["speed over polish"]
+
+
+def test_extract_qa_signals_falls_back_to_legacy_for_unknown_keys():
+    qa = {"style": "analytical", "values": ["clarity", "precision"]}
+    signals = extract_qa_signals(qa)
+    # Legacy adapter maps style -> decision_style, values -> prioritization_rules
+    assert signals["decision_style"] == "analytical"
+    assert signals["prioritization_rules"] == ["clarity", "precision"]
+
+
+def test_extract_qa_signals_empty_dict():
+    signals = extract_qa_signals({})
+    assert signals == empty_source_signals()
+
+
+# --- legacy_profile_to_signals ---
+
+def test_legacy_style_and_values():
+    profile = {"style": "analytical", "values": ["clarity"]}
+    signals = legacy_profile_to_signals(profile)
+    assert signals["decision_style"] == "analytical"
+    assert signals["prioritization_rules"] == ["clarity"]
+
+
+def test_legacy_unknown_list_becomes_constraints():
+    profile = {"foo": ["bar", "baz"]}
+    signals = legacy_profile_to_signals(profile)
+    assert signals["constraints"] == ["bar", "baz"]
+
+
+def test_legacy_unknown_non_list_field_ignored():
+    profile = {"random_key": "random_value"}
+    signals = legacy_profile_to_signals(profile)
+    assert signals["decision_style"] is None
+    assert signals["constraints"] == []
+
+
+def test_legacy_empty_profile():
+    signals = legacy_profile_to_signals({})
+    assert signals == empty_source_signals()
