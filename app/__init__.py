@@ -30,4 +30,7 @@ def create_app():
     from app.web.dashboard_views import dashboard
     app.register_blueprint(dashboard)
 
+    from app.web.compare_views import compare
+    app.register_blueprint(compare)
+
     return app

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Mneme — Compare{% endblock %}
+{% block content %}
+<div class="compare-header">
+  <h1>Mneme Compare</h1>
+  <p class="compare-subtitle">Run a prompt through default AI and your personalized AI. Pick the better output.</p>
+  <a href="{{ url_for('compare.stats') }}" class="btn btn-secondary">View Stats</a>
+  <a href="{{ url_for('compare.add_user') }}" class="btn btn-secondary">Add User</a>
+</div>
+
+<div class="compare-form-card">
+  <form method="POST" action="{{ url_for('compare.run') }}">
+    <div class="form-group">
+      <label for="user_id">Who are you?</label>
+      <select name="user_id" id="user_id" required>
+        <option value="">— select user —</option>
+        {% for user in users %}
+        <option value="{{ user.id }}" {% if user.id == selected_user_id %}selected{% endif %}>
+          {{ user.name }}
+        </option>
+        {% endfor %}
+      </select>
+      {% if not users %}
+      <p class="hint"><a href="{{ url_for('compare.add_user') }}">Add a user first →</a></p>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="prompt">Prompt</label>
+      <textarea name="prompt" id="prompt" rows="4"
+        placeholder="How would you prioritize a backlog when everything feels urgent?"
+        required></textarea>
+      <p class="hint">Ask something you'd actually face: a decision, a trade-off, a communication challenge.</p>
+    </div>
+
+    <button type="submit" class="btn btn-primary" {% if not users %}disabled{% endif %}>
+      Run Comparison
+    </button>
+  </form>
+</div>
+
+<div class="compare-prompt-ideas">
+  <p class="hint-heading">Try these:</p>
+  <ul>
+    <li onclick="setPrompt(this)">How would you decide between shipping fast and shipping well?</li>
+    <li onclick="setPrompt(this)">Three stakeholders each think their request is most urgent. How do you handle it?</li>
+    <li onclick="setPrompt(this)">A vendor offers a 40% discount if you commit today with no trial. What do you do?</li>
+    <li onclick="setPrompt(this)">Write a project status update for a delayed initiative.</li>
+    <li onclick="setPrompt(this)">How do you decide when to stop gathering data and just make a call?</li>
+  </ul>
+</div>
+
+<script>
+function setPrompt(el) {
+  document.getElementById('prompt').value = el.textContent.trim();
+  document.getElementById('prompt').focus();
+}
+</script>
+{% endblock %}

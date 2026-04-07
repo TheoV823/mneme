@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Mneme — Pick the Better Output{% endblock %}
+{% block content %}
+<div class="compare-header">
+  <h1>Which is better?</h1>
+  <p class="compare-subtitle compare-prompt-display">{{ pending.prompt }}</p>
+</div>
+
+<div class="compare-outputs">
+  <div class="compare-output" id="output-a">
+    <div class="compare-output-label">Option A</div>
+    <div class="compare-output-text">{{ pending.output_a }}</div>
+  </div>
+  <div class="compare-output" id="output-b">
+    <div class="compare-output-label">Option B</div>
+    <div class="compare-output-text">{{ pending.output_b }}</div>
+  </div>
+</div>
+
+<form method="POST" action="{{ url_for('compare.vote') }}" class="compare-vote-form">
+  <p class="vote-instruction">Pick the output that feels more like how <strong>you</strong> think.</p>
+  <div class="vote-buttons">
+    <button type="submit" name="choice" value="a" class="btn btn-vote btn-a">A is better</button>
+    <button type="submit" name="choice" value="b" class="btn btn-vote btn-b">B is better</button>
+    <button type="submit" name="choice" value="tie" class="btn btn-vote btn-tie">Tie</button>
+    <button type="submit" name="choice" value="skip" class="btn btn-vote btn-skip">Skip</button>
+  </div>
+</form>
+
+<div class="compare-nav">
+  <a href="{{ url_for('compare.index', user_id=pending.user_id) }}" class="btn btn-secondary">← Run another</a>
+  <a href="{{ url_for('compare.stats', user_id=pending.user_id) }}" class="btn btn-secondary">View stats</a>
+</div>
+{% endblock %}

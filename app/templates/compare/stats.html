@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Mneme — Stats{% endblock %}
+{% block content %}
+<div class="compare-header">
+  <h1>Mneme Win Rate</h1>
+  <a href="{{ url_for('compare.index') }}" class="btn btn-secondary">← Run comparison</a>
+</div>
+
+<div class="stats-user-select">
+  <form method="GET">
+    <select name="user_id" onchange="this.form.submit()">
+      <option value="">— select user —</option>
+      {% for user in users %}
+      <option value="{{ user.id }}" {% if user.id == selected_user_id %}selected{% endif %}>
+        {{ user.name }}
+      </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+{% if selected_user and stats %}
+<div class="stats-card">
+  <div class="stats-user-name">{{ selected_user.name }}</div>
+
+  <div class="stats-win-rate {% if stats.win_rate and stats.win_rate >= 0.6 %}win-rate-strong{% elif stats.win_rate and stats.win_rate >= 0.45 %}win-rate-weak{% elif stats.win_rate %}win-rate-low{% endif %}">
+    {% if stats.win_rate is not none %}
+      {{ "%.0f"|format(stats.win_rate * 100) }}%
+    {% else %}
+      —
+    {% endif %}
+  </div>
+  <div class="stats-win-rate-label">
+    {% if stats.win_rate is not none %}
+      Mneme win rate
+    {% else %}
+      No decisive comparisons yet
+    {% endif %}
+  </div>
+
+  <div class="stats-breakdown">
+    <div class="stats-row">
+      <span class="stats-label">Total comparisons</span>
+      <span class="stats-value">{{ stats.total }}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label">Mneme wins</span>
+      <span class="stats-value stats-win">{{ stats.mneme_wins }}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label">Default wins</span>
+      <span class="stats-value stats-loss">{{ stats.default_wins }}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label">Ties</span>
+      <span class="stats-value">{{ stats.ties }}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label">Skipped</span>
+      <span class="stats-value">{{ stats.skips }}</span>
+    </div>
+  </div>
+
+  <p class="stats-hint">
+    {% if stats.total < 5 %}
+      Run {{ 5 - stats.total }} more comparison{{ 's' if (5 - stats.total) != 1 }} for a directional signal.
+    {% elif stats.total < 10 %}
+      Run {{ 10 - stats.total }} more for a reliable rate.
+    {% elif stats.win_rate and stats.win_rate >= 0.6 %}
+      Strong signal — Mneme is improving your outputs.
+    {% elif stats.win_rate and stats.win_rate >= 0.45 %}
+      Inconclusive — keep comparing or refine the profile.
+    {% elif stats.win_rate is not none %}
+      Weak signal — consider updating your profile.
+    {% endif %}
+  </p>
+</div>
+
+{% elif selected_user %}
+<div class="stats-card">
+  <div class="stats-user-name">{{ selected_user.name }}</div>
+  <p class="stats-empty">No comparisons yet. <a href="{{ url_for('compare.index', user_id=selected_user.id) }}">Run your first one →</a></p>
+</div>
+{% endif %}
+{% endblock %}
