@@ -5,8 +5,10 @@ from flask.cli import with_appcontext
 
 from app.db import get_db, init_db
 from app.config import Config
-from app.models.user import insert_user, list_users
+from app.models.user import insert_user, list_users, get_user
 from app.models.prompt import insert_prompt, get_prompts_for_user
+from app.runner.compare import run_comparison
+from app.models.comparison import insert_comparison, get_comparisons_for_user, compute_win_rate
 from app.models.run import insert_run, list_runs
 from app.runner.engine import run_benchmark_for_user
 from app.scoring.assigner import generate_assignments
@@ -239,3 +241,96 @@ def seed_demo_command():
 
     click.echo(f"Seeded: {len(users)} users, {len(assignments)} scored runs in batch 'demo-batch'")
     click.echo("Run: flask report --batch-id demo-batch")
+
+
+@click.command("compare")
+@click.option("--user-id", required=True, help="User ID to compare against.")
+@click.option("--prompt", "prompt_text", required=True, help="Prompt to send to both AI modes.")
+@with_appcontext
+def compare_command(user_id, prompt_text):
+    """Run a prompt against default AI and Mneme AI. Choose which output you prefer."""
+    db = get_db()
+    user = get_user(db, user_id)
+    if not user:
+        raise click.ClickException(f"User not found: {user_id}")
+
+    click.echo(f"\nRunning comparison for {user['name']}...")
+
+    try:
+        result = run_comparison(
+            user=user,
+            prompt_text=prompt_text,
+            api_key=Config.ANTHROPIC_API_KEY,
+            model=Config.MODEL,
+            temperature=Config.TEMPERATURE,
+            max_tokens=Config.MAX_TOKENS,
+        )
+    except Exception as e:
+        raise click.ClickException(f"LLM call failed: {e}")
+
+    sep = "─" * 60
+    click.echo(f"\n{sep}")
+    click.echo(f"PROMPT:\n{prompt_text}")
+    click.echo(sep)
+    click.echo(f"Option A:\n\n{result['output_a']}")
+    click.echo(sep)
+    click.echo(f"Option B:\n\n{result['output_b']}")
+    click.echo(sep)
+
+    valid = {"a", "b", "tie", "skip"}
+    while True:
+        choice = click.prompt("Which is better? (A/B/tie/skip)").strip().lower()
+        if choice in valid:
+            break
+
+    # winner stored as lowercase: 'a', 'b', 'tie', 'skip'
+    winner = choice
+
+    if winner == "a":
+        preferred_mode = result["option_a_mode"]
+    elif winner == "b":
+        preferred_mode = result["option_b_mode"]
+    else:
+        preferred_mode = None
+
+    insert_comparison(
+        db,
+        user_id=user_id,
+        prompt=prompt_text,
+        option_a_mode=result["option_a_mode"],
+        option_b_mode=result["option_b_mode"],
+        winner=winner,
+        preferred_mode=preferred_mode,
+    )
+
+    if preferred_mode:
+        click.echo(f"\n✓ Saved. You preferred: {preferred_mode}")
+    else:
+        click.echo(f"\n✓ Saved. ({winner})")
+
+
+@click.command("compare-stats")
+@click.option("--user-id", required=True, help="User ID to show stats for.")
+@with_appcontext
+def compare_stats_command(user_id):
+    """Show cumulative Mneme win rate for a user across all comparisons."""
+    db = get_db()
+    user = get_user(db, user_id)
+    if not user:
+        raise click.ClickException(f"User not found: {user_id}")
+
+    comparisons = get_comparisons_for_user(db, user_id)
+    if not comparisons:
+        click.echo(f"No comparisons found for {user['name']}.")
+        return
+
+    stats = compute_win_rate(comparisons)
+    wr = f"{stats['win_rate']:.1%}" if stats["win_rate"] is not None else "N/A"
+
+    click.echo(f"\nMneme comparison stats for {user['name']}:")
+    click.echo(f"  Total comparisons : {stats['total']}")
+    click.echo(f"  Mneme wins        : {stats['mneme_wins']}")
+    click.echo(f"  Default wins      : {stats['default_wins']}")
+    click.echo(f"  Ties              : {stats['ties']}")
+    click.echo(f"  Skips             : {stats['skips']}")
+    click.echo(f"  Win rate          : {wr}")
