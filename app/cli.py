@@ -8,7 +8,7 @@ from app.config import Config
 from app.models.user import insert_user, list_users, get_user
 from app.models.prompt import insert_prompt, get_prompts_for_user
 from app.runner.compare import run_comparison
-from app.models.comparison import insert_comparison
+from app.models.comparison import insert_comparison, get_comparisons_for_user, compute_win_rate
 from app.models.run import insert_run, list_runs
 from app.runner.engine import run_benchmark_for_user
 from app.scoring.assigner import generate_assignments
@@ -314,8 +314,6 @@ def compare_command(user_id, prompt_text):
 @with_appcontext
 def compare_stats_command(user_id):
     """Show cumulative Mneme win rate for a user across all comparisons."""
-    from app.models.comparison import get_comparisons_for_user, compute_win_rate
-
     db = get_db()
     user = get_user(db, user_id)
     if not user:

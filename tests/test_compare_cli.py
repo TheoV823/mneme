@@ -101,6 +101,7 @@ def test_compare_command_invalid_choice_reprompts(runner, app, db, user_id):
     with app.app_context():
         rows = get_comparisons_for_user(db, user_id)
     assert rows[0]["winner"] == "a"
+    assert rows[0]["preferred_mode"] == "default"  # option_a_mode in _FAKE_RUN_RESULT
 
 
 def test_compare_stats_shows_win_rate(runner, app, db, user_id):
