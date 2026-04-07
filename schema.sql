@@ -80,3 +80,14 @@ CREATE TABLE IF NOT EXISTS metrics_snapshots (
     per_user_json TEXT,
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS comparison_results (
+    id           TEXT PRIMARY KEY,
+    user_id      TEXT NOT NULL REFERENCES users(id),
+    prompt       TEXT NOT NULL,
+    option_a_mode TEXT NOT NULL CHECK (option_a_mode IN ('default', 'mneme')),
+    option_b_mode TEXT NOT NULL CHECK (option_b_mode IN ('default', 'mneme')),
+    winner       TEXT NOT NULL CHECK (winner IN ('A', 'B', 'tie', 'skip')),
+    preferred_mode TEXT CHECK (preferred_mode IN ('default', 'mneme')),
+    created_at   TEXT NOT NULL
+);
