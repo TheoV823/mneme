@@ -2,13 +2,13 @@ from app.utils.ids import new_id
 from app.utils.timestamps import now_iso
 
 
-def insert_user(db, name, mneme_profile, source=None, extra_context=None):
+def insert_user(db, name, mneme_profile, source=None, extra_context=None, extra_context_type=None):
     user_id = new_id()
     created_at = now_iso()
     db.execute(
-        "INSERT INTO users (id, name, mneme_profile, extra_context, source, created_at) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
-        (user_id, name, mneme_profile, extra_context, source, created_at),
+        "INSERT INTO users (id, name, mneme_profile, extra_context, extra_context_type, source, created_at) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (user_id, name, mneme_profile, extra_context, extra_context_type, source, created_at),
     )
     db.commit()
     return {
@@ -16,6 +16,7 @@ def insert_user(db, name, mneme_profile, source=None, extra_context=None):
         "name": name,
         "mneme_profile": mneme_profile,
         "extra_context": extra_context,
+        "extra_context_type": extra_context_type,
         "source": source,
         "created_at": created_at,
     }

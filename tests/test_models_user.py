@@ -40,3 +40,14 @@ def test_get_user_includes_extra_context(db):
     )
     fetched = get_user(db, inserted["id"])
     assert fetched["extra_context"] == "some context"
+
+
+def test_insert_user_with_extra_context_type(db):
+    u = insert_user(db, name="Bob", mneme_profile="{}", extra_context="some notes",
+                    extra_context_type="notes")
+    assert u["extra_context_type"] == "notes"
+
+
+def test_insert_user_extra_context_type_defaults_to_none(db):
+    u = insert_user(db, name="Bob", mneme_profile="{}")
+    assert u["extra_context_type"] is None
