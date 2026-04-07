@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT NOT NULL,
     mneme_profile TEXT NOT NULL,
     extra_context TEXT,
+    extra_context_type TEXT CHECK (extra_context_type IN ('chat', 'document', 'notes')),
     source TEXT,
     created_at TEXT NOT NULL
 );

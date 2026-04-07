@@ -6,6 +6,8 @@ from flask.cli import with_appcontext
 from app.db import get_db, init_db
 from app.config import Config
 from app.models.user import insert_user, list_users, get_user
+from app.profiles.extractors import extract_qa_signals, extract_extra_context_signals
+from app.profiles.builder import build_mneme_profile
 from app.models.prompt import insert_prompt, get_prompts_for_user
 from app.runner.compare import run_comparison
 from app.models.comparison import insert_comparison, get_comparisons_for_user, compute_win_rate
@@ -26,13 +28,14 @@ from app.utils.hashing import canonical_hash
     default=None,
     help="Optional path to a plain-text file with extra context (bio, notes, etc.)",
 )
+@click.option(
+    "--extra-context-type",
+    default=None,
+    type=click.Choice(["chat", "document", "notes"], case_sensitive=False),
+    help="Type of extra context: chat | document | notes",
+)
 @with_appcontext
-def add_user_command(profile_path, name, source, extra_context_path):
-    import json
-    from app.profiles.extractors import extract_qa_signals, extract_extra_context_signals
-    from app.profiles.builder import build_mneme_profile
-    from app.config import Config
-
+def add_user_command(profile_path, name, source, extra_context_path, extra_context_type):
     with open(profile_path) as f:
         raw = f.read()
     qa_input = json.loads(raw)  # validate JSON
@@ -40,11 +43,15 @@ def add_user_command(profile_path, name, source, extra_context_path):
     qa_signals = extract_qa_signals(qa_input)
     signals = {"qa": qa_signals}
 
+    if extra_context_type and not extra_context_path:
+        raise click.UsageError("--extra-context-type requires --extra-context-path")
+
     extra_text = None
     if extra_context_path:
         with open(extra_context_path) as f:
             extra_text = f.read()
-        ec_signals = extract_extra_context_signals(extra_text, Config.ANTHROPIC_API_KEY)
+        ec_signals = extract_extra_context_signals(extra_text, Config.ANTHROPIC_API_KEY,
+                                                   context_type=extra_context_type)
         signals["extra_context"] = ec_signals
         click.echo(f"  Extra context loaded from {extra_context_path}")
 
@@ -57,6 +64,7 @@ def add_user_command(profile_path, name, source, extra_context_path):
         mneme_profile=json.dumps(merged_profile),
         source=source,
         extra_context=extra_text,
+        extra_context_type=extra_context_type,
     )
     click.echo(f"User created: {user['id']} ({name})")
 

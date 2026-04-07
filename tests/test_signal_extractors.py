@@ -181,3 +181,85 @@ def test_extract_extra_context_signals_partial_response():
     assert signals["decision_style"] is None
     assert signals["risk_tolerance"] == "low"
     assert signals["prioritization_rules"] == []
+
+
+# --- extract_extra_context_signals with context_type ---
+
+def test_extract_extra_context_signals_chat_type_hint():
+    """chat type appends conversation-pattern hint to system prompt."""
+    claude_response = (
+        '{"decision_style": "direct", "risk_tolerance": null, '
+        '"communication_style": null, '
+        '"prioritization_rules": [], "constraints": [], "anti_patterns": []}'
+    )
+    captured = {}
+
+    def fake_call_claude(**kwargs):
+        captured["system_prompt"] = kwargs["system_prompt"]
+        return {"output": claude_response, "metadata": {}}
+
+    with patch("app.profiles.extractors.call_claude", fake_call_claude):
+        signals = extract_extra_context_signals("some text", api_key="fake",
+                                                context_type="chat")
+
+    assert signals["decision_style"] == "direct"
+    assert "conversation patterns" in captured["system_prompt"]
+
+
+def test_extract_extra_context_signals_document_type_hint():
+    claude_response = (
+        '{"decision_style": null, "risk_tolerance": null, '
+        '"communication_style": null, '
+        '"prioritization_rules": [], "constraints": [], "anti_patterns": []}'
+    )
+    captured = {}
+
+    def fake_call_claude(**kwargs):
+        captured["system_prompt"] = kwargs["system_prompt"]
+        return {"output": claude_response, "metadata": {}}
+
+    with patch("app.profiles.extractors.call_claude", fake_call_claude):
+        extract_extra_context_signals("some text", api_key="fake",
+                                      context_type="document")
+
+    assert "formal structure" in captured["system_prompt"]
+
+
+def test_extract_extra_context_signals_notes_type_hint():
+    claude_response = (
+        '{"decision_style": null, "risk_tolerance": null, '
+        '"communication_style": null, '
+        '"prioritization_rules": [], "constraints": [], "anti_patterns": []}'
+    )
+    captured = {}
+
+    def fake_call_claude(**kwargs):
+        captured["system_prompt"] = kwargs["system_prompt"]
+        return {"output": claude_response, "metadata": {}}
+
+    with patch("app.profiles.extractors.call_claude", fake_call_claude):
+        extract_extra_context_signals("some text", api_key="fake",
+                                      context_type="notes")
+
+    assert "rules of thumb" in captured["system_prompt"]
+
+
+def test_extract_extra_context_signals_no_type_uses_base_prompt():
+    """No context_type → no type-specific phrase in system prompt."""
+    claude_response = (
+        '{"decision_style": null, "risk_tolerance": null, '
+        '"communication_style": null, '
+        '"prioritization_rules": [], "constraints": [], "anti_patterns": []}'
+    )
+    captured = {}
+
+    def fake_call_claude(**kwargs):
+        captured["system_prompt"] = kwargs["system_prompt"]
+        return {"output": claude_response, "metadata": {}}
+
+    with patch("app.profiles.extractors.call_claude", fake_call_claude):
+        extract_extra_context_signals("some text", api_key="fake")
+
+    assert "conversation patterns" not in captured["system_prompt"]
+    assert "formal structure" not in captured["system_prompt"]
+    assert "rules of thumb" not in captured["system_prompt"]
