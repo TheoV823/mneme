@@ -1,0 +1,208 @@
+{
+  "meta": {
+    "name": "mneme-context-engine",
+    "description": "A Python library for injecting structured project memory into LLM API calls so outputs stay consistent with prior decisions.",
+    "version": "0.1.0",
+    "owner": "mneme-project",
+    "created": "2026-04-16"
+  },
+  "items": [
+    {
+      "id": "fact-001",
+      "type": "fact",
+      "title": "Runtime",
+      "content": "Python 3.11+. No support for earlier versions.",
+      "tags": ["python", "runtime", "language"],
+      "priority": "high"
+    },
+    {
+      "id": "fact-002",
+      "type": "fact",
+      "title": "LLM provider",
+      "content": "Anthropic Claude via the official anthropic SDK. No OpenAI, no litellm in v1.",
+      "tags": ["llm", "anthropic", "provider", "api"],
+      "priority": "high"
+    },
+    {
+      "id": "fact-003",
+      "type": "fact",
+      "title": "Storage format",
+      "content": "All project memory is stored in human-editable JSON files. No database in v1.",
+      "tags": ["storage", "json", "database", "persistence"],
+      "priority": "high"
+    },
+    {
+      "id": "fact-004",
+      "type": "fact",
+      "title": "Core dependencies",
+      "content": "anthropic and python-dotenv only. The dependency list must stay minimal.",
+      "tags": ["dependencies", "packages", "requirements"],
+      "priority": "high"
+    },
+    {
+      "id": "fact-005",
+      "type": "fact",
+      "title": "Pipeline stages",
+      "content": "load -> retrieve -> build_context -> call_llm -> evaluate. Each stage is a separate module with no cross-imports.",
+      "tags": ["pipeline", "architecture", "modules", "stages"],
+      "priority": "medium"
+    },
+    {
+      "id": "rule-001",
+      "type": "rule",
+      "title": "Extend current infrastructure before rebuilding",
+      "content": "When adding capability, first ask whether an existing module can be extended. Do not introduce new abstractions or parallel pipelines unless the existing one is fundamentally incompatible with the requirement.",
+      "tags": ["architecture", "philosophy", "scope", "extend"],
+      "priority": "high"
+    },
+    {
+      "id": "rule-002",
+      "type": "rule",
+      "title": "Keep v1 retrieval deterministic",
+      "content": "Retrieval must be deterministic: same query and memory file must always return the same ranked list. No randomness, no learned weights, no embeddings in v1. Determinism is required for testability and trust.",
+      "tags": ["retrieval", "determinism", "embedding", "testing"],
+      "priority": "high"
+    },
+    {
+      "id": "rule-003",
+      "type": "rule",
+      "title": "Separate project memory from personal style",
+      "content": "This library stores project-level decisions: architecture, constraints, tech stack choices. It does not store personal preferences, writing style, or user-specific context. That is a different product category.",
+      "tags": ["scope", "personal", "project", "memory", "boundary"],
+      "priority": "high"
+    },
+    {
+      "id": "rule-004",
+      "type": "rule",
+      "title": "Keep the MVP narrow and developer-friendly",
+      "content": "Every feature added to v1 must answer yes to: 'Can a developer run this in under 5 minutes on a clean machine?' If it requires external services, accounts, or setup steps beyond pip install, it does not belong in v1.",
+      "tags": ["mvp", "developer-experience", "scope", "onboarding"],
+      "priority": "high"
+    },
+    {
+      "id": "rule-005",
+      "type": "rule",
+      "title": "Context injection goes in the system prompt",
+      "content": "Retrieved memory is always injected via the system parameter of the Messages API. Do not append memory to the user turn or inject mid-conversation.",
+      "tags": ["injection", "system_prompt", "api", "context"],
+      "priority": "medium"
+    },
+    {
+      "id": "pref-001",
+      "type": "preference",
+      "title": "Dataclasses over Pydantic",
+      "content": "Use stdlib dataclasses for all models. Pydantic adds validation capability but also a dependency and learning curve. If validation is needed later, add it explicitly rather than pulling in Pydantic by default.",
+      "tags": ["models", "pydantic", "dataclasses", "dependencies"],
+      "priority": "medium"
+    },
+    {
+      "id": "pref-002",
+      "type": "preference",
+      "title": "Google-style docstrings with full type hints",
+      "content": "All public functions and class attributes must have type hints. Docstrings on public symbols should use the Google style (Args, Returns, Raises sections). Private helpers can have shorter inline comments.",
+      "tags": ["style", "docstrings", "types", "documentation"],
+      "priority": "low"
+    },
+    {
+      "id": "pref-003",
+      "type": "preference",
+      "title": "One class per module for pipeline stages",
+      "content": "Each pipeline stage (MemoryStore, Retriever, ContextBuilder, LLMAdapter, Evaluator) lives in its own module and exports one primary class. Utility functions are allowed but should not grow into hidden second classes.",
+      "tags": ["module", "structure", "pipeline", "class"],
+      "priority": "low"
+    },
+    {
+      "id": "arch-001",
+      "type": "architecture_decision",
+      "title": "Keyword scoring for retrieval, not embeddings",
+      "content": "Retrieval uses keyword-overlap scoring with tag boosting and per-item priority weighting. This is intentional: no ML dependency, fully deterministic, easy to debug. Embedding-based retrieval is deferred to v2 as an opt-in upgrade path.",
+      "tags": ["retrieval", "embedding", "keyword", "architecture"],
+      "priority": "high"
+    },
+    {
+      "id": "arch-002",
+      "type": "architecture_decision",
+      "title": "Schema holds items and examples as separate lists",
+      "content": "ProjectMemory contains two lists: items (facts, rules, preferences, etc.) and examples (decision records with task/decision/rationale). They serve different purposes in context injection and must not be merged into a single flat list.",
+      "tags": ["schema", "memory", "items", "examples", "architecture"],
+      "priority": "medium"
+    },
+    {
+      "id": "arch-003",
+      "type": "architecture_decision",
+      "title": "Evaluator is deterministic, not an LLM judge",
+      "content": "The evaluator checks rules and anti_patterns using string matching, not a secondary LLM call. This keeps evaluation fast, cheap, and auditable. An LLM-judge mode can be added later but must not replace the deterministic pass.",
+      "tags": ["evaluator", "alignment", "llm-judge", "determinism"],
+      "priority": "medium"
+    },
+    {
+      "id": "anti-001",
+      "type": "anti_pattern",
+      "title": "Do not use langchain",
+      "content": "langchain must not be added as a dependency. It abstracts away the API surface this library is specifically designed to control, and it adds significant weight to the install.",
+      "tags": ["langchain", "forbidden", "dependency", "avoid"],
+      "priority": "high"
+    },
+    {
+      "id": "anti-002",
+      "type": "anti_pattern",
+      "title": "Do not add agentic loops in v1",
+      "content": "No tool-use, function calling, or multi-turn agent loops in this module. Mneme v1 is a single call-response pipeline. Agentic behaviour is a separate concern and a separate product layer.",
+      "tags": ["agents", "tool-use", "loops", "avoid", "scope"],
+      "priority": "high"
+    },
+    {
+      "id": "anti-003",
+      "type": "anti_pattern",
+      "title": "Do not persist state between sessions in v1",
+      "content": "There is no session state, no conversation history, no write-back to the memory file from runtime. The memory file is read-only at runtime. Stateful memory management is a v2+ concern.",
+      "tags": ["state", "persistence", "session", "avoid"],
+      "priority": "medium"
+    },
+    {
+      "id": "ex-code-001",
+      "type": "example",
+      "title": "Correct pipeline invocation",
+      "content": "store = MemoryStore('examples/project_memory.json'); memory = store.load(); context = Retriever(memory).retrieve(query); system = ContextBuilder().build_system_context(memory, context); response = LLMAdapter().call(system=system, user=query)",
+      "tags": ["pipeline", "usage", "example", "code"],
+      "priority": "medium"
+    }
+  ],
+  "examples": [
+    {
+      "id": "dec-001",
+      "task": "A contributor proposed adding sentence-transformers for semantic retrieval in v1.",
+      "decision": "Declined. Kept keyword scoring. Added a comment in retriever.py noting the embedding upgrade path.",
+      "rationale": "Sentence-transformers is a heavy ML dependency that breaks the 'pip install in 30 seconds' contract. Keyword scoring is good enough to demonstrate the concept and is fully deterministic. Embeddings are a v2 opt-in.",
+      "tags": ["retrieval", "embedding", "dependencies", "scope", "v1"]
+    },
+    {
+      "id": "dec-002",
+      "task": "Should project memory be stored per-user or per-project?",
+      "decision": "Per-project only. One JSON file per project, no user concept in v1.",
+      "rationale": "User-level memory conflates two different problems: project alignment (this library) and personal assistant style (a different product). Keeping the scope to project-level memory makes the value proposition clear and the data model simple.",
+      "tags": ["scope", "user", "project", "memory", "boundary"]
+    },
+    {
+      "id": "dec-003",
+      "task": "Should the evaluator call a second LLM to score alignment?",
+      "decision": "No. The evaluator uses deterministic string matching against rules and anti_patterns.",
+      "rationale": "An LLM judge adds latency, cost, and a second failure mode. For v1, the goal is demonstrating that memory injection reduces obvious violations. Deterministic evaluation is auditable and fast. LLM-judge can be added as an optional mode later.",
+      "tags": ["evaluator", "llm-judge", "alignment", "determinism", "cost"]
+    },
+    {
+      "id": "dec-004",
+      "task": "Should the context builder inject memory into the user turn instead of the system prompt?",
+      "decision": "Always the system prompt. The user turn is reserved for the actual task.",
+      "rationale": "Mixing project context into the user turn makes it harder for the model to distinguish task from constraints, and it pollutes the conversation history if multi-turn is added later. System prompt injection is cleaner and aligns with how Anthropic recommends structuring persistent context.",
+      "tags": ["injection", "system_prompt", "user_turn", "context", "api"]
+    },
+    {
+      "id": "dec-005",
+      "task": "A request came in to support OpenAI GPT-4o as an alternative LLM provider.",
+      "decision": "Deferred to v2. v1 ships with Anthropic only.",
+      "rationale": "Supporting multiple providers in v1 requires an abstraction layer (provider interface, config routing) that adds complexity without demonstrating the core value. The LLMAdapter is designed to be swappable - adding OpenAI support in v2 is a one-file change.",
+      "tags": ["openai", "provider", "llm", "scope", "v1", "v2"]
+    }
+  ]
+}

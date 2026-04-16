@@ -1,0 +1,20 @@
+[
+  {
+    "id": "task-001",
+    "title": "Rebuild from scratch?",
+    "question": "The retrieval module is growing in complexity. A team member is suggesting we scrap the current keyword-based approach and rebuild retrieval from scratch using a proper vector database and embedding model. Should we do it?",
+    "query": "rebuild scratch retrieval embedding vector database architecture complexity"
+  },
+  {
+    "id": "task-002",
+    "title": "Broaden v1 scope?",
+    "question": "We are getting strong user interest in adding agent-based workflows and multi-turn conversational memory to v1. The argument is that these features would make the product significantly more compelling. Should we expand the v1 scope to include them?",
+    "query": "agents multi-turn scope v1 expand features conversational memory agentic"
+  },
+  {
+    "id": "task-003",
+    "title": "Mix project memory and personal style?",
+    "question": "A user wants to store their personal coding preferences — indentation style, variable naming conventions, preferred comment format — in the same memory file as their project constraints. They argue it would make the tool more useful day-to-day. Should we support this in v1?",
+    "query": "personal style coding preferences project memory mixing scope user"
+  }
+]
