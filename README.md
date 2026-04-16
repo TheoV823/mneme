@@ -2,6 +2,8 @@
 
 **Mneme injects project memory into AI calls so outputs follow your decisions.**
 
+Mneme is a thin layer between your workflow and the model.
+
 ---
 
 ## The problem
@@ -30,6 +32,28 @@ response = LLMAdapter().complete(
 )
 print(response.content)
 ```
+
+## How it works
+
+Mneme turns project memory into a structured context packet that is injected into every LLM call.
+
+The pipeline is:
+
+1. **Memory store** — structured project memory: rules, constraints, facts, decision examples
+2. **Deterministic retrieval** — selects relevant items based on the input task
+3. **Context packet** — builds a compact, structured representation of what the model needs to know
+4. **Injection** — the context packet is passed as the system prompt
+5. **Evaluation** (optional) — outputs are scored against the injected context to check alignment
+
+This is intentionally simple:
+
+* no vector database
+* no long context windows
+* no agent loops
+
+The goal is not to give the model more information. It is to make it **respect prior decisions**.
+
+---
 
 ## The flagship example
 
