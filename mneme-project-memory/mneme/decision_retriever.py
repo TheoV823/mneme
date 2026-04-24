@@ -31,10 +31,18 @@ _WEIGHTS: dict[str, float] = {
     "rationale": 0.5,
 }
 
+# Short high-frequency verbs that carry no domain signal.
+# These appear in both natural-language queries and in verbose legacy-migrated
+# content, causing false-positive score contributions.
+_STOPWORDS: frozenset[str] = frozenset({"add", "use", "not", "get", "set", "run"})
+
 
 def _tokenize(text: str) -> set[str]:
-    """Lowercase tokens of length >= 3."""
-    return {w for w in re.split(r"\W+", text.lower()) if len(w) >= 3}
+    """Lowercase tokens, length >= 4, excluding high-frequency stopwords."""
+    return {
+        w for w in re.findall(r"[a-z0-9]+", text.lower())
+        if len(w) >= 4 and w not in _STOPWORDS
+    }
 
 
 def _tokenize_list(values: Iterable[str]) -> set[str]:
