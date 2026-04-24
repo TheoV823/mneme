@@ -19,6 +19,7 @@ the ``system`` parameter of an API call.
 
 from __future__ import annotations
 
+from mneme.decision_retriever import ScoredDecision  # noqa: F401  (re-exported type)
 from mneme.schemas import ContextPacket, DecisionExample, MemoryItem
 
 
@@ -118,3 +119,72 @@ class ContextBuilder:
         sections.append(f"OUTPUT GUIDANCE\n  {packet.output_guidance}")
 
         return "\n\n".join(sections)
+
+
+# ── Decision-aware formatting (v2) ───────────────────────────────────────────
+
+DEFAULT_MAX_DECISIONS = 3
+
+
+def format_decisions(
+    scored: list[ScoredDecision],
+    max_items: int = DEFAULT_MAX_DECISIONS,
+) -> str:
+    """Format the top-N scored decisions as a system-prompt fragment.
+
+    Skips decisions with score == 0. Deduplicates by decision id. Returns
+    an empty string when no decisions qualify.
+
+    Output shape::
+
+        [Mneme decisions applied]
+
+        DECISION [id]: <decision>
+          Why:          <rationale>
+          Scope:        <scope joined by comma>
+          Constraints:  - <c1>
+                        - <c2>
+          Avoid:        - <a1>
+
+    Args:
+        scored:    Pre-scored decisions from DecisionRetriever.retrieve().
+                   Assumed to be sorted descending by score.
+        max_items: Hard cap on number injected. Defaults to 3.
+
+    Returns:
+        A formatted multi-section string, or "" if nothing qualifies.
+    """
+    seen: set[str] = set()
+    kept: list[ScoredDecision] = []
+    for s in scored:
+        if s.score <= 0:
+            continue
+        if s.decision.id in seen:
+            continue
+        seen.add(s.decision.id)
+        kept.append(s)
+        if len(kept) >= max_items:
+            break
+
+    if not kept:
+        return ""
+
+    blocks: list[str] = ["[Mneme decisions applied]"]
+    for s in kept:
+        d = s.decision
+        lines = [f"DECISION [{d.id}]: {d.decision}"]
+        if d.rationale:
+            lines.append(f"  Why:          {d.rationale}")
+        if d.scope:
+            lines.append(f"  Scope:        {', '.join(d.scope)}")
+        if d.constraints:
+            lines.append("  Constraints:")
+            for c in d.constraints:
+                lines.append(f"    - {c}")
+        if d.anti_patterns:
+            lines.append("  Avoid:")
+            for a in d.anti_patterns:
+                lines.append(f"    - {a}")
+        blocks.append("\n".join(lines))
+
+    return "\n\n".join(blocks)
