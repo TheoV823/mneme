@@ -8,6 +8,14 @@ Mneme makes AI coding behave like a consistent engineer, not a stateless assista
 
 ---
 
+## Demo
+
+[![Mneme — Same prompt. Two outcomes.](https://cdn.loom.com/sessions/thumbnails/7c4064a0019d4036a42e8075b87d313b-with-play.gif)](https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b)
+
+*Same prompt. Same model. Different answer — because it has your project's decisions.*
+
+---
+
 ## The problem
 
 LLMs drift in long-running projects. They forget prior architecture choices, reintroduce rejected technologies, and suggest changes that violate decisions already made by the team.
