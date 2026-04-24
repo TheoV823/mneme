@@ -33,6 +33,7 @@ from pathlib import Path
 from mneme.context_builder import DEFAULT_MAX_DECISIONS, format_decisions
 from mneme.cursor_generator import generate_mdc
 from mneme.decision_retriever import DecisionRetriever
+from mneme.enforcer import Severity, check_prompt
 from mneme.memory_store import MemoryStore
 
 
@@ -110,6 +111,42 @@ def _cmd_test(args: argparse.Namespace) -> int:
     return 0
 
 
+# ── Subcommand: check ────────────────────────────────────────────────────────
+
+_EXIT_CODES: dict[Severity, int] = {
+    Severity.PASS: 0,
+    Severity.WARN: 1,
+    Severity.FAIL: 2,
+}
+
+_SEVERITY_PREFIX: dict[Severity, str] = {
+    Severity.PASS: "PASS",
+    Severity.WARN: "WARN",
+    Severity.FAIL: "FAIL",
+}
+
+
+def _cmd_check(args: argparse.Namespace) -> int:
+    input_text = Path(args.input).read_text(encoding="utf-8")
+
+    store = MemoryStore(args.memory)
+    store.load()
+    retriever = DecisionRetriever(store.decisions())
+    scored = retriever.retrieve(args.query)
+
+    result = check_prompt(input_text, scored, top=args.top)
+
+    if result.violations:
+        for v in result.violations:
+            kind = "anti_pattern" if v.severity == Severity.FAIL else "constraint"
+            print(f"{v.severity.value:4}  [{v.decision_id}] {kind} \"{v.rule}\" — trigger: {v.trigger}")
+            print(f"      {v.decision_text}")
+        print()
+
+    print(f"Result: {result.verdict.value}")
+    return _EXIT_CODES[result.verdict]
+
+
 # ── Subcommand: cursor generate ──────────────────────────────────────────────
 
 def _cmd_cursor_generate(args: argparse.Namespace) -> int:
@@ -161,6 +198,14 @@ def _build_parser() -> argparse.ArgumentParser:
     p_test.add_argument("--query", required=True)
     p_test.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
     p_test.set_defaults(func=_cmd_test)
+
+    # check
+    p_check = sub.add_parser("check", help="Enforce decisions against an input prompt")
+    p_check.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_check.add_argument("--input", required=True, help="Path to input file to check")
+    p_check.add_argument("--query", required=True, help="Context query for retrieval")
+    p_check.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
+    p_check.set_defaults(func=_cmd_check)
 
     # cursor (parent for cursor subcommands)
     p_cursor = sub.add_parser("cursor", help="Cursor.ai integration commands")
