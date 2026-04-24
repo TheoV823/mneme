@@ -116,7 +116,7 @@ def check_prompt(
             if not m:
                 continue
             forbidden_phrase = m.group(1).strip()
-            for term in _rule_terms(forbidden_phrase, min_len=2):
+            for term in _rule_terms(forbidden_phrase, min_len=3):
                 if _word_in_text(term, input_text):
                     violations.append(Violation(
                         decision_id=d.id,
