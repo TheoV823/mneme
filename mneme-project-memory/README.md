@@ -279,6 +279,18 @@ mneme cursor generate --memory examples/project_memory.json \
 mneme check --memory examples/project_memory.json \
     --input examples/prompt_violation.txt \
     --query "storage backend"
+
+# strict mode (default): WARN→exit 1, FAIL→exit 2 — gates CI pipelines
+mneme check --mode strict \
+    --memory examples/project_memory.json \
+    --input examples/prompt_violation.txt \
+    --query "storage backend"
+
+# warn mode: all verdicts exit 0 — logs violations without blocking
+mneme check --mode warn \
+    --memory examples/project_memory.json \
+    --input examples/prompt_violation.txt \
+    --query "storage backend"
 ```
 
 ---
@@ -399,14 +411,41 @@ Result: PASS
 
 **What triggers each level:**
 
-| Verdict | Trigger | Exit code |
-|---------|---------|-----------|
-| `PASS`  | No violations in top-N decisions | 0 |
-| `WARN`  | Input mentions a term forbidden by a `"no X"` constraint | 1 |
-| `FAIL`  | Input contains a term from a decision's `anti_patterns` list | 2 |
+| Verdict | Trigger | `strict` exit | `warn` exit |
+|---------|---------|:---:|:---:|
+| `PASS`  | No violations in top-N decisions | 0 | 0 |
+| `WARN`  | Input mentions a term forbidden by a `"no X"` constraint | 1 | 0 |
+| `FAIL`  | Input contains a term from a decision's `anti_patterns` list | 2 | 0 |
 
 Detection is deterministic — no ML, no LLM, no external calls. Same input
 always returns the same verdict.
+
+### Enforcement modes
+
+`--mode strict` *(default)* — designed for CI gates and pre-commit hooks.
+Any violation causes a non-zero exit that stops the pipeline.
+
+```bash
+# Gate a CI step: fail the build if the prompt violates decisions
+mneme check --mode strict \
+  --memory examples/project_memory.json \
+  --input  prompt.txt \
+  --query  "storage backend"
+```
+
+`--mode warn` — designed for observability and gradual adoption.
+Violations are printed with full detail but the process always exits 0,
+so existing scripts are never broken.
+
+```bash
+# Log violations without blocking the agent
+mneme check --mode warn \
+  --memory examples/project_memory.json \
+  --input  prompt.txt \
+  --query  "storage backend"
+```
+
+Both modes print the same structured output. Only the exit code differs.
 
 ---
 
@@ -526,7 +565,7 @@ See the [Adoption and Enhancement Roadmap](../docs/roadmap/2026-04-24-adoption-a
 |---------|-----------|
 | **v0.1** | JSON-backed memory, keyword retrieval, deterministic evaluation, before/after demo |
 | **v0.2** ✓ | Decision enforcement layer: `mneme check` (PASS/WARN/FAIL), Cursor rules generator, drift detection test harness |
-| **v0.3** | Strict enforcement mode: retry loop, structured violation report, CI-gate integration |
+| **v0.3** ✓ | Configurable enforcement modes: `--mode strict` (default, CI-gate) and `--mode warn` (log-only, zero exit) |
 | **v1.0** | Multi-project support, memory versioning, embedding-based retrieval (opt-in) |
 | **Beyond** | LLM-judge evaluator mode, learned retrieval ranking, cross-project memory |
 

@@ -113,16 +113,9 @@ def _cmd_test(args: argparse.Namespace) -> int:
 
 # ── Subcommand: check ────────────────────────────────────────────────────────
 
-_EXIT_CODES: dict[Severity, int] = {
-    Severity.PASS: 0,
-    Severity.WARN: 1,
-    Severity.FAIL: 2,
-}
-
-_SEVERITY_PREFIX: dict[Severity, str] = {
-    Severity.PASS: "PASS",
-    Severity.WARN: "WARN",
-    Severity.FAIL: "FAIL",
+_EXIT_CODES_BY_MODE: dict[str, dict[Severity, int]] = {
+    "strict": {Severity.PASS: 0, Severity.WARN: 1, Severity.FAIL: 2},
+    "warn":   {Severity.PASS: 0, Severity.WARN: 0, Severity.FAIL: 0},
 }
 
 
@@ -144,7 +137,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
         print()
 
     print(f"Result: {result.verdict.value}")
-    return _EXIT_CODES[result.verdict]
+    return _EXIT_CODES_BY_MODE[args.mode][result.verdict]
 
 
 # ── Subcommand: cursor generate ──────────────────────────────────────────────
@@ -205,6 +198,10 @@ def _build_parser() -> argparse.ArgumentParser:
     p_check.add_argument("--input", required=True, help="Path to input file to check")
     p_check.add_argument("--query", required=True, help="Context query for retrieval")
     p_check.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
+    p_check.add_argument(
+        "--mode", choices=["warn", "strict"], default="strict",
+        help="warn: all verdicts exit 0; strict (default): WARN→1, FAIL→2",
+    )
     p_check.set_defaults(func=_cmd_check)
 
     # cursor (parent for cursor subcommands)
