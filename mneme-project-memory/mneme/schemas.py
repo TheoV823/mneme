@@ -131,14 +131,16 @@ class ProjectMemory:
     """The full memory store for one project.
 
     Attributes:
-        meta:     Project-level metadata (name, description, version).
-        items:    All MemoryItem entries — facts, rules, preferences, etc.
-        examples: All DecisionExample entries showing past reasoning.
+        meta:      Project-level metadata (name, description, version).
+        items:     All MemoryItem entries — facts, rules, preferences, etc.
+        examples:  All DecisionExample entries showing past reasoning.
+        decisions: All Decision entries (v2 schema + legacy-migrated).
     """
 
     meta: ProjectMeta
     items: list[MemoryItem] = field(default_factory=list)
     examples: list[DecisionExample] = field(default_factory=list)
+    decisions: list["Decision"] = field(default_factory=list)
 
 
 @dataclass

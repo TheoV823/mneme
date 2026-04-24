@@ -204,5 +204,37 @@
       "rationale": "Supporting multiple providers in v1 requires an abstraction layer (provider interface, config routing) that adds complexity without demonstrating the core value. The LLMAdapter is designed to be swappable - adding OpenAI support in v2 is a one-file change.",
       "tags": ["openai", "provider", "llm", "scope", "v1", "v2"]
     }
+  ],
+  "decisions": [
+    {
+      "id": "mneme_storage_json",
+      "decision": "Use JSON storage only",
+      "rationale": "Avoid infra complexity and keep local-first. A human-editable JSON file is good enough for v1 and keeps the pip-install-in-30-seconds contract.",
+      "scope": ["storage", "backend", "persistence"],
+      "constraints": ["no postgres", "no external database", "no ORM"],
+      "anti_patterns": ["introduce ORM", "add migration layer", "add sqlalchemy"],
+      "created_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z"
+    },
+    {
+      "id": "mneme_retrieval_deterministic",
+      "decision": "Retrieval must be deterministic",
+      "rationale": "Same query + same memory file must always produce the same ranked list. Embeddings are a v2 opt-in.",
+      "scope": ["retrieval", "ranking"],
+      "constraints": ["no embeddings in v1", "no learned weights"],
+      "anti_patterns": ["add sentence-transformers", "add vector database", "introduce randomness"],
+      "created_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z"
+    },
+    {
+      "id": "mneme_no_agents_v1",
+      "decision": "No agentic loops in v1",
+      "rationale": "Mneme v1 is a single call-response pipeline. Agentic behaviour is a separate concern.",
+      "scope": ["runtime", "architecture"],
+      "constraints": ["single-turn only"],
+      "anti_patterns": ["tool-use loops", "function calling", "multi-turn agents"],
+      "created_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z"
+    }
   ]
 }

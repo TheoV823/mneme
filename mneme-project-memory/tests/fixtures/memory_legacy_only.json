@@ -1,0 +1,30 @@
+{
+  "meta": {"name": "test-legacy", "description": "legacy-only fixture"},
+  "items": [
+    {
+      "id": "rule-001",
+      "type": "rule",
+      "title": "Extend current infrastructure before rebuilding",
+      "content": "Prefer extending existing modules over new abstractions.",
+      "tags": ["architecture"],
+      "priority": "high"
+    },
+    {
+      "id": "anti-001",
+      "type": "anti_pattern",
+      "title": "Do not use langchain",
+      "content": "langchain adds weight and abstracts the API surface.",
+      "tags": ["langchain", "forbidden"],
+      "priority": "high"
+    },
+    {
+      "id": "fact-001",
+      "type": "fact",
+      "title": "Runtime",
+      "content": "Python 3.11+.",
+      "tags": ["runtime"],
+      "priority": "high"
+    }
+  ],
+  "examples": []
+}

@@ -1,0 +1,17 @@
+{
+  "meta": {"name": "test-v2", "description": "v2 fixture"},
+  "items": [],
+  "examples": [],
+  "decisions": [
+    {
+      "id": "mneme_001",
+      "decision": "Use JSON storage only",
+      "rationale": "Avoid infra complexity and keep local-first",
+      "scope": ["storage", "backend"],
+      "constraints": ["no postgres", "no external db"],
+      "anti_patterns": ["introduce ORM", "add migration layer"],
+      "created_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z"
+    }
+  ]
+}

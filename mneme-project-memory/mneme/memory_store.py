@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from mneme.schemas import DecisionExample, MemoryItem, ProjectMeta, ProjectMemory
+from mneme.schemas import Decision, DecisionExample, MemoryItem, ProjectMeta, ProjectMemory
 
 
 class MemoryStore:
@@ -82,7 +82,50 @@ class MemoryStore:
             for ex in data.get("examples", [])
         ]
 
-        self._memory = ProjectMemory(meta=meta, items=items, examples=examples)
+        # Native Decision records (v2 schema).
+        native_decisions = [
+            Decision(
+                id=d["id"],
+                decision=d["decision"],
+                rationale=d.get("rationale", ""),
+                scope=list(d.get("scope", [])),
+                constraints=list(d.get("constraints", [])),
+                anti_patterns=list(d.get("anti_patterns", [])),
+                created_at=d.get("created_at", ""),
+                updated_at=d.get("updated_at", ""),
+            )
+            for d in data.get("decisions", [])
+        ]
+
+        # Backward compatibility: migrate legacy rule/anti_pattern items.
+        migrated: list[Decision] = []
+        for item in items:
+            if item.type == "rule":
+                migrated.append(
+                    Decision(
+                        id=item.id,
+                        decision=item.title,
+                        rationale="",
+                        scope=["general"],
+                        constraints=[item.content] if item.content else [],
+                    )
+                )
+            elif item.type == "anti_pattern":
+                migrated.append(
+                    Decision(
+                        id=item.id,
+                        decision=f"Avoid: {item.title}",
+                        rationale="",
+                        scope=["general"],
+                        anti_patterns=[item.title] + (
+                            [item.content] if item.content else []
+                        ),
+                    )
+                )
+
+        decisions = native_decisions + migrated
+
+        self._memory = ProjectMemory(meta=meta, items=items, examples=examples, decisions=decisions)
         return self._memory
 
     @property
@@ -125,6 +168,10 @@ class MemoryStore:
     def facts(self) -> list[MemoryItem]:
         """Return all items of type "fact"."""
         return self.by_type("fact")
+
+    def decisions(self) -> list[Decision]:
+        """Return all Decision records (native + legacy-migrated)."""
+        return list(self.memory.decisions)
 
     def summary(self) -> str:
         """Return a one-line summary string combining name and description."""
