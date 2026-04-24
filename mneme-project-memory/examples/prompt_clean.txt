@@ -1,0 +1,10 @@
+Extend the storage module to support optional decision expiry.
+
+Proposed changes:
+- Add an optional `expires_at` field to the Decision dataclass (default: None)
+- Update MemoryStore.load() to filter out expired decisions at load time
+- Add a --filter-expired flag to the list_decisions CLI command
+- Write the updated structure back to the same JSON file on disk
+
+No new dependencies. JSON files only. Fully backwards-compatible with existing
+project_memory.json files.

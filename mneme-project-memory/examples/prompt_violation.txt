@@ -1,0 +1,10 @@
+Refactor the storage layer to use SQLAlchemy with a PostgreSQL backend.
+
+Proposed changes:
+- Create a DecisionModel class using SQLAlchemy's declarative base
+- Store decisions in a decisions table with columns: id, decision, rationale, scope, constraints
+- Add an Alembic migration for the initial schema
+- Replace MemoryStore.load() with a SQLAlchemy session using psycopg2
+
+This gives us type safety, query flexibility, and a proper migration layer for
+future schema evolution.
