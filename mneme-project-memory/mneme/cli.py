@@ -3,9 +3,10 @@ cli.py — Command-line interface for Mneme.
 
 Subcommands
 -----------
-  add_decision    Append a new Decision to a project_memory.json file.
-  list_decisions  Print every Decision in the memory file.
-  test_query      Run a query through the retriever and show scores + injected.
+  add_decision      Append a new Decision to a project_memory.json file.
+  list_decisions    Print every Decision in the memory file.
+  test_query        Run a query through the retriever and show scores + injected.
+  cursor generate   Generate a Cursor .mdc rules file from retrieved decisions.
 
 Usage::
 
@@ -15,6 +16,8 @@ Usage::
         --constraint "no postgres"
     mneme test_query --memory examples/project_memory.json \\
         --query "should I add postgres?"
+    mneme cursor generate --memory examples/project_memory.json \\
+        --query "working on storage layer" --output .cursor/rules/mneme.mdc
 
 All writes go directly to the JSON file. The Pipeline runtime is never
 mutated — add_decision is a file operation only.
@@ -28,6 +31,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from mneme.context_builder import DEFAULT_MAX_DECISIONS, format_decisions
+from mneme.cursor_generator import generate_mdc
 from mneme.decision_retriever import DecisionRetriever
 from mneme.memory_store import MemoryStore
 
@@ -106,6 +110,29 @@ def _cmd_test(args: argparse.Namespace) -> int:
     return 0
 
 
+# ── Subcommand: cursor generate ──────────────────────────────────────────────
+
+def _cmd_cursor_generate(args: argparse.Namespace) -> int:
+    store = MemoryStore(args.memory)
+    store.load()
+    retriever = DecisionRetriever(store.decisions())
+    scored = retriever.retrieve(args.query)
+
+    mdc = generate_mdc(
+        scored=scored,
+        query=args.query,
+        memory_path=args.memory,
+        top=args.top,
+        timestamp=_utc_now(),
+    )
+
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(mdc, encoding="utf-8")
+    print(f"Written: {output}")
+    return 0
+
+
 # ── Entry point ──────────────────────────────────────────────────────────────
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -134,6 +161,20 @@ def _build_parser() -> argparse.ArgumentParser:
     p_test.add_argument("--query", required=True)
     p_test.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
     p_test.set_defaults(func=_cmd_test)
+
+    # cursor (parent for cursor subcommands)
+    p_cursor = sub.add_parser("cursor", help="Cursor.ai integration commands")
+    cursor_sub = p_cursor.add_subparsers(dest="cursor_cmd", required=True)
+
+    p_cursor_gen = cursor_sub.add_parser("generate", help="Generate Cursor rules file")
+    p_cursor_gen.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_cursor_gen.add_argument("--query", required=True, help="Context query for retrieval")
+    p_cursor_gen.add_argument(
+        "--output", default=".cursor/rules/mneme.mdc",
+        help="Output path (default: .cursor/rules/mneme.mdc)",
+    )
+    p_cursor_gen.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
+    p_cursor_gen.set_defaults(func=_cmd_cursor_generate)
 
     return parser
 
