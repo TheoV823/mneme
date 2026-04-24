@@ -141,6 +141,39 @@ class ProjectMemory:
     examples: list[DecisionExample] = field(default_factory=list)
 
 
+@dataclass
+class Decision:
+    """A structured project decision with rationale, scope, and constraints.
+
+    Decisions are the primary unit of the v2 memory model. Unlike flat
+    MemoryItem rules, each Decision bundles *what* was decided with *why*
+    (rationale), *where it applies* (scope), and *what to avoid*
+    (constraints + anti_patterns). This structure drives relevance
+    scoring and conflict detection.
+
+    Attributes:
+        id:            Unique identifier, e.g. "mneme_001".
+        decision:      Concise statement of what was decided.
+        rationale:     Reasoning — why this was chosen.
+        scope:         Areas this applies to, e.g. ["storage", "backend"].
+        constraints:   Hard constraints expressed as short phrases,
+                       e.g. ["no postgres", "no external db"].
+        anti_patterns: Explicitly forbidden approaches,
+                       e.g. ["introduce ORM", "add migration layer"].
+        created_at:    ISO 8601 timestamp of creation.
+        updated_at:    ISO 8601 timestamp of last update.
+    """
+
+    id: str
+    decision: str
+    rationale: str = ""
+    scope: list[str] = field(default_factory=list)
+    constraints: list[str] = field(default_factory=list)
+    anti_patterns: list[str] = field(default_factory=list)
+    created_at: str = ""
+    updated_at: str = ""
+
+
 # ── Pipeline models ───────────────────────────────────────────────────────────
 
 @dataclass
