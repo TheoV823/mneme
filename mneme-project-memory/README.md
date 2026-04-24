@@ -124,16 +124,20 @@ Mneme is not a search engine for your docs. It is a structured rule system that 
 ```
 mneme-project-memory/
   mneme/
-    schemas.py          Dataclasses: MemoryItem, DecisionExample, ContextPacket
-    memory_store.py     Load project_memory.json into typed Python objects
-    retriever.py        Score items by keyword overlap + tag match + priority weight
-    context_builder.py  Format a ContextPacket into a system prompt string
-    llm_adapter.py      Thin Anthropic API wrapper with dry-run mode
-    evaluator.py        Deterministic alignment checker (rule + decision checks)
+    schemas.py              Dataclasses: MemoryItem, Decision, DecisionExample, ContextPacket
+    memory_store.py         Load project_memory.json; auto-migrate legacy rule/anti_pattern items
+    retriever.py            v1: keyword overlap + tag match + priority weight (unchanged)
+    decision_retriever.py   v2: field-weighted scoring over Decision records
+    context_builder.py      format_context_packet (v1) + format_decisions/top-N (v2)
+    conflict_detector.py    v2: post-response violation scanner
+    pipeline.py             v2: MemoryStore -> DecisionRetriever -> inject -> LLM -> detect
+    llm_adapter.py          Thin Anthropic API wrapper with dry-run mode
+    evaluator.py            v1: deterministic alignment checker (unchanged)
+    cli.py                  v2: add_decision / list_decisions / test_query commands
   examples/
-    project_memory.json 20 memory items + 5 decision examples for this repo
-    demo_tasks.json     3 decision-oriented tasks for the before/after demo
-  demo.py               CLI runner: baseline vs. Mneme-enhanced, with alignment scoring
+    project_memory.json     20 items + 5 examples + 3 native decisions for this repo
+    demo_tasks.json         3 decision-oriented tasks for the before/after demo
+  demo.py                   CLI runner: baseline vs. Mneme-enhanced, with alignment scoring
 ```
 
 ### Memory item types
@@ -183,6 +187,88 @@ The evaluator checks the response against the rules that were actually injected 
 Score = fraction of checks passed. 1.00 = no violations detected.
 
 The evaluator is deterministic, fast, and auditable. The upgrade path to a model-based judge is explicit in the code: replace two functions, keep everything else.
+
+## v2: Decision enforcement layer
+
+Mneme v0.2 adds structured `Decision` records, field-weighted retrieval, top-N
+injection, post-response conflict detection, and a CLI — all additive. The v1
+pipeline is unchanged. Legacy `rule` and `anti_pattern` items are auto-migrated
+into `Decision` objects at load time; no changes needed to existing JSON files.
+
+### Decision schema
+
+```json
+{
+  "id": "mneme_storage_json",
+  "decision": "Use JSON storage only",
+  "rationale": "Avoid infra complexity and keep local-first.",
+  "scope": ["storage", "backend"],
+  "constraints": ["no postgres", "no external database"],
+  "anti_patterns": ["introduce ORM", "add migration layer"]
+}
+```
+
+Add a top-level `"decisions"` array alongside `"items"` and `"examples"` in
+`project_memory.json`. All seven fields are optional except `id` and `decision`.
+
+### Scoring formula
+
+`DecisionRetriever` scores each decision with field-weighted keyword overlap
+(deterministic, no ML, same query always returns the same ranking):
+
+```
+score =
+    overlap(query, decision)      * 1.0
+  + overlap(query, scope)         * 2.0
+  + overlap(query, constraints)   * 1.5
+  + overlap(query, anti_patterns) * 1.5
+  + overlap(query, rationale)     * 0.5
+```
+
+### Top-N injection
+
+Only the top-scoring decisions are injected. The default cap is
+`DEFAULT_MAX_DECISIONS = 3`. Override per call:
+
+```python
+from mneme.pipeline import Pipeline
+
+result = Pipeline("examples/project_memory.json", dry_run=True, max_decisions=5).run(query)
+print(result.system_prompt)   # formatted block injected as system prompt
+print(result.injected_decisions)  # list[Decision] actually sent
+```
+
+### Conflict detection
+
+`ConflictDetector` scans the LLM response for constraint and anti-pattern
+violations **after** the call. It is a detector, not a blocker:
+
+```python
+from mneme.conflict_detector import ConflictDetector
+conflicts = ConflictDetector().detect(response.content, injected_decisions)
+# Conflict(violated_decision_id, reason, snippet) per match
+```
+
+A term is only flagged when it appears **without** a negation signal nearby.
+`"Do not use Postgres"` is not a conflict. `"Switch to Postgres"` is.
+
+### CLI
+
+```bash
+# List all decisions (native + auto-migrated legacy items)
+mneme list_decisions --memory examples/project_memory.json
+
+# Append a new decision (file write only — does not mutate a live Pipeline)
+mneme add_decision --memory examples/project_memory.json \
+    --id mneme_042 --decision "No GraphQL in v1" \
+    --scope api --constraint "REST only" --anti-pattern "introduce graphql"
+
+# Score a query and preview the injected block
+mneme test_query --memory examples/project_memory.json \
+    --query "should I add postgres?" --top 3
+```
+
+---
 
 ## Quickstart
 
