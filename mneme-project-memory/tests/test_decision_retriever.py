@@ -65,3 +65,42 @@ def test_results_sorted_descending():
     ]
     ranked = _retriever(decisions).retrieve("postgres")
     assert ranked[0].score >= ranked[-1].score
+
+
+def test_stopword_token_does_not_contribute_to_score():
+    """A token in STOPWORDS must not create a false-positive match.
+
+    "add" appears in both query and decision — it is a stopword and must
+    be filtered before overlap is computed.
+    """
+    decisions = [
+        Decision(id="noise", decision="Do not add agentic loops"),
+    ]
+    ranked = _retriever(decisions).retrieve("should I add embeddings?")
+    assert ranked[0].score == 0
+
+
+def test_legacy_migrated_item_does_not_outrank_native_via_stopword():
+    """A migrated decision that only matches via a stopword must score zero.
+
+    Before the fix, "add" in both query and migrated anti_patterns content
+    contributed 2.5 points, drowning out genuine score differences.
+    """
+    decisions = [
+        Decision(
+            id="native",
+            decision="Storage must remain JSON",
+            scope=["storage"],
+            constraints=["no postgres"],
+        ),
+        Decision(
+            id="migrated",
+            decision="Do not add agentic loops",
+            anti_patterns=["Do not add agentic loops in v1"],
+        ),
+    ]
+    ranked = _retriever(decisions).retrieve("should I add postgres storage?")
+    assert ranked[0].decision.id == "native"
+    migrated = next(r for r in ranked if r.decision.id == "migrated")
+    # "add" is a stopword — migrated has no other token that overlaps the query
+    assert migrated.score == 0
