@@ -1,16 +1,18 @@
-# mneme-project-memory
+# Mneme
 
-**Mneme injects project memory into AI calls so outputs follow your decisions.**
+**Prevent LLMs from violating prior project decisions.**
 
-Mneme is a thin layer between your workflow and the model.
+Mneme is a lightweight decision-enforcement layer for AI-assisted development workflows.
+
+Mneme makes AI coding behave like a consistent engineer, not a stateless assistant.
 
 ---
 
 ## The problem
 
-You ask an LLM to help with your project. It suggests Postgres when you committed to JSON files. It recommends langchain when you explicitly banned it. It proposes rebuilding a module you decided to extend. Every call starts from zero because the model has no memory of your project's constraints, architecture decisions, or established patterns.
+LLMs drift in long-running projects. They forget prior architecture choices, reintroduce rejected technologies, and suggest changes that violate decisions already made by the team.
 
-The usual fix is prompt engineering -- manually pasting context into every call. That does not scale, is not auditable, and drifts the moment anyone forgets to update the preamble.
+Mneme turns those decisions into structured, retrievable constraints that can be injected into LLM calls and checked against generated output.
 
 ## What Mneme is
 
@@ -270,6 +272,16 @@ mneme test_query --memory examples/project_memory.json \
 
 ---
 
+## Quick demo
+
+```bash
+python -m mneme.cli list_decisions --memory examples/project_memory.json
+python -m mneme.cli test_query --memory examples/project_memory.json --query "should I use Postgres?" --top 3
+python demo.py --dry-run
+```
+
+---
+
 ## Quickstart
 
 ```bash
@@ -369,6 +381,8 @@ The full file has 20 items and 5 decision examples. Edit it for your own project
 - **Evaluation closes the loop.** Injecting context is half the problem. The other half is knowing whether it worked. The evaluator checks the response against the rules that were injected and returns a score. This is the beginning of measurable LLM alignment at the project level.
 
 ## Roadmap
+
+See the [Adoption and Enhancement Roadmap](../docs/roadmap/2026-04-24-adoption-and-enhancement-roadmap.md).
 
 | Version | Capability |
 |---------|-----------|
