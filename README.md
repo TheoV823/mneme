@@ -1,10 +1,8 @@
 # Mneme
 
-**Prevent LLMs from violating prior project decisions.**
+**Stop LLMs from forgetting how your project is built.**
 
-Mneme is a lightweight decision-enforcement layer for AI-assisted development workflows.
-
-Mneme makes AI coding behave like a consistent engineer, not a stateless assistant.
+Mneme adds persistent project memory and guardrails to LLM-powered development workflows.
 
 ---
 
@@ -18,15 +16,15 @@ Mneme makes AI coding behave like a consistent engineer, not a stateless assista
 
 ## The problem
 
-LLMs drift in long-running projects. They forget prior architecture choices, reintroduce rejected technologies, and suggest changes that violate decisions already made by the team.
+LLMs start every call from zero. They forget prior architecture choices, reintroduce rejected technologies, and suggest changes that contradict decisions your team already made. This happens whether you are using a direct API completion, an IDE coding assistant, an agent framework, or a managed agent platform.
 
 Mneme turns those decisions into structured, retrievable constraints that can be injected into LLM calls and checked against generated output.
 
 ## What Mneme is
 
-**Mneme** is a portable project memory and evaluation nucleus for AI workflows.
+**Mneme** is a portable project memory and evaluation nucleus for LLM workflows.
 
-This repository demonstrates the first core capability: injecting structured project memory into LLM/API calls so outputs stay consistent with prior project decisions.
+This repository demonstrates the first core capability: injecting structured project memory into LLM calls so outputs stay consistent with prior project decisions.
 
 ```python
 from mneme.memory_store import MemoryStore
@@ -42,6 +40,14 @@ response = LLMAdapter().complete(
 )
 print(response.content)
 ```
+
+## Works with
+
+- Direct LLM API integrations
+- IDE coding assistants (Cursor, Copilot, Cline)
+- Agent frameworks (LangChain, CrewAI, AutoGen)
+- Managed agent platforms
+- Internal prompt pipelines
 
 ## How it works
 
@@ -384,7 +390,7 @@ The full file has 20 items and 5 decision examples. Edit it for your own project
 
 - **LLM calls are stateless.** Every API call starts from zero. Without explicit project context, the model gives plausible answers that routinely contradict your established decisions. Mneme makes the context explicit and the injection automatic.
 
-- **Project memory is a structured artifact, not a blob.** Dumping raw notes into a system prompt does not scale. Mneme types each piece of memory (rule, anti-pattern, decision example), assigns priority, and retrieves only what is relevant. The context stays compact.
+- **Project memory is a structured artifact, not a blob.** Dumping raw content into a system prompt does not scale. Mneme types each piece of memory (rule, anti-pattern, decision example), assigns priority, and retrieves only what is relevant. The context stays compact.
 
 - **Evaluation closes the loop.** Injecting context is half the problem. The other half is knowing whether it worked. The evaluator checks the response against the rules that were injected and returns a score. This is the beginning of measurable LLM alignment at the project level.
 
@@ -398,7 +404,7 @@ See the [Adoption and Enhancement Roadmap](docs/roadmap/2026-04-24-adoption-and-
 | **v0.2** | Embedding-based retrieval (opt-in), CLI tooling for memory management |
 | **v0.3** | LLM-judge evaluator mode, positive-alignment verification |
 | **v1.0** | Multi-project support, memory versioning, CI integration for alignment checks |
-| **Beyond** | Learned retrieval ranking, cross-project memory, agent-level memory management |
+| **Beyond** | Learned retrieval ranking, cross-project memory, multi-workflow memory management |
 
 ## Use Mneme via API
 
@@ -452,7 +458,7 @@ You can also pass memory inline:
   "memory": {
     "meta": {
       "name": "mneme",
-      "description": "Portable project memory and evaluation nucleus for AI workflows."
+      "description": "Portable project memory and evaluation nucleus for LLM workflows."
     },
     "items": [
       {
@@ -525,7 +531,7 @@ It exists to prove the core Mneme loop in the simplest usable form:
 
 This is the first public module of **Mneme**. It is a narrow, intentional wedge: one capability, demonstrated clearly, with a clean upgrade path.
 
-Mneme is a portable project memory and evaluation nucleus for AI workflows. This repo is where it starts.
+Mneme is a portable project memory and evaluation nucleus for LLM workflows. This repo is where it starts.
 
 ## License
 

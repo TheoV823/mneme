@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mneme — Persistent project memory for LLM workflows</title>
+  <meta name="description" content="Mneme adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0d;
+      --surface: #141416;
+      --surface2: #1a1a1d;
+      --border: #222226;
+      --border2: #2e2e34;
+      --text: #e8e8ec;
+      --muted: #88889a;
+      --accent: #c8f060;
+      --accent-dim: #a8d040;
+      --teal: #8be0c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(12,12,13,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 7rem 2rem 5rem;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(200,240,96,0.07);
+      border: 1px solid rgba(200,240,96,0.22);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 1.25rem;
+      font-family: 'DM Mono', monospace;
+    }
+    .hero-support {
+      font-size: 0.82rem;
+      color: var(--teal);
+      max-width: 500px;
+      margin: 0 auto 2.75rem;
+      font-family: 'DM Mono', monospace;
+    }
+    .cta-group {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── SECTION SHARED ── */
+    .section-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+      color: var(--text);
+    }
+
+    /* ── BEFORE/AFTER DEMO ── */
+    .demo-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 640px) {
+      .demo-panels { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); }
+    .panel-label {
+      font-size: 0.72rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      margin-left: 0.25rem;
+    }
+    .panel-label.bad { color: #ff7070; }
+    .panel-label.good { color: var(--accent); }
+    .panel-body {
+      padding: 1.25rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+    .panel-body.good-response { color: var(--text); }
+    .panel-prompt {
+      color: var(--border2);
+      margin-bottom: 0.75rem;
+      font-size: 0.72rem;
+      font-style: italic;
+    }
+
+    .alignment-block {
+      background: var(--surface);
+      border: 1px solid rgba(200,240,96,0.18);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.9;
+    }
+    .align-ok { color: var(--accent); }
+    .align-rule { color: var(--text); }
+    .align-score { color: var(--teal); padding-top: 0.4rem; border-top: 1px solid var(--border); margin-top: 0.4rem; }
+    .demo-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,240,96,0.3);
+      padding-bottom: 0.1rem;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .demo-link:hover { color: var(--teal); border-color: var(--teal); }
+
+    /* ── HOW IT WORKS ── */
+    .pipeline-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--teal);
+      overflow-x: auto;
+      margin-bottom: 2.5rem;
+      white-space: nowrap;
+    }
+    .steps { display: flex; flex-direction: column; gap: 1.5rem; }
+    .step { display: flex; gap: 1.25rem; align-items: flex-start; }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(200,240,96,0.28);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+    }
+    .step-body h4 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+    .step-body p { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── RAG TABLE ── */
+    .rag-table-wrap {
+      overflow-x: auto;
+    }
+    .rag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+    }
+    .rag-table th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border2);
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .rag-table th:first-child { width: 18%; }
+    .rag-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .rag-table td:first-child { color: var(--muted); }
+    .rag-table td:nth-child(2) { color: var(--text); opacity: 0.55; }
+    .rag-table td:nth-child(3) { color: var(--teal); }
+    .rag-table tr:last-child td { border-bottom: none; }
+
+    /* ── WORKS WITH ── */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1rem;
+    }
+    .works-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem 1.25rem;
+      transition: border-color 0.15s;
+    }
+    .works-card:hover { border-color: rgba(200,240,96,0.28); }
+    .works-card h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+    .works-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── GET STARTED ── */
+    .code-blocks { display: flex; flex-direction: column; gap: 1.25rem; }
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .code-block-label {
+      padding: 0.6rem 1rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .code-block pre {
+      padding: 1.25rem 1.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: var(--text);
+      overflow-x: auto;
+    }
+    .cc { color: var(--muted); }
+    .ck { color: var(--accent); }
+    .cs { color: var(--teal); }
+    .cp { color: var(--muted); }
+
+    /* ── CTA FOOTER ── */
+    .cta-footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 6rem 2rem;
+    }
+    .cta-footer h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 1.5rem 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">Mneme</a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Persistent project memory for LLM workflows</div>
+    <h1>Stop LLMs from forgetting<br>how your project is built.</h1>
+    <p class="hero-sub">Mneme adds persistent project memory and guardrails to LLM-powered development workflows.</p>
+    <p class="hero-support">Works with direct API integrations, coding assistants, agent frameworks, and managed agent platforms.</p>
+    <div class="cta-group">
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
+      <a href="https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b" target="_blank" rel="noopener" class="btn-ghost">Watch 17-second demo</a>
+    </div>
+  </div>
+
+  <!-- BEFORE / AFTER DEMO -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">See the difference</div>
+    <h2 class="section-title">Same prompt. Same model. Different answer.</h2>
+
+    <div class="demo-panels">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <span class="panel-label bad">Without Mneme</span>
+        </div>
+        <div class="panel-body">
+          <div class="panel-prompt">Prompt: "Should we rebuild the retrieval system from scratch with embeddings?"</div>
+          <div>We could consider rebuilding the system with a vector database and embedding model. This would improve semantic matching and scale better long-term. Sentence-transformers is a good option for generating embeddings...</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <span class="panel-label good">With Mneme</span>
+        </div>
+        <div class="panel-body good-response">
+          <div class="panel-prompt">Prompt: "Should we rebuild the retrieval system from scratch with embeddings?"</div>
+          <div>Do not rebuild from scratch. The project has an explicit rule to extend current infrastructure before rebuilding (rule-001). Keyword scoring was chosen intentionally — it is deterministic, has no ML dependencies, and is easy to debug. The team already declined adding sentence-transformers in v1. Extend the current retriever instead.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alignment-block">
+      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">rule-001: Extend current infrastructure before rebuilding</span></div>
+      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">rule-002: Keep v1 retrieval deterministic</span></div>
+      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">anti-001: Do not use langchain</span></div>
+      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">dec-001: Declined. Kept keyword scoring.</span></div>
+      <div class="align-score">alignment_score: 1.00</div>
+    </div>
+
+    <a href="https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b" target="_blank" rel="noopener" class="demo-link">Watch the full 17-second demo →</a>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section-wrap" id="how-it-works">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="section-title">Five stages. No vector store. No ML.</h2>
+
+    <div class="pipeline-block">
+      project_memory.json → MemoryStore → Retriever → ContextBuilder → LLMAdapter → Evaluator
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Load</h4>
+          <p>Load structured project memory from a human-editable JSON file — rules, constraints, facts, and prior decision records.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Retrieve</h4>
+          <p>Retrieve only the rules and decision examples relevant to the current task using deterministic keyword scoring. Same query always returns the same result.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Build</h4>
+          <p>Build a compact context packet containing only what the model needs to know about your project's established decisions.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Inject</h4>
+          <p>Inject the context packet as the system prompt before every LLM call — regardless of which tool or platform makes the call.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Evaluate</h4>
+          <p>Score the response against the injected context. Check whether the model respected your decisions and surface any violations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAG VS MNEME -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">Why not just RAG?</div>
+    <h2 class="section-title">RAG retrieves information. Mneme retrieves decisions.</h2>
+    <div class="rag-table-wrap">
+      <table class="rag-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>RAG</th>
+            <th>Mneme</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Input</td>
+            <td>Documents, chunks, embeddings</td>
+            <td>Rules, constraints, decision records</td>
+          </tr>
+          <tr>
+            <td>Goal</td>
+            <td>Inform the response</td>
+            <td>Shape the response</td>
+          </tr>
+          <tr>
+            <td>Output effect</td>
+            <td>Model knows more</td>
+            <td>Model follows your decisions</td>
+          </tr>
+          <tr>
+            <td>Evaluation</td>
+            <td>"Did it use the right source?"</td>
+            <td>"Did it respect the constraint?"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- WORKS WITH -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">Integrations</div>
+    <h2 class="section-title">Works with your entire LLM stack.</h2>
+    <div class="works-grid">
+      <div class="works-card">
+        <h3>Direct LLM API integrations</h3>
+        <p>Wrap any Anthropic, OpenAI, or compatible API call with automatic project memory injection.</p>
+      </div>
+      <div class="works-card">
+        <h3>IDE coding assistants</h3>
+        <p>Cursor, GitHub Copilot, Cline — your project decisions become editor-level guardrails.</p>
+      </div>
+      <div class="works-card">
+        <h3>Agent frameworks</h3>
+        <p>LangChain, CrewAI, AutoGen — enforce project constraints across every step of a multi-step run.</p>
+      </div>
+      <div class="works-card">
+        <h3>Managed agent platforms</h3>
+        <p>Connect via the API layer to any platform that accepts a structured system prompt.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GET STARTED -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">Get started</div>
+    <h2 class="section-title">Running in under two minutes.</h2>
+    <div class="code-blocks">
+      <div class="code-block">
+        <div class="code-block-label">install</div>
+        <pre><span class="cp">$</span> git clone https://github.com/TheoV823/mneme
+<span class="cp">$</span> cd mneme
+<span class="cp">$</span> pip install -e .</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-block-label">run demo</div>
+        <pre><span class="cc"># Runs the before/after demo without an API key</span>
+<span class="cp">$</span> python demo.py --dry-run</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-block-label">usage example</div>
+        <pre><span class="ck">from</span> mneme.memory_store <span class="ck">import</span> MemoryStore
+<span class="ck">from</span> mneme.retriever <span class="ck">import</span> Retriever
+<span class="ck">from</span> mneme.context_builder <span class="ck">import</span> format_context_packet
+<span class="ck">from</span> mneme.llm_adapter <span class="ck">import</span> LLMAdapter
+
+memory = MemoryStore(<span class="cs">"examples/project_memory.json"</span>).load()
+packet = Retriever(memory).retrieve(<span class="cs">"Should we rebuild from scratch?"</span>)
+response = LLMAdapter().complete(
+    user=<span class="cs">"Should we rebuild from scratch?"</span>,
+    system=format_context_packet(packet),
+)
+<span class="ck">print</span>(response.content)</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA FOOTER -->
+  <div class="cta-footer">
+    <h2>Ready to give your LLM workflows a memory?</h2>
+    <div class="cta-group">
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
+      <a href="https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b" target="_blank" rel="noopener" class="btn-ghost">Watch demo</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;·&nbsp;
+    Open source
+    &nbsp;·&nbsp;
+    MIT License
+  </p>
+</footer>
+
+</body>
+</html>
