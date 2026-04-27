@@ -1,0 +1,6 @@
+# Force HTTPS — Cloudflare-aware (avoids redirect loops)
+# CF-Visitor tells origin what scheme the visitor used, even when
+# Cloudflare itself fetches from origin over HTTP.
+RewriteEngine On
+RewriteCond %{HTTP:CF-Visitor} '"scheme":"http"'
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
