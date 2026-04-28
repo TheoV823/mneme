@@ -30,6 +30,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from mneme.benchmark import BenchmarkRunner, ScenarioVerdict
+from mneme.benchmark_report import format_json, format_markdown, format_terminal
 from mneme.context_builder import DEFAULT_MAX_DECISIONS, format_decisions
 from mneme.cursor_generator import generate_mdc
 from mneme.decision_retriever import DecisionRetriever
@@ -163,6 +165,42 @@ def _cmd_cursor_generate(args: argparse.Namespace) -> int:
     return 0
 
 
+# ── Subcommand: benchmark ────────────────────────────────────────────────────
+
+def _cmd_benchmark(args: argparse.Namespace) -> int:
+    """Run all benchmark scenarios in a directory and report results."""
+    benchmarks_dir = Path(args.benchmarks_dir)
+    if not benchmarks_dir.is_dir():
+        print(f"ERROR: {benchmarks_dir} is not a directory", flush=True)
+        return 2
+
+    store = MemoryStore(args.memory)
+    store.load()
+    runner = BenchmarkRunner(store)
+
+    results = runner.run_suite(benchmarks_dir)
+    if not results:
+        print("No benchmark scenarios found.")
+        return 0
+
+    print(format_terminal(results))
+
+    if args.json:
+        out = Path(args.json)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(format_json(results), encoding="utf-8")
+        print(f"JSON report written: {args.json}")
+
+    if args.markdown:
+        out = Path(args.markdown)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(format_markdown(results), encoding="utf-8")
+        print(f"Markdown report written: {args.markdown}")
+
+    has_failures = any(r.verdict == ScenarioVerdict.FAIL for r in results)
+    return 1 if has_failures else 0
+
+
 # ── Entry point ──────────────────────────────────────────────────────────────
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -217,6 +255,22 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p_cursor_gen.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
     p_cursor_gen.set_defaults(func=_cmd_cursor_generate)
+
+    # benchmark
+    p_bench = sub.add_parser(
+        "benchmark",
+        help="Run benchmark scenarios and report violation detection results",
+    )
+    p_bench.add_argument(
+        "benchmarks_dir",
+        help="Path to directory containing benchmark scenario subdirectories",
+    )
+    p_bench.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_bench.add_argument("--json", metavar="FILE", default=None,
+                         help="Write JSON report to FILE")
+    p_bench.add_argument("--markdown", metavar="FILE", default=None,
+                         help="Write Markdown report to FILE")
+    p_bench.set_defaults(func=_cmd_benchmark)
 
     return parser
 
