@@ -169,6 +169,9 @@ def _cmd_cursor_generate(args: argparse.Namespace) -> int:
 
 def _cmd_benchmark(args: argparse.Namespace) -> int:
     """Run all benchmark scenarios in a directory and report results."""
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     benchmarks_dir = Path(args.benchmarks_dir)
     if not benchmarks_dir.is_dir():
         print(f"ERROR: {benchmarks_dir} is not a directory", flush=True)
