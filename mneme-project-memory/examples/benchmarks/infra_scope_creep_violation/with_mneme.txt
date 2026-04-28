@@ -1,7 +1,8 @@
-Enterprise readiness in v1 means making the core workflow reliable and easy
-to integrate (rule-004). Complex distributed infrastructure is out of scope —
-every v1 capability must run on a fresh installation with no accounts required.
+Scaling for teams in this release means reliable developer experience, solid
+documentation, and clear CI guidance — not distributed infrastructure. Complex
+external services and orchestration brokers are outside the project's planned
+roadmap; the architecture is intentionally narrow so it runs on a clean
+developer environment without any account setup.
 
-The right approach: improve error handling and API versioning, strengthen the
-CLI for team workflows, and document CI integration patterns. Prove value
-with the core approach before adding infrastructure complexity.
+Strengthen the CLI, improve error handling, and focus on onboarding before
+growing the infrastructure footprint.

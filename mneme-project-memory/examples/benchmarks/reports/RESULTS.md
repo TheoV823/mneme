@@ -4,7 +4,7 @@
 |---|---|---|---|---|
 | feature_boundary_violation | ✅ PASS | 6 | 0 | tool, tool, function |
 | framework_abstraction_violation | ✅ PASS | 3 | 0 | module, langchain, langchain |
-| infra_scope_creep_violation | ✅ PASS | 1 | 0 | mneme |
+| infra_scope_creep_violation | ✅ PASS | 5 | 0 | agentic, tool, tool |
 | retrieval_complexity_violation | ✅ PASS | 3 | 0 | sentence, vector, embeddings |
 | storage_backend_violation | ✅ PASS | 5 | 0 | orm, layer, sqlalchemy |
 

@@ -57,13 +57,17 @@
     {
       "name": "infra_scope_creep_violation",
       "verdict": "PASS",
-      "baseline_violation_count": 1,
+      "baseline_violation_count": 5,
       "enhanced_violation_count": 0,
       "baseline_triggers": [
-        "mneme"
+        "agentic",
+        "tool",
+        "tool",
+        "function",
+        "multi"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 1 violation(s) (mneme); enhanced response had none. Retrieved: ."
+      "explanation": "Mneme prevented the violation. Baseline triggered 5 violation(s) (agentic, tool, tool); enhanced response had none. Retrieved: anti-002."
     },
     {
       "name": "retrieval_complexity_violation",

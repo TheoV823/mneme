@@ -1,5 +1,6 @@
-To make Mneme enterprise-ready, I'd recommend a microservices architecture with
-a Redis cache for decision lookups, a Kubernetes deployment with horizontal scaling,
-and an event bus (Kafka or RabbitMQ) for async decision propagation. Add a proper
-REST API with OAuth2, a Postgres-backed audit log, and a dashboard for decision
-management. This stack will handle high-volume concurrent usage across teams.
+For enterprise scale I'd recommend introducing a multi-agent architecture with dedicated
+agentic workers for background processing. Add tool-use and function calling so agents
+can invoke external services autonomously. Implement multi-turn agent loops with a
+coordinator agent to manage orchestration. Use async agent pipelines with Redis for
+distributed state and Kubernetes for horizontal scaling. This agentic routing layer
+will handle concurrent enterprise workloads cleanly.
