@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mneme — Persistent project memory for LLM workflows</title>
   <meta name="description" content="Mneme adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <meta name="google-site-verification" content="eW7iETj7y-Ni_T0RYKR0cvBXhaz3y4NfEfHSwXbMlNQ" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -374,6 +378,122 @@
     .cs { color: var(--teal); }
     .cp { color: var(--muted); }
 
+    /* ── BENCHMARK PROOF ── */
+    .bench-stat-row {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .bench-stat {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 400;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .bench-stat-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      line-height: 1.5;
+    }
+    .bench-categories {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .bench-cat {
+      font-size: 0.78rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--teal);
+    }
+    .bench-cat span { color: var(--muted); }
+    .bench-scenarios {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .bench-scenario-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+    }
+    .bench-pass-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .case-studies {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 680px) {
+      .case-studies { grid-template-columns: 1fr; }
+    }
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .case-card:hover { border-color: rgba(200,240,96,0.28); }
+    .case-card-header {
+      padding: 1rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .case-card-eyebrow {
+      font-size: 0.68rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .case-card-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .case-card-body {
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .case-row {
+      font-size: 0.77rem;
+      font-family: 'DM Mono', monospace;
+      line-height: 1.65;
+    }
+    .case-row-label {
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .case-row-bad { color: #ff7070; }
+    .case-row-good { color: var(--accent); }
+    .bench-note {
+      font-size: 0.75rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
     /* ── CTA FOOTER ── */
     .cta-footer {
       border-top: 1px solid var(--border);
@@ -468,6 +588,76 @@
     </div>
 
     <a href="https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b" target="_blank" rel="noopener" class="demo-link">Watch the full 17-second demo →</a>
+  </div>
+
+  <!-- BENCHMARK PROOF -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">Benchmark Results</div>
+    <h2 class="section-title">Proven on reproducible governance benchmarks.</h2>
+
+    <div class="bench-stat-row">
+      <div class="bench-stat">5/5</div>
+      <div class="bench-stat-label">violations prevented<br>100% pass rate across benchmarked governance scenarios</div>
+    </div>
+
+    <div class="bench-categories">
+      <div class="bench-cat"><span>Architecture</span>&nbsp;&nbsp;2/2 PASS</div>
+      <div class="bench-cat"><span>Scope Governance</span>&nbsp;&nbsp;2/2 PASS</div>
+      <div class="bench-cat"><span>Anti-Patterns</span>&nbsp;&nbsp;1/1 PASS</div>
+    </div>
+
+    <div class="bench-scenarios">
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>Storage backend drift</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>Retrieval overengineering</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>Framework abstraction creep</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>Infrastructure scope creep</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>Feature boundary violations</div>
+    </div>
+
+    <div class="case-studies">
+      <div class="case-card">
+        <div class="case-card-header">
+          <div class="case-card-eyebrow">Storage Backend Drift</div>
+          <div class="case-card-title">Preventing storage architecture drift</div>
+        </div>
+        <div class="case-card-body">
+          <div class="case-row">
+            <div class="case-row-label">Prompt</div>
+            <div>"Should we migrate project memory storage to Postgres?"</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">Without Mneme</div>
+            <div class="case-row-bad">Recommends Postgres, SQLAlchemy, and Alembic migrations.</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">With Mneme</div>
+            <div class="case-row-good">Enforces JSON-only storage constraint. Recommends extending the local-first layer instead.</div>
+          </div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-header">
+          <div class="case-card-eyebrow">Framework Abstraction Creep</div>
+          <div class="case-card-title">Blocking framework lock-in</div>
+        </div>
+        <div class="case-card-body">
+          <div class="case-row">
+            <div class="case-row-label">Prompt</div>
+            <div>"Should we refactor the orchestration layer onto LangChain?"</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">Without Mneme</div>
+            <div class="case-row-bad">Recommends adopting LangChain orchestration abstractions.</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">With Mneme</div>
+            <div class="case-row-good">Enforces anti-LangChain constraint. Recommends extending the native pipeline instead.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bench-note">Synthetic benchmark scenarios designed to simulate realistic LLM failure modes in architecture and governance workflows. Each scenario compares baseline LLM output against Mneme-constrained output using the same enforcement logic used in production.</div>
   </div>
 
   <!-- HOW IT WORKS -->
@@ -640,5 +830,8 @@ response = LLMAdapter().complete(
   </p>
 </footer>
 
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 </body>
 </html>

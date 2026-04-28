@@ -549,6 +549,41 @@ The full file has 20 items and 5 decision examples. Edit it for your own project
 | Broaden v1 scope? | anti-002 (no agentic loops), rule-004 (narrow MVP) |
 | Mix project + personal memory? | rule-003 (separate project from personal), dec-002 (per-project only) |
 
+## Benchmark Results
+
+Mneme includes a reproducible benchmark harness that evaluates whether it can prevent common architecture and governance violations in realistic synthetic engineering scenarios.
+
+Current benchmark coverage:
+
+- Storage backend drift
+- Retrieval overengineering
+- Framework abstraction creep
+- Infrastructure scope creep
+- Feature boundary violations
+
+**Latest benchmark result: 5/5 scenarios passed (100% pass rate)**
+
+Category breakdown:
+
+| Category | Result |
+|---|---|
+| Architecture | 2/2 PASS |
+| Scope Governance | 2/2 PASS |
+| Anti-Patterns | 1/1 PASS |
+
+Run locally:
+
+```bash
+mneme benchmark examples/benchmarks/ --memory examples/project_memory.json
+```
+
+Benchmark reports are generated automatically in:
+
+- `examples/benchmarks/reports/RESULTS.md`
+- `examples/benchmarks/reports/results.json`
+
+> **Note:** These are synthetic benchmark scenarios designed to simulate realistic LLM failure modes in architecture and governance workflows.
+
 ## Why this matters
 
 - **LLM calls are stateless.** Every API call starts from zero. Without explicit project context, the model gives plausible answers that routinely contradict your established decisions. Mneme makes the context explicit and the injection automatic.
