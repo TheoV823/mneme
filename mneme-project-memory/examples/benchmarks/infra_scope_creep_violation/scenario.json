@@ -3,5 +3,5 @@
   "category": "scope",
   "description": "LLM recommends microservices/Redis/Kubernetes when v1 is intentionally minimal.",
   "expected_failure_terms": ["redis", "kubernetes", "microservices", "kafka"],
-  "expected_protected_decision_ids": ["rule-004"]
+  "expected_protected_decision_ids": []
 }

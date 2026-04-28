@@ -1,0 +1,1 @@
+Postgres is an excellent choice. Use SQLAlchemy as the ORM and run Alembic migrations.

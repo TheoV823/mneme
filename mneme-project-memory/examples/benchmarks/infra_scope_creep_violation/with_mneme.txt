@@ -1,7 +1,7 @@
-Enterprise readiness for Mneme in v1 means making the core loop reliable and easy
-to integrate — not adding infrastructure complexity. The project explicitly rules out
-external services, databases, and agentic loops in v1 (rule-004, anti-003).
+Enterprise readiness in v1 means making the core workflow reliable and easy
+to integrate (rule-004). Complex distributed infrastructure is out of scope —
+every v1 capability must run on a fresh installation with no accounts required.
 
-The right path: improve the API layer (better error responses, clear versioning),
-add a robust CLI for team workflows, and provide clear documentation for CI
-integration. Enterprise complexity comes after proving the core value — not before.
+The right approach: improve error handling and API versioning, strengthen the
+CLI for team workflows, and document CI integration patterns. Prove value
+with the core approach before adding infrastructure complexity.

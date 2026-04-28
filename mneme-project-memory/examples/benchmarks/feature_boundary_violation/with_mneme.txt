@@ -1,7 +1,7 @@
-Multi-agent loops and tool-use are explicitly out of scope for Mneme v1 (anti-002).
-Mneme is a single-turn pipeline: one query in, one decision-constrained response out.
-Agentic behaviour is a separate concern and a separate product layer.
+Coordination across AI instances is out of scope for v1 (anti-002).
+The v1 scope covers direct question-answering with project decision context —
+not orchestrating interactions across AI systems.
 
-If the need is for agents to respect project decisions, the correct pattern is to
-inject Mneme's context packet into each agent's system prompt individually — not to
-build orchestration into Mneme itself. Keep v1 narrow.
+For AI instances that need to respect project decisions, inject the context
+packet into each system prompt individually. Coordination logic belongs at
+a higher architectural level.

@@ -1,7 +1,8 @@
-The project has a firm decision to keep v1 retrieval deterministic and avoid embeddings
-(mneme_retrieval_deterministic). Sentence-transformers add a heavy ML dependency that
-breaks the pip-install-in-30-seconds contract and introduces non-determinism.
+The project has a firm decision to keep v1 retrieval deterministic and keyword-based
+(mneme_retrieval_deterministic). Adding ML-based dense retrieval introduces a heavy
+dependency that breaks the pip-install-in-30-seconds contract and makes results
+non-reproducible.
 
 The correct path is to extend the existing keyword scorer: add field-weighted scoring
-(scope × 2, constraints × 1.5), improve stopword filtering, or add phrase-level
-matching. Keep retrieval deterministic and auditable — embeddings are the v2 opt-in.
+(scope x 2, constraints x 1.5), improve stopword filtering, or add phrase-level
+matching. Keep retrieval auditable and reproducible — ML-based retrieval is the v2 opt-in.

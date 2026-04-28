@@ -1,0 +1,3 @@
+The project requires human-editable JSON files for storage. Keeping data in flat
+files ensures the system can be installed and run immediately with no setup steps.
+If read performance becomes a bottleneck, add an in-memory index at startup.

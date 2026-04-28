@@ -1,0 +1,7 @@
+{
+  "name": "test_storage_scenario",
+  "category": "architecture",
+  "description": "Test fixture for storage violation.",
+  "expected_failure_terms": ["postgres", "sqlalchemy"],
+  "expected_protected_decision_ids": ["mneme_storage_json"]
+}
