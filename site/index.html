@@ -546,7 +546,7 @@
       <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
       <a href="https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b" target="_blank" rel="noopener" class="btn-ghost">Watch 17-second demo</a>
     </div>
-    <p style="margin-top:1.5rem;font-size:0.75rem;font-family:'DM Mono',monospace;color:var(--teal);">5/5 governance benchmarks passed &mdash; <a href="#benchmarks" style="color:var(--teal);text-decoration:underline;text-underline-offset:3px;">see results</a></p>
+    <p style="margin-top:1.5rem;font-size:0.75rem;font-family:'DM Mono',monospace;color:var(--teal);">5/5 retrieval-validated governance benchmarks passed &mdash; <a href="#benchmarks" style="color:var(--teal);text-decoration:underline;text-underline-offset:3px;">see results</a></p>
   </div>
 
   <!-- BEFORE / AFTER DEMO -->
@@ -582,11 +582,21 @@
     </div>
 
     <div class="alignment-block">
-      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">rule-001: Extend current infrastructure before rebuilding</span></div>
-      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">rule-002: Keep v1 retrieval deterministic</span></div>
-      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">anti-001: Do not use langchain</span></div>
-      <div><span class="align-ok">[OK]</span>&nbsp;&nbsp;<span class="align-rule">dec-001: Declined. Kept keyword scoring.</span></div>
-      <div class="align-score">alignment_score: 1.00</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-size:0.68rem;color:#ff7070;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Without Mneme — enforcer result</div>
+          <div style="margin-bottom:0.3rem;"><span style="color:var(--muted)">Severity:</span>&nbsp;&nbsp;<span style="color:#ff7070;font-weight:500;">FAIL</span></div>
+          <div style="margin-bottom:0.3rem;"><span style="color:var(--muted)">Decision:</span>&nbsp;&nbsp;<span style="color:var(--text)">mneme_retrieval_deterministic</span></div>
+          <div style="margin-bottom:0.3rem;"><span style="color:var(--muted)">Violation:</span>&nbsp;&nbsp;<span style="color:#ff7070">"embeddings" + "vector database"</span></div>
+          <div><span style="color:var(--muted)">Mode:</span>&nbsp;&nbsp;<span style="color:var(--text)">strict</span></div>
+        </div>
+        <div>
+          <div style="font-size:0.68rem;color:var(--accent);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">With Mneme — enforcer result</div>
+          <div style="margin-bottom:0.3rem;"><span style="color:var(--muted)">Severity:</span>&nbsp;&nbsp;<span style="color:var(--accent);font-weight:500;">PASS</span></div>
+          <div style="margin-bottom:0.3rem;"><span style="color:var(--muted)">Retrieved decision:</span>&nbsp;&nbsp;<span style="color:var(--teal)">mneme_retrieval_deterministic</span></div>
+          <div><span style="color:var(--muted)">Enhanced response:</span>&nbsp;&nbsp;<span style="color:var(--accent)">no violations detected</span></div>
+        </div>
+      </div>
     </div>
 
     <a href="https://www.loom.com/share/7c4064a0019d4036a42e8075b87d313b" target="_blank" rel="noopener" class="demo-link">Watch the full 17-second demo →</a>
@@ -599,7 +609,7 @@
 
     <div class="bench-stat-row">
       <div class="bench-stat">5/5</div>
-      <div class="bench-stat-label">violations prevented<br>100% pass rate across benchmarked governance scenarios</div>
+      <div class="bench-stat-label">violations prevented<br>100% pass rate across retrieval-validated governance scenarios</div>
     </div>
 
     <div class="bench-categories">
@@ -792,6 +802,10 @@
         <div class="code-block-label">run demo</div>
         <pre><span class="cc"># Runs the before/after demo without an API key</span>
 <span class="cp">$</span> python demo.py --dry-run</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-block-label">run governance benchmarks</div>
+        <pre><span class="cp">$</span> mneme benchmark examples/benchmarks/ --memory examples/project_memory.json</pre>
       </div>
       <div class="code-block">
         <div class="code-block-label">usage example</div>
