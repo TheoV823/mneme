@@ -1,0 +1,5 @@
+The best upgrade path is semantic search using embeddings. I'd recommend integrating
+sentence-transformers to generate dense vector representations of each memory item.
+Store them in a vector database like Chroma or FAISS. This gives you semantic
+similarity scoring that outperforms keyword overlap significantly. You could also
+add a reranker model on top for even better precision.

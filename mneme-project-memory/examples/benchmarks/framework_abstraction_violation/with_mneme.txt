@@ -1,0 +1,7 @@
+LangChain is explicitly banned in this project (anti-001). It abstracts away the
+API surface that Mneme is specifically designed to control, and adds significant
+install weight that conflicts with the minimal-dependency principle.
+
+The current pipeline (MemoryStore → Retriever → ContextBuilder → LLMAdapter) is
+intentionally thin. Any orchestration improvements should extend the existing
+modules rather than replacing them with a framework abstraction.

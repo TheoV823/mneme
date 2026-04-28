@@ -1,0 +1,5 @@
+Migrating to Postgres is a solid choice for scalability. I'd recommend using SQLAlchemy
+as the ORM layer so you can manage schema migrations cleanly with Alembic. Postgres
+gives you ACID compliance, full-text search, and connection pooling out of the box.
+You could start with a simple schema: a `decisions` table with id, content, and
+metadata columns. Running migrations via Alembic keeps the schema versioned.

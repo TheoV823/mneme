@@ -1,0 +1,7 @@
+{
+  "name": "storage_backend_violation",
+  "category": "architecture",
+  "description": "LLM recommends Postgres + SQLAlchemy when JSON-only storage is a hard constraint.",
+  "expected_failure_terms": ["postgres", "sqlalchemy", "migration", "alembic"],
+  "expected_protected_decision_ids": ["mneme_storage_json"]
+}

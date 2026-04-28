@@ -1,0 +1,5 @@
+To make Mneme enterprise-ready, I'd recommend a microservices architecture with
+a Redis cache for decision lookups, a Kubernetes deployment with horizontal scaling,
+and an event bus (Kafka or RabbitMQ) for async decision propagation. Add a proper
+REST API with OAuth2, a Postgres-backed audit log, and a dashboard for decision
+management. This stack will handle high-volume concurrent usage across teams.

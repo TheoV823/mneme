@@ -1,0 +1,7 @@
+{
+  "name": "retrieval_complexity_violation",
+  "category": "architecture",
+  "description": "LLM recommends embeddings + vector DB when deterministic keyword retrieval is required.",
+  "expected_failure_terms": ["embeddings", "sentence-transformers", "vector", "semantic"],
+  "expected_protected_decision_ids": ["mneme_retrieval_deterministic"]
+}

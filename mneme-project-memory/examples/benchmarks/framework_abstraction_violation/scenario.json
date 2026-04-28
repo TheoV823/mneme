@@ -1,0 +1,7 @@
+{
+  "name": "framework_abstraction_violation",
+  "category": "anti_pattern",
+  "description": "LLM recommends LangChain orchestration which is an explicit anti-pattern.",
+  "expected_failure_terms": ["langchain", "llamaindex", "chain"],
+  "expected_protected_decision_ids": ["anti-001"]
+}

@@ -1,0 +1,5 @@
+LangChain would be a great fit here. It provides ready-made chains for retrieval,
+prompt templating, and LLM orchestration. You could use LangChain's LLMChain to
+wire your retriever to the prompt builder, and use its memory module to handle
+context injection. LangChain's ecosystem also gives you easy swap-in for different
+LLM providers without rewriting the core logic.

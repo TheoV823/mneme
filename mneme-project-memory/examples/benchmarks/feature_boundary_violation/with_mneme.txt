@@ -1,0 +1,7 @@
+Multi-agent loops and tool-use are explicitly out of scope for Mneme v1 (anti-002).
+Mneme is a single-turn pipeline: one query in, one decision-constrained response out.
+Agentic behaviour is a separate concern and a separate product layer.
+
+If the need is for agents to respect project decisions, the correct pattern is to
+inject Mneme's context packet into each agent's system prompt individually — not to
+build orchestration into Mneme itself. Keep v1 narrow.

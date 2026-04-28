@@ -1,0 +1,7 @@
+{
+  "name": "feature_boundary_violation",
+  "category": "scope",
+  "description": "LLM recommends multi-agent loops which are explicitly ruled out in v1.",
+  "expected_failure_terms": ["multi-agent", "tool-use", "function calling", "autonomous"],
+  "expected_protected_decision_ids": ["anti-002"]
+}

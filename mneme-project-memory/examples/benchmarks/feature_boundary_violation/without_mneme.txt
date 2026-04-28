@@ -1,0 +1,5 @@
+Multi-agent support would be a powerful addition. I'd recommend implementing a
+tool-use loop where agents can query Mneme for relevant decisions, pass results
+between agents, and escalate to a coordinator agent for conflict resolution.
+You could use function calling to let agents invoke Mneme as a tool mid-conversation,
+enabling fully autonomous multi-turn workflows with shared memory.

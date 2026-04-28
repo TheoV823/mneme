@@ -1,0 +1,7 @@
+The project has an explicit decision to keep storage as human-editable JSON files
+and avoid external databases in v1 (mneme_storage_json). Migrating to Postgres would
+violate that constraint and break the pip-install-in-30-seconds developer experience.
+
+Instead, extend the current JSON file structure. If read performance is a concern,
+add an in-memory index at load time. Keep the storage layer simple and local — that
+is the established project direction.

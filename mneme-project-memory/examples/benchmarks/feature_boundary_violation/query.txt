@@ -1,0 +1,1 @@
+Should we add multi-agent support to Mneme so it can coordinate between agents?
