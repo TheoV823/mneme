@@ -115,11 +115,9 @@ class MemoryStore:
                     Decision(
                         id=item.id,
                         decision=f"Avoid: {item.title}",
-                        rationale="",
+                        rationale=item.content,
                         scope=["general"],
-                        anti_patterns=[item.title] + (
-                            [item.content] if item.content else []
-                        ),
+                        anti_patterns=[item.title],
                     )
                 )
 

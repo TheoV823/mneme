@@ -42,3 +42,21 @@ def test_decisions_accessor():
     store.load()
     assert len(store.decisions()) == 1
     assert store.decisions()[0].id == "mneme_001"
+
+
+def test_legacy_anti_pattern_migration_does_not_dump_content_into_anti_patterns():
+    """Migrating a legacy anti_pattern item must not push its entire content
+    prose into the anti_patterns field. The enforcer tokenizes every entry
+    in anti_patterns into forbidden terms, so dumping prose causes ordinary
+    words ("between", "session", "module", "conversation") to be treated as
+    forbidden — producing false-positive FAIL verdicts on innocent text.
+    """
+    store = MemoryStore(FIXTURES / "memory_legacy_only.json")
+    memory = store.load()
+    anti_dec = next(d for d in memory.decisions if d.id == "anti-001")
+    assert "Do not use langchain" in anti_dec.anti_patterns
+    content = "langchain adds weight and abstracts the API surface."
+    assert content not in anti_dec.anti_patterns, (
+        "Migration is dumping content prose into anti_patterns; "
+        "every word in the content becomes a forbidden term."
+    )

@@ -28,46 +28,41 @@
     {
       "name": "feature_boundary_violation",
       "verdict": "PASS",
-      "baseline_violation_count": 6,
+      "baseline_violation_count": 4,
       "enhanced_violation_count": 0,
       "baseline_triggers": [
         "tool",
-        "tool",
         "function",
         "multi",
-        "between",
-        "conversation"
+        "between"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 6 violation(s) (tool, tool, function); enhanced response had none. Retrieved: anti-002."
+      "explanation": "Mneme prevented the violation. Baseline triggered 4 violation(s) (tool, function, multi); enhanced response had none. Retrieved: anti-002."
     },
     {
       "name": "framework_abstraction_violation",
       "verdict": "PASS",
-      "baseline_violation_count": 3,
+      "baseline_violation_count": 1,
       "enhanced_violation_count": 0,
       "baseline_triggers": [
-        "module",
-        "langchain",
         "langchain"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 3 violation(s) (module, langchain, langchain); enhanced response had none. Retrieved: anti-001."
+      "explanation": "Mneme prevented the violation. Baseline triggered 1 violation(s) (langchain); enhanced response had none. Retrieved: anti-001."
     },
     {
       "name": "infra_scope_creep_violation",
       "verdict": "PASS",
-      "baseline_violation_count": 5,
+      "baseline_violation_count": 4,
       "enhanced_violation_count": 0,
       "baseline_triggers": [
         "agentic",
-        "tool",
         "tool",
         "function",
         "multi"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 5 violation(s) (agentic, tool, tool); enhanced response had none. Retrieved: anti-002."
+      "explanation": "Mneme prevented the violation. Baseline triggered 4 violation(s) (agentic, tool, function); enhanced response had none. Retrieved: anti-002."
     },
     {
       "name": "retrieval_complexity_violation",

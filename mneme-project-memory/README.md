@@ -549,11 +549,11 @@ The full file has 20 items and 5 decision examples. Edit it for your own project
 | Broaden v1 scope? | anti-002 (no agentic loops), rule-004 (narrow MVP) |
 | Mix project + personal memory? | rule-003 (separate project from personal), dec-002 (per-project only) |
 
-## Benchmark Results
+## Enforcement regression suite
 
-Mneme includes a reproducible benchmark harness that evaluates whether it can prevent common architecture and governance violations in realistic synthetic engineering scenarios.
+Mneme ships with a deterministic regression suite that exercises the enforcement engine against hand-authored fixture responses.
 
-Current benchmark coverage:
+Current scenario coverage:
 
 - Storage backend drift
 - Retrieval overengineering
@@ -561,28 +561,22 @@ Current benchmark coverage:
 - Infrastructure scope creep
 - Feature boundary violations
 
-**Latest benchmark result: 5/5 scenarios passed (100% pass rate)**
-
-Category breakdown:
-
-| Category | Result |
-|---|---|
-| Architecture | 2/2 PASS |
-| Scope Governance | 2/2 PASS |
-| Anti-Patterns | 1/1 PASS |
-
 Run locally:
 
 ```bash
 mneme benchmark examples/benchmarks/ --memory examples/project_memory.json
 ```
 
-Benchmark reports are generated automatically in:
+Reports are generated in:
 
 - `examples/benchmarks/reports/RESULTS.md`
 - `examples/benchmarks/reports/results.json`
 
-> **Note:** These are synthetic benchmark scenarios designed to simulate realistic LLM failure modes in architecture and governance workflows.
+### What this is — and what it isn't
+
+This suite is a **regression test for the deterministic enforcer**, not a behavioral evaluation of LLM output. Each scenario consists of two hand-authored fixture responses — one that names a forbidden technology, one that doesn't — and the suite verifies that the enforcer flags the first and not the second. No LLM is invoked anywhere in the harness.
+
+The suite is useful for catching regressions in retrieval and enforcement logic. It does **not** measure whether Mneme changes real model output. A behavioral evaluation harness — running real LLM samples under baseline and Mneme-injected conditions, with violation rates and confidence intervals — is on the roadmap but not yet built. Until it is, do not interpret a green regression suite as evidence that Mneme prevents violations in production.
 
 ## Why this matters
 
