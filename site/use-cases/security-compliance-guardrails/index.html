@@ -36,7 +36,7 @@
     .answer-capsule { max-width: 820px; margin: 0 auto; padding: 1.5rem 2rem; background: var(--surface); border-bottom: 1px solid rgba(200,240,96,0.18); font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
     .answer-capsule strong { color: var(--accent); }
     .hero { max-width: 800px; margin: 0 auto; padding: 5rem 2rem 4rem; text-align: center; }
-    .hero-tag { display: inline-block; background: rgba(200,240,96,0.07); border: 1px solid rgba(200,240,96,0.22); color: var(--accent); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.9rem; border-radius: 999px; margin-bottom: 2rem; }
+    .hero-tag { display: inline-block; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem; }
     .hero h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.25rem; }
     .hero-sub { font-size: 1rem; color: var(--muted); max-width: 540px; margin: 0 auto 2.5rem; }
     .cta-group { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
@@ -93,6 +93,11 @@
     .breadcrumb a { color: var(--muted); text-decoration: none; }
     .breadcrumb a:hover { color: var(--text); }
     .breadcrumb span { color: var(--border2); margin: 0 0.4rem; }
+
+    .related-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--border); }
+    .related-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+    .related-links a { color: var(--accent); font-size: 0.82rem; text-decoration: none; }
+    .related-links a:hover { color: var(--accent-dim); }
   </style>
 </head>
 <body>
@@ -125,8 +130,8 @@
     <h1>Preventing LLMs from Introducing Security and Compliance Violations</h1>
     <p class="hero-sub">Enforce encryption standards, auth requirements, PII handling rules, and secrets policies — before the LLM generates a single line of non-compliant code.</p>
     <div class="cta-group">
-      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
-      <a href="/#how-it-works" class="btn-ghost">How it works</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-ghost">View GitHub</a>
     </div>
   </div>
 
@@ -337,10 +342,18 @@
   </div>
 
   <!-- CTA FOOTER -->
+  <div class="related-wrap">
+    <div class="section-eyebrow">Related Use Cases</div>
+    <div class="related-links">
+    <a href="/use-cases/coding-assistant-governance/">Coding Assistant Governance →</a>
+    <a href="/use-cases/data-platform-governance/">Data Platform Governance →</a>
+    <a href="/use-cases/multi-agent-workflow-governance/">Multi-Agent Workflow Governance →</a>
+    </div>
+  </div>
   <div class="cta-footer">
     <h2>Enforce compliance rules before the LLM writes a line.</h2>
     <div class="cta-group">
-      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
       <a href="/use-cases/" class="btn-ghost">More use cases</a>
     </div>
   </div>
