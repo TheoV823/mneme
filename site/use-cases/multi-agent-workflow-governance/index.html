@@ -102,6 +102,9 @@
     .related-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
     .related-links a { color: var(--accent); font-size: 0.82rem; text-decoration: none; }
     .related-links a:hover { color: var(--accent-dim); }
+
+    .diagram-wrap { max-width: 960px; margin: 3rem auto 0; padding: 3rem 2rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
+    .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
   </style>
 </head>
 <body>
@@ -133,6 +136,61 @@
       <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
       <a href="https://github.com/TheoV823/mneme" class="btn-ghost">View GitHub</a>
     </div>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 840 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="14" font-family="monospace" font-size="9" fill="#88889a" letter-spacing="4">SHARED DECISION LAYER</text>
+      <!-- Agent pipeline (left column) -->
+      <!-- Stage 1: Planner -->
+      <rect x="10" y="22" width="210" height="52" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
+      <text x="115" y="41" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Stage 1</text>
+      <text x="115" y="60" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Planner Agent</text>
+      <!-- Down arrow -->
+      <line x1="115" y1="74" x2="115" y2="92" stroke="#2e2e34" stroke-width="1.5"/>
+      <polygon points="111,88 115,98 119,88" fill="#2e2e34"/>
+      <!-- Stage 2: Coder -->
+      <rect x="10" y="98" width="210" height="52" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
+      <text x="115" y="117" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Stage 2</text>
+      <text x="115" y="136" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Coder Agent</text>
+      <!-- Down arrow -->
+      <line x1="115" y1="150" x2="115" y2="168" stroke="#2e2e34" stroke-width="1.5"/>
+      <polygon points="111,164 115,174 119,164" fill="#2e2e34"/>
+      <!-- Stage 3: Reviewer -->
+      <rect x="10" y="174" width="210" height="52" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
+      <text x="115" y="193" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Stage 3</text>
+      <text x="115" y="212" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Reviewer Agent</text>
+      <!-- Down arrow -->
+      <line x1="115" y1="226" x2="115" y2="244" stroke="#2e2e34" stroke-width="1.5"/>
+      <polygon points="111,240 115,250 119,240" fill="#2e2e34"/>
+      <!-- Stage 4: Deployer -->
+      <rect x="10" y="250" width="210" height="30" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
+      <text x="115" y="270" font-family="monospace" font-size="13" fill="#88889a" text-anchor="middle">Deployer Agent</text>
+      <!-- Mneme store (right, tall) -->
+      <rect x="490" y="18" width="240" height="254" rx="10" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
+      <text x="610" y="52" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">MNEME</text>
+      <text x="610" y="80" font-family="monospace" font-size="15" fill="#e8e8ec" text-anchor="middle">Decision Store</text>
+      <text x="610" y="104" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">decisions/*.yml</text>
+      <!-- Divider -->
+      <line x1="510" y1="118" x2="710" y2="118" stroke="#222226" stroke-width="1"/>
+      <text x="610" y="138" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">shared across all stages</text>
+      <text x="610" y="158" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">semantic retrieval per query</text>
+      <text x="610" y="178" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">violations block next stage</text>
+      <text x="610" y="198" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">full audit trail per run</text>
+      <!-- Connection lines from each agent right edge → Mneme left edge -->
+      <!-- Planner (right=220, cy=48) → Mneme left (490, 75) -->
+      <line x1="220" y1="48" x2="490" y2="75" stroke="#2e2e34" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="345" y="54" font-family="monospace" font-size="8" fill="#88889a" text-anchor="middle">check()</text>
+      <!-- Coder (right=220, cy=124) → Mneme left (490, 124) -->
+      <line x1="220" y1="124" x2="490" y2="145" stroke="#2e2e34" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="352" y="128" font-family="monospace" font-size="8" fill="#88889a" text-anchor="middle">check()</text>
+      <!-- Reviewer (right=220, cy=200) → Mneme left (490, 195) -->
+      <line x1="220" y1="200" x2="490" y2="195" stroke="#2e2e34" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="352" y="195" font-family="monospace" font-size="8" fill="#88889a" text-anchor="middle">check()</text>
+      <!-- Deployer (right=220, cy=265) → Mneme left (490, 240) -->
+      <line x1="220" y1="265" x2="490" y2="245" stroke="#2e2e34" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="345" y="262" font-family="monospace" font-size="8" fill="#88889a" text-anchor="middle">check()</text>
+    </svg>
   </div>
 
   <div class="section-wrap">

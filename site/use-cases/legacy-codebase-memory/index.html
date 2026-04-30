@@ -98,6 +98,9 @@
     .related-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
     .related-links a { color: var(--accent); font-size: 0.82rem; text-decoration: none; }
     .related-links a:hover { color: var(--accent-dim); }
+
+    .diagram-wrap { max-width: 960px; margin: 3rem auto 0; padding: 3rem 2rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
+    .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
   </style>
 </head>
 <body>
@@ -133,6 +136,41 @@
       <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
       <a href="https://github.com/TheoV823/mneme" class="btn-ghost">View GitHub</a>
     </div>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 960 118" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="14" font-family="monospace" font-size="9" fill="#88889a" letter-spacing="4">CAPTURE &amp; ENFORCE PIPELINE</text>
+      <!-- Node 1: Tribal Knowledge -->
+      <rect x="10" y="24" width="195" height="60" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
+      <text x="107" y="46" font-family="monospace" font-size="9.5" fill="#88889a" text-anchor="middle">tribal knowledge</text>
+      <text x="107" y="66" font-family="monospace" font-size="12" fill="#e8e8ec" text-anchor="middle">Undocumented Rules</text>
+      <text x="107" y="80" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">Slack, memory, post-mortems</text>
+      <!-- Arrow 1→2 -->
+      <line x1="205" y1="54" x2="240" y2="54" stroke="#2e2e34" stroke-width="1.5"/>
+      <polygon points="236,50 247,54 236,58" fill="#2e2e34"/>
+      <!-- Node 2: Capture Session -->
+      <rect x="247" y="24" width="185" height="60" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
+      <text x="339" y="46" font-family="monospace" font-size="9.5" fill="#88889a" text-anchor="middle">30-min session</text>
+      <text x="339" y="66" font-family="monospace" font-size="12" fill="#e8e8ec" text-anchor="middle">Capture Session</text>
+      <text x="339" y="80" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">mneme add → decisions/*.yml</text>
+      <!-- Arrow 2→3 -->
+      <line x1="432" y1="54" x2="467" y2="54" stroke="#2e2e34" stroke-width="1.5"/>
+      <polygon points="463,50 474,54 463,58" fill="#2e2e34"/>
+      <!-- Node 3: Decision Store (teal) -->
+      <rect x="474" y="24" width="185" height="60" rx="8" fill="#141416" stroke="#8be0c8" stroke-width="1.5"/>
+      <text x="566" y="46" font-family="monospace" font-size="9.5" fill="#8be0c8" text-anchor="middle">decisions/</text>
+      <text x="566" y="66" font-family="monospace" font-size="12" fill="#e8e8ec" text-anchor="middle">Decision Store</text>
+      <text x="566" y="80" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">structured, retrievable, versioned</text>
+      <!-- Arrow 3→4 -->
+      <line x1="659" y1="54" x2="694" y2="54" stroke="#2e2e34" stroke-width="1.5"/>
+      <polygon points="690,50 701,54 690,58" fill="#2e2e34"/>
+      <!-- Node 4: AI Enforcement (accent) -->
+      <rect x="701" y="24" width="195" height="60" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
+      <text x="798" y="46" font-family="monospace" font-size="9.5" fill="#c8f060" text-anchor="middle">every session</text>
+      <text x="798" y="66" font-family="monospace" font-size="12" fill="#e8e8ec" text-anchor="middle">AI Enforcement</text>
+      <text x="798" y="80" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">mneme check before every prompt</text>
+    </svg>
   </div>
 
   <!-- PROBLEM -->
