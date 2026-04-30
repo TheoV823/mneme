@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Cases — Mneme</title>
+  <meta name="description" content="Reference architectures showing how teams use Mneme to enforce architectural decisions, preserve tribal knowledge, and prevent compliance violations in LLM-powered development." />
+  <link rel="canonical" href="https://mnemehq.com/use-cases/" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0d; --surface: #141416; --surface2: #1a1a1d;
+      --border: #222226; --border2: #2e2e34;
+      --text: #e8e8ec; --muted: #88889a;
+      --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { font-family: 'Instrument Serif', serif; font-size: 1.4rem; font-weight: 400; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+    .hero { max-width: 720px; margin: 0 auto; padding: 5rem 2rem 4rem; text-align: center; }
+    .section-eyebrow { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+    .hero h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.25rem; }
+    .hero-sub { font-size: 0.95rem; color: var(--muted); max-width: 520px; margin: 0 auto; }
+    .cards-wrap { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+    .case-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 0.75rem; transition: border-color 0.15s; }
+    .case-card:hover { border-color: var(--border2); }
+    .case-card-eyebrow { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .case-card h3 { font-family: 'Instrument Serif', serif; font-size: 1.15rem; font-weight: 400; letter-spacing: -0.01em; line-height: 1.3; }
+    .case-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; flex: 1; }
+    .case-card a.read-link { color: var(--accent); font-size: 0.82rem; text-decoration: none; margin-top: 0.5rem; }
+    .case-card a.read-link:hover { color: var(--accent-dim); }
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<nav>
+  <a href="/" class="logo">Mneme</a>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/use-cases/" class="active">Use cases</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="section-eyebrow">Use Cases</div>
+    <h1>How teams use Mneme</h1>
+    <p class="hero-sub">Reference architectures for enforcing architectural decisions in LLM-powered development workflows. All scenarios are simulated.</p>
+  </div>
+
+  <div class="cards-wrap">
+    <div class="cards-grid">
+
+      <div class="case-card">
+        <div class="case-card-eyebrow">Reference Architecture</div>
+        <h3>Coding Assistant Governance</h3>
+        <p>Prevent Cursor, Claude Code, and Copilot from violating architecture rules — session after session. Enforce ADRs, service boundaries, and naming conventions at prompt time.</p>
+        <a href="/use-cases/coding-assistant-governance/" class="read-link">Read →</a>
+      </div>
+
+      <div class="case-card">
+        <div class="case-card-eyebrow">Reference Architecture</div>
+        <h3>Legacy Codebase Memory</h3>
+        <p>Give every coding assistant access to the undocumented rules that only your longest-tenured engineers know. Capture tribal knowledge once — enforce it forever.</p>
+        <a href="/use-cases/legacy-codebase-memory/" class="read-link">Read →</a>
+      </div>
+
+      <div class="case-card">
+        <div class="case-card-eyebrow">Reference Architecture</div>
+        <h3>Security &amp; Compliance Guardrails</h3>
+        <p>Enforce PII handling rules, auth requirements, and compliance controls before the LLM generates a single line of non-compliant code. GDPR, SOC 2, and beyond.</p>
+        <a href="/use-cases/security-compliance-guardrails/" class="read-link">Read →</a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <a href="/">Mneme</a> &nbsp;·&nbsp; <a href="/use-cases/">Use cases</a> &nbsp;·&nbsp; <a href="https://github.com/TheoV823/mneme">GitHub</a>
+</footer>
+</body>
+</html>
