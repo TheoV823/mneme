@@ -29,7 +29,7 @@ try:
 except subprocess.CalledProcessError:
     pass  # site/ is not a separate repo — fine
 
-print(f"✓ Branch: main  |  Clean: yes  |  Source: {BASE_LOCAL}")
+print(f"[OK] Branch: main  |  Clean: yes  |  Source: {BASE_LOCAL}")
 
 # ── cPanel credentials ───────────────────────────────────────────────────────
 HOST = '152.89.79.37'
