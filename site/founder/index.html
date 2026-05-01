@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Founder — Theo Valmis | Mneme</title>
+  <meta name="description" content="Theo Valmis built Mneme after watching LLMs introduce architectural drift across large production codebases. Background in AI systems and technical delivery for global enterprise brands." />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://mneme.dev/founder/#theo",
+        "name": "Theo Valmis",
+        "jobTitle": "Founder",
+        "worksFor": { "@type": "Organization", "name": "Mneme" },
+        "url": "https://mneme.dev/founder/",
+        "sameAs": [
+          "https://github.com/TheoV823",
+          "https://www.linkedin.com/in/theovalmis/"
+        ],
+        "description": "Founder of Mneme. Background in AI systems, digital analytics, and large-scale technical delivery across startups and enterprise organisations."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Mneme", "item": "https://mneme.dev/" },
+          { "@type": "ListItem", "position": 2, "name": "Founder", "item": "https://mneme.dev/founder/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0d;
+      --surface: #141416;
+      --surface2: #1a1a1d;
+      --border: #222226;
+      --border2: #2e2e34;
+      --text: #e8e8ec;
+      --muted: #88889a;
+      --accent: #c8f060;
+      --accent-dim: #a8d040;
+      --teal: #8be0c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(12,12,13,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 5rem 2rem 6rem;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb span { color: var(--border2); }
+
+    /* ── HEADER ── */
+    .founder-tag {
+      display: inline-block;
+      background: rgba(200,240,96,0.07);
+      border: 1px solid rgba(200,240,96,0.22);
+      color: var(--accent);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+    .founder-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .founder-title {
+      font-size: 0.88rem;
+      color: var(--teal);
+      margin-bottom: 3rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── PROSE ── */
+    .prose h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+    .prose p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+      line-height: 1.75;
+    }
+    .prose p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .prose ul {
+      list-style: none;
+      margin: 0.75rem 0 1.25rem;
+      padding: 0;
+    }
+    .prose ul li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      padding: 0.2rem 0 0.2rem 1.25rem;
+      position: relative;
+      line-height: 1.65;
+    }
+    .prose ul li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--border2);
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
+    }
+    .callout p {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ── BRAND STRIP ── */
+    .brand-strip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
+    }
+    .brand-strip-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .brand-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+    }
+    .brand-chip {
+      font-size: 0.78rem;
+      color: var(--text);
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 0.3rem 0.75rem;
+    }
+
+    /* ── LINKS SECTION ── */
+    .links-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 1.25rem;
+    }
+    .link-row {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-size: 0.85rem;
+    }
+    .link-row-label {
+      color: var(--muted);
+      min-width: 80px;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .link-row a {
+      color: var(--teal);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .link-row a:hover { color: var(--text); }
+
+    /* ── CTA FOOTER ── */
+    .cta-footer {
+      text-align: center;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border);
+      max-width: 600px;
+      margin: 5rem auto 0;
+    }
+    .cta-footer h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 400;
+      margin-bottom: 1.75rem;
+      letter-spacing: -0.02em;
+    }
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .page-wrap { padding: 3rem 1.25rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">Mneme</a>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+<div class="page-wrap">
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Mneme</a>
+    <span>/</span>
+    <span>Founder</span>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="founder-tag">Founder</div>
+  <h1 class="founder-name">Theo Valmis</h1>
+  <p class="founder-title">Founder of Mneme &nbsp;·&nbsp; AI Systems &amp; Enterprise Technical Delivery</p>
+
+  <hr class="divider">
+
+  <div class="prose">
+
+    <p>I built Mneme after running into the same problem repeatedly while using AI coding tools on real production systems: the larger and more complex a codebase became, the less reliable AI-generated output became over time.</p>
+
+    <p>Models could write code quickly. They could follow instructions in the moment. But they consistently failed at one critical thing:</p>
+
+    <div class="callout">
+      <p>Maintaining continuity of architectural decisions across sessions, contributors, and long-running projects.</p>
+    </div>
+
+    <p>They forgot constraints. They reintroduced rejected patterns. They ignored prior architecture decisions unless those decisions were manually re-explained every time.</p>
+
+    <p>That is the gap Mneme is designed to solve.</p>
+
+    <h2>Why I built this</h2>
+
+    <p>My background is in digital analytics, AI systems, and large-scale technical delivery. Worked across startups and enterprise organisations delivering analytics, AI systems, and technical platforms where consistency, governance, and architectural discipline matter as much as speed.</p>
+
+    <div class="brand-strip">
+      <div class="brand-strip-label">Organisations worked with</div>
+      <div class="brand-list">
+        <span class="brand-chip">BT</span>
+        <span class="brand-chip">Dell</span>
+        <span class="brand-chip">Microsoft</span>
+        <span class="brand-chip">HSBC</span>
+        <span class="brand-chip">Unilever</span>
+      </div>
+    </div>
+
+    <p>As AI-assisted development became part of my workflow, one pattern became obvious:</p>
+
+    <p><strong>LLMs accelerate implementation. But without structured memory and governance, they introduce architectural drift.</strong></p>
+
+    <p>Mneme was built to provide that missing layer.</p>
+
+    <h2>What Mneme does</h2>
+
+    <p>Mneme is an open-source architectural governance layer for AI-assisted development. It stores architectural decisions, constraints, and anti-patterns as structured YAML in version control, then injects the relevant rules at prompt time — so AI coding assistants generate code that fits your architecture.</p>
+
+    <p>It helps teams preserve and enforce:</p>
+    <ul>
+      <li>Architecture decisions</li>
+      <li>Coding standards and tooling preferences</li>
+      <li>Anti-patterns and rejected approaches</li>
+      <li>Project-specific implementation rules</li>
+    </ul>
+
+    <p>Across tools such as Cursor, Claude Code, GitHub Copilot, LangChain, CrewAI, and custom agent pipelines.</p>
+
+    <h2>Why this matters now</h2>
+
+    <p>The current generation of AI coding tools is powerful, but they remain fundamentally stateless.</p>
+
+    <p>Without structured memory:</p>
+    <ul>
+      <li>Every session starts partially blind</li>
+      <li>Every contributor re-explains context manually</li>
+      <li>Every long-running project accumulates drift</li>
+    </ul>
+
+    <p>The bottleneck in AI-assisted software development is no longer generation speed. <strong>It is continuity of context and trust in output.</strong></p>
+
+    <p>Mneme exists to solve that problem.</p>
+
+    <hr class="divider">
+
+    <h2>Connect</h2>
+
+    <p>Mneme is built openly, in public, and grounded in real implementation work. If you're exploring governance, memory, or reliability for AI-assisted development workflows, I'd be glad to connect.</p>
+
+    <div class="links-grid">
+      <div class="link-row">
+        <span class="link-row-label">GitHub</span>
+        <a href="https://github.com/TheoV823" target="_blank" rel="noopener">github.com/TheoV823</a>
+      </div>
+      <div class="link-row">
+        <span class="link-row-label">LinkedIn</span>
+        <a href="https://www.linkedin.com/in/theovalmis/" target="_blank" rel="noopener">linkedin.com/in/theovalmis</a>
+      </div>
+      <div class="link-row">
+        <span class="link-row-label">Contact</span>
+        <a href="/contact/">mneme.dev/contact</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CTA FOOTER -->
+<div class="cta-footer">
+  <h2>Ready to enforce your architecture across every AI coding session?</h2>
+  <div class="cta-group">
+    <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
+    <a href="/use-cases/" class="btn-ghost">See use cases</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;·&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;·&nbsp;
+    Open source
+    &nbsp;·&nbsp;
+    MIT License
+  </p>
+</footer>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 **Stop LLMs from forgetting how your project is built.**
 
-Mneme adds persistent project memory and guardrails to LLM-powered development workflows.
+Mneme is the architectural governance layer for AI-assisted development.
 
 ---
 
@@ -22,9 +22,9 @@ Mneme turns those decisions into structured, retrievable constraints that can be
 
 ## What Mneme is
 
-**Mneme** is a portable project memory and evaluation nucleus for LLM workflows.
+**Mneme** is the architectural governance layer for AI-assisted development.
 
-This repository demonstrates the first core capability: injecting structured project memory into LLM calls so outputs stay consistent with prior project decisions.
+This repository demonstrates the first core capability: injecting structured architectural decisions into LLM calls so outputs stay consistent with prior engineering decisions.
 
 ```python
 from mneme.memory_store import MemoryStore
@@ -51,11 +51,11 @@ print(response.content)
 
 ## How it works
 
-Mneme turns project memory into a structured context packet that is injected into every LLM call.
+Mneme turns architectural decisions into structured context packets injected into every LLM call.
 
 The pipeline is:
 
-1. **Memory store** — structured project memory: rules, constraints, facts, decision examples
+1. **Decision store** — structured architectural decisions: rules, constraints, anti-patterns, decision records
 2. **Deterministic retrieval** — selects relevant items based on the input task
 3. **Context packet** — builds a compact, structured representation of what the model needs to know
 4. **Injection** — the context packet is passed as the system prompt
@@ -458,7 +458,7 @@ You can also pass memory inline:
   "memory": {
     "meta": {
       "name": "mneme",
-      "description": "Portable project memory and evaluation nucleus for LLM workflows."
+      "description": "Architectural governance layer for AI-assisted development workflows."
     },
     "items": [
       {
@@ -531,7 +531,7 @@ It exists to prove the core Mneme loop in the simplest usable form:
 
 This is the first public module of **Mneme**. It is a narrow, intentional wedge: one capability, demonstrated clearly, with a clean upgrade path.
 
-Mneme is a portable project memory and evaluation nucleus for LLM workflows. This repo is where it starts.
+Mneme is the architectural governance layer for AI-assisted development. This repo is where it starts.
 
 ## License
 

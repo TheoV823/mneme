@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Mneme</title>
+  <meta name="description" content="Get in touch with the Mneme team. Questions about integration, enterprise use, partnership, or press — we're reachable via GitHub, LinkedIn, or email." />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ContactPage",
+        "@id": "https://mneme.dev/contact/",
+        "name": "Contact Mneme",
+        "url": "https://mneme.dev/contact/",
+        "description": "Contact page for Mneme — architectural governance for AI-assisted development.",
+        "mainEntity": {
+          "@type": "Organization",
+          "name": "Mneme",
+          "url": "https://mneme.dev",
+          "sameAs": [
+            "https://github.com/TheoV823/mneme",
+            "https://www.linkedin.com/in/theovalmis/"
+          ]
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Mneme", "item": "https://mneme.dev/" },
+          { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://mneme.dev/contact/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0d;
+      --surface: #141416;
+      --surface2: #1a1a1d;
+      --border: #222226;
+      --border2: #2e2e34;
+      --text: #e8e8ec;
+      --muted: #88889a;
+      --accent: #c8f060;
+      --accent-dim: #a8d040;
+      --teal: #8be0c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(12,12,13,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 5rem 2rem 6rem;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb span { color: var(--border2); }
+
+    /* ── HEADER ── */
+    .page-tag {
+      display: inline-block;
+      background: rgba(200,240,96,0.07);
+      border: 1px solid rgba(200,240,96,0.22);
+      color: var(--accent);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .page-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 3.5rem;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── CONTACT CARDS ── */
+    .contact-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      transition: border-color 0.15s;
+      text-decoration: none;
+    }
+    .contact-card:hover { border-color: var(--border2); }
+    .contact-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .icon-github { background: rgba(139,224,200,0.08); }
+    .icon-linkedin { background: rgba(200,240,96,0.08); }
+    .icon-email { background: rgba(139,224,200,0.08); }
+    .icon-issues { background: rgba(200,240,96,0.08); }
+    .contact-card-body {}
+    .contact-card-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .contact-card-value {
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .contact-card-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+      margin-top: 3rem;
+    }
+
+    /* ── TOPIC GRID ── */
+    .topic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .topic-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+    }
+    .topic-card-title {
+      font-size: 0.82rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .topic-card-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── NOTE ── */
+    .note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 2rem;
+      padding: 1.25rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 5rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .page-wrap { padding: 3rem 1.25rem 5rem; }
+      .topic-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">Mneme</a>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+<div class="page-wrap">
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Mneme</a>
+    <span>/</span>
+    <span>Contact</span>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="page-tag">Contact</div>
+  <h1>Get in touch</h1>
+  <p class="page-sub">Questions about integration, enterprise adoption, OSS contributions, or anything else — reach out via the channels below.</p>
+
+  <!-- CONTACT CHANNELS -->
+  <div class="contact-grid">
+
+    <a href="https://github.com/TheoV823/mneme/issues" target="_blank" rel="noopener" class="contact-card">
+      <div class="contact-card-icon icon-issues">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8be0c8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div class="contact-card-body">
+        <div class="contact-card-label">GitHub Issues</div>
+        <div class="contact-card-value">github.com/TheoV823/mneme/issues</div>
+        <div class="contact-card-desc">Bug reports, feature requests, and integration questions. Preferred for anything technical.</div>
+      </div>
+    </a>
+
+    <a href="https://github.com/TheoV823/mneme/discussions" target="_blank" rel="noopener" class="contact-card">
+      <div class="contact-card-icon icon-github">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8be0c8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="contact-card-body">
+        <div class="contact-card-label">GitHub Discussions</div>
+        <div class="contact-card-value">github.com/TheoV823/mneme/discussions</div>
+        <div class="contact-card-desc">Open questions, architecture ideas, community conversation.</div>
+      </div>
+    </a>
+
+    <a href="https://www.linkedin.com/in/theovalmis/" target="_blank" rel="noopener" class="contact-card">
+      <div class="contact-card-icon icon-linkedin">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8f060" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </div>
+      <div class="contact-card-body">
+        <div class="contact-card-label">LinkedIn</div>
+        <div class="contact-card-value">linkedin.com/in/theovalmis</div>
+        <div class="contact-card-desc">Enterprise inquiries, partnerships, consulting, and speaking requests.</div>
+      </div>
+    </a>
+
+    <a href="mailto:hi@theovalmis.com" class="contact-card">
+      <div class="contact-card-icon icon-email">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8be0c8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="contact-card-body">
+        <div class="contact-card-label">Email</div>
+        <div class="contact-card-value">hi@theovalmis.com</div>
+        <div class="contact-card-desc">Press, podcast, and anything not suited to a public thread.</div>
+      </div>
+    </a>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- WHAT TO REACH OUT ABOUT -->
+  <div class="section-eyebrow">What to reach out about</div>
+  <div class="topic-grid">
+    <div class="topic-card">
+      <div class="topic-card-title">Technical integration</div>
+      <div class="topic-card-desc">Connecting Mneme to Cursor, Claude Code, LangChain, CrewAI, or a custom agent pipeline.</div>
+    </div>
+    <div class="topic-card">
+      <div class="topic-card-title">Enterprise adoption</div>
+      <div class="topic-card-desc">Deploying Mneme across a team, org, or multi-repository environment.</div>
+    </div>
+    <div class="topic-card">
+      <div class="topic-card-title">OSS contributions</div>
+      <div class="topic-card-desc">Pull requests, new adapters, schema extensions, or documentation improvements.</div>
+    </div>
+    <div class="topic-card">
+      <div class="topic-card-title">Research &amp; press</div>
+      <div class="topic-card-desc">AI governance research, LLM reliability studies, podcast appearances, or media coverage.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    Response time is typically within 1–2 business days for email. GitHub issues and discussions are monitored daily.
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;·&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;·&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;·&nbsp;
+    Open source
+    &nbsp;·&nbsp;
+    MIT License
+  </p>
+</footer>
+
+</body>
+</html>
