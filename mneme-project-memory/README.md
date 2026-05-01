@@ -240,6 +240,38 @@ print(result.system_prompt)   # formatted block injected as system prompt
 print(result.injected_decisions)  # list[Decision] actually sent
 ```
 
+### Strict enforcement mode
+
+By default `Pipeline` runs in `warn` mode: conflicts are surfaced on
+`PipelineResult.conflicts` and the caller decides what to do. For pipelines
+that should fail fast on any detected violation — e.g. a CI gate or a
+scripted workflow — pass `enforcement_mode="strict"`:
+
+```python
+from mneme.pipeline import Pipeline
+from mneme.schemas import MnemeConflictError
+
+p = Pipeline(
+    "examples/project_memory.json",
+    dry_run=True,
+    enforcement_mode="strict",
+)
+
+try:
+    result = p.run("Should I switch storage to Postgres?")
+except MnemeConflictError as err:
+    # err.conflicts: list[Conflict] from ConflictDetector
+    # err.result:    the partial PipelineResult, so you can still inspect
+    #                the LLM response, the system prompt, and the injected
+    #                decisions that produced the violation.
+    for c in err.conflicts:
+        print(c.violated_decision_id, "->", c.reason)
+```
+
+Strict mode runs the conflict detector on the response and raises if any
+conflict is found. It does **not** retry, regenerate, or block the LLM call
+upstream — that's a deliberate non-goal for this iteration.
+
 ### Conflict detection
 
 `ConflictDetector` scans the LLM response for constraint and anti-pattern
