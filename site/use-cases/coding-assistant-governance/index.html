@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coding Assistant Governance — Mneme</title>
   <meta name="description" content="How Mneme enforces architectural decisions when using Cursor, Claude Code, or Copilot — preventing drift, repeated violations, and wasted review cycles." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme" />
+  <meta property="og:title" content="Coding Assistant Governance | Mneme" />
+  <meta property="og:description" content="Enforce architectural decisions for Cursor, Claude Code, and Copilot. Mneme flags violations before AI-generated code reaches review." />
+  <meta property="og:url" content="https://mnemehq.com/use-cases/coding-assistant-governance/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Coding Assistant Governance | Mneme" />
+  <meta name="twitter:description" content="Enforce architectural decisions for Cursor, Claude Code, and Copilot. Mneme flags violations before AI-generated code reaches review." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/coding-assistant-governance/" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
@@ -102,6 +112,46 @@
     .diagram-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 0; }
     .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Use cases", "item": "https://mnemehq.com/use-cases/" },
+        { "@type": "ListItem", "position": 3, "name": "Coding assistant governance" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Mneme work with Cursor, Claude Code, and Copilot?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme works at the workflow level — it's not an IDE plugin. mneme check runs before you prompt, and mneme cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between Mneme and just writing better system prompts?",
+          "acceptedAnswer": { "@type": "Answer", "text": "System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves." }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to set up?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Under 5 minutes for a project with existing documentation. pip install mneme-project-memory, create a decisions/ directory, add your first YAML decision, and run mneme check. See the README for the quickstart." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I enforce decisions in CI without blocking the pipeline during setup?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Use --mode warn for a non-blocking run that logs violations without failing the build. Switch to --mode strict once you're confident in your decision set." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
