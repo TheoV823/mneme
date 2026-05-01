@@ -28,3 +28,14 @@ Thumbs.db
 # Flask
 *.log
 .worktrees/
+
+# Internal/private strategy files — must live in mneme-internal repo
+/private/
+/internal/
+/strategy/
+/gtm/
+/competitors/
+/investor-notes/
+/customer-notes/
+*.private.md
+*.internal.md

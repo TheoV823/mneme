@@ -12,11 +12,14 @@ def _git(args, cwd):
 
 # 1. Script repo must be on main and clean
 script_branch = _git(['rev-parse', '--abbrev-ref', 'HEAD'], SCRIPT_DIR)
-script_dirty  = _git(['status', '--porcelain'], SCRIPT_DIR)
+script_dirty  = '\n'.join(
+    l for l in _git(['status', '--porcelain'], SCRIPT_DIR).splitlines()
+    if not l.startswith('??')          # untracked files don't affect deploys
+)
 if script_branch != 'main':
     raise SystemExit(f"ERROR: repo is on '{script_branch}' — must be on main to deploy.")
 if script_dirty:
-    raise SystemExit(f"ERROR: working tree is dirty — commit or stash before deploying.")
+    raise SystemExit(f"ERROR: working tree has uncommitted changes — commit or stash before deploying.")
 
 # 2. site/ dir must also be on main if it is a separate git repo
 try:
