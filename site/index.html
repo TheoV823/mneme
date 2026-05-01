@@ -23,7 +23,8 @@
   <!-- End Google Tag Manager -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -43,7 +44,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'DM Mono', monospace;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -64,12 +65,9 @@
       z-index: 100;
     }
     .logo {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: var(--text);
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      letter-spacing: -0.01em;
     }
     .nav-links {
       display: flex;
@@ -80,7 +78,7 @@
       color: var(--muted);
       text-decoration: none;
       font-size: 0.82rem;
-      font-family: 'DM Mono', monospace;
+      font-family: 'Inter', sans-serif;
       transition: color 0.15s;
     }
     .nav-links a:hover { color: var(--text); }
@@ -155,18 +153,18 @@
       color: var(--text);
     }
     .hero-sub {
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: var(--muted);
       max-width: 520px;
       margin: 0 auto 1.25rem;
-      font-family: 'DM Mono', monospace;
+      font-family: 'Inter', sans-serif;
     }
     .hero-support {
       font-size: 0.82rem;
       color: var(--teal);
       max-width: 500px;
       margin: 0 auto 2.75rem;
-      font-family: 'DM Mono', monospace;
+      font-family: 'Inter', sans-serif;
     }
     .cta-group {
       display: flex;
@@ -191,9 +189,9 @@
       margin-bottom: 0.75rem;
     }
     .section-title {
-      font-family: 'Instrument Serif', serif;
+      font-family: 'Inter', sans-serif;
       font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 400;
+      font-weight: 600;
       letter-spacing: -0.02em;
       margin-bottom: 2.5rem;
       color: var(--text);
@@ -301,9 +299,9 @@
       color: var(--accent);
     }
     .step-body h4 {
-      font-family: 'Instrument Serif', serif;
+      font-family: 'Inter', sans-serif;
       font-size: 1.05rem;
-      font-weight: 400;
+      font-weight: 600;
       margin-bottom: 0.3rem;
       color: var(--text);
     }
@@ -352,9 +350,9 @@
     }
     .works-card:hover { border-color: rgba(200,240,96,0.28); }
     .works-card h3 {
-      font-family: 'Instrument Serif', serif;
+      font-family: 'Inter', sans-serif;
       font-size: 1rem;
-      font-weight: 400;
+      font-weight: 600;
       margin-bottom: 0.4rem;
       color: var(--text);
     }
@@ -513,9 +511,9 @@
       padding: 6rem 2rem;
     }
     .cta-footer h2 {
-      font-family: 'Instrument Serif', serif;
+      font-family: 'Inter', sans-serif;
       font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 400;
+      font-weight: 600;
       letter-spacing: -0.02em;
       margin-bottom: 2rem;
       color: var(--text);
@@ -575,9 +573,10 @@
 
 <!-- NAV -->
 <nav>
-  <a href="/" class="logo">Mneme</a>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme" height="36" style="display:block;"></a>
   <div class="nav-links">
     <a href="#how-it-works">How it works</a>
+    <a href="/demo.html">Demo</a>
     <a href="#benchmarks">Benchmarks</a>
     <a href="/use-cases/">Use cases</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
@@ -605,7 +604,7 @@
   </div>
 
   <!-- BEFORE / AFTER DEMO -->
-  <div class="section-wrap">
+  <div class="section-wrap" id="benchmarks">
     <div class="section-eyebrow">See the difference</div>
     <h2 class="section-title">Same prompt. Same model. Different answer.</h2>
 

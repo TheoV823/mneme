@@ -49,6 +49,8 @@ FILES = [
     ('index.html',                                                                ''),
     ('sitemap.xml',                                                               ''),
     ('og.png',                                                                    ''),
+    ('favicon.png',                                                               ''),
+    ('logo-v2.png',                                                               ''),
     (os.path.join('founder',   'index.html'),                                    'founder'),
     (os.path.join('contact',   'index.html'),                                    'contact'),
     (os.path.join('privacy',   'index.html'),                                    'privacy'),

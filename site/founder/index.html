@@ -10,7 +10,8 @@
   <!-- End Google Tag Manager -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -60,7 +61,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'DM Mono', monospace;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -81,12 +82,9 @@
       z-index: 100;
     }
     .logo {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: var(--text);
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      letter-spacing: -0.01em;
     }
     .nav-links {
       display: flex;
@@ -97,7 +95,7 @@
       color: var(--muted);
       text-decoration: none;
       font-size: 0.82rem;
-      font-family: 'DM Mono', monospace;
+      font-family: 'Inter', sans-serif;
       transition: color 0.15s;
     }
     .nav-links a:hover { color: var(--text); }
@@ -198,9 +196,9 @@
 
     /* ── PROSE ── */
     .prose h2 {
-      font-family: 'Instrument Serif', serif;
+      font-family: 'Inter', sans-serif;
       font-size: 1.5rem;
-      font-weight: 400;
+      font-weight: 600;
       letter-spacing: -0.01em;
       color: var(--text);
       margin-top: 3rem;
@@ -316,9 +314,9 @@
       margin: 5rem auto 0;
     }
     .cta-footer h2 {
-      font-family: 'Instrument Serif', serif;
+      font-family: 'Inter', sans-serif;
       font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-      font-weight: 400;
+      font-weight: 600;
       margin-bottom: 1.75rem;
       letter-spacing: -0.02em;
     }
@@ -354,9 +352,10 @@
 
 <!-- NAV -->
 <nav>
-  <a href="/" class="logo">Mneme</a>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme" height="36" style="display:block;"></a>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/demo.html">Demo</a>
     <a href="/#benchmarks">Benchmarks</a>
     <a href="/use-cases/">Use cases</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
@@ -459,6 +458,10 @@
       <div class="link-row">
         <span class="link-row-label">LinkedIn</span>
         <a href="https://www.linkedin.com/in/theovalmis/" target="_blank" rel="noopener">linkedin.com/in/theovalmis</a>
+      </div>
+      <div class="link-row">
+        <span class="link-row-label">Email</span>
+        <a href="mailto:hi@theovalmis.com">hi@theovalmis.com</a>
       </div>
       <div class="link-row">
         <span class="link-row-label">Contact</span>

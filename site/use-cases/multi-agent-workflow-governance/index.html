@@ -19,7 +19,8 @@
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -29,9 +30,9 @@
       --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
     nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
-    .logo { font-family: 'Instrument Serif', serif; font-size: 1.4rem; font-weight: 400; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
     .nav-links { display: flex; gap: 1.5rem; align-items: center; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
     .nav-links a:hover, .nav-links a.active { color: var(--text); }
@@ -50,7 +51,7 @@
     .cta-group { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
     .section-wrap { max-width: 860px; margin: 0 auto; padding: 4.5rem 2rem; border-top: 1px solid var(--border); }
     .section-eyebrow { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
-    .section-title { font-family: 'Instrument Serif', serif; font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 400; letter-spacing: -0.02em; margin-bottom: 2rem; }
+    .section-title { font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2rem; }
     .prose { font-size: 0.88rem; color: var(--muted); line-height: 1.9; max-width: 680px; }
     .demo-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 2rem 0; }
     @media (max-width: 640px) { .demo-panels { grid-template-columns: 1fr; } }
@@ -80,7 +81,7 @@
     .steps { display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
     .step { display: flex; gap: 1.25rem; align-items: flex-start; }
     .step-num { flex-shrink: 0; width: 32px; height: 32px; border: 1px solid rgba(200,240,96,0.28); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--accent); }
-    .step-body h4 { font-family: 'Instrument Serif', serif; font-size: 1.05rem; font-weight: 400; margin-bottom: 0.3rem; }
+    .step-body h4 { font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; }
     .step-body p { font-size: 0.82rem; color: var(--muted); }
     .code-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 1.5rem 0; }
     .code-block-label { padding: 0.6rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.04em; }
@@ -99,7 +100,7 @@
     details[open] summary { border-bottom: 1px solid var(--border); }
     .faq-body { padding: 1.25rem; font-size: 0.84rem; color: var(--muted); line-height: 1.8; }
     .cta-footer { border-top: 1px solid var(--border); text-align: center; padding: 5rem 2rem; }
-    .cta-footer h2 { font-family: 'Instrument Serif', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 400; letter-spacing: -0.02em; margin-bottom: 2rem; }
+    .cta-footer h2 { font-family: 'Inter', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2rem; }
     footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--text); }
@@ -160,9 +161,11 @@
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <nav>
-  <a href="/" class="logo">Mneme</a>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme" height="36" style="display:block;"></a>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/demo.html">Demo</a>
+    <a href="/#benchmarks">Benchmarks</a>
     <a href="/use-cases/" class="active">Use cases</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
     <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
