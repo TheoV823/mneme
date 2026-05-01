@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Mneme — Add User{% endblock %}
+{% block content %}
+<div class="compare-header">
+  <h1>Add User</h1>
+  <a href="{{ url_for('compare.index') }}" class="btn btn-secondary">← Back</a>
+</div>
+
+<div class="compare-form-card">
+  <form method="POST">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" value="{{ name or '' }}"
+        placeholder="Your name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="profile_json">Decision Profile (JSON)</label>
+      <textarea name="profile_json" id="profile_json" rows="16"
+        placeholder='{"decision_style": "...", "risk_tolerance": "...", ...}'
+        required>{{ profile_json or default_profile }}</textarea>
+      <p class="hint">Edit the values to match how you actually think and decide.</p>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create User</button>
+  </form>
+</div>
+
+<script>
+// Pre-fill with the sample profile if textarea is empty
+const ta = document.getElementById('profile_json');
+if (!ta.value.trim()) {
+  ta.value = JSON.stringify({
+    "decision_style": "analytical and deliberate — prefers written briefs over verbal discussion",
+    "risk_tolerance": "medium — willing to take calculated risks with clear reversibility criteria",
+    "prioritization_rules": [
+      "customer impact over internal efficiency",
+      "speed to learning over polish",
+      "depth over breadth when resources are constrained"
+    ],
+    "communication_style": "direct and structured — prefers numbered lists and clear tradeoffs",
+    "constraints": [
+      "no decisions requiring more than 2 weeks lead time without async alignment first",
+      "must preserve team psychological safety"
+    ],
+    "anti_patterns": [
+      "analysis paralysis on reversible decisions",
+      "consensus-seeking when a clear owner exists"
+    ]
+  }, null, 2);
+}
+</script>
+{% endblock %}
