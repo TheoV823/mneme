@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Design System Governance — Mneme</title>
   <meta name="description" content="How Mneme preserves design system and UX decisions for AI builders — preventing LLMs from violating design tokens, component hierarchy, and accessibility rules when generating UI code." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme" />
+  <meta property="og:title" content="Design System Governance | Mneme" />
+  <meta property="og:description" content="Preserve design tokens, component hierarchy rules, and accessibility requirements for AI-assisted UI development. Mneme flags non-approved usage before code reaches review." />
+  <meta property="og:url" content="https://mnemehq.com/use-cases/design-system-governance/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Design System Governance | Mneme" />
+  <meta name="twitter:description" content="Preserve design tokens, component hierarchy rules, and accessibility requirements for AI-assisted UI development. Mneme flags non-approved usage before code reaches review." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/design-system-governance/" />
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -100,6 +110,46 @@
     .diagram-wrap { max-width: 960px; margin: 3rem auto 0; padding: 3rem 2rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
     .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Use cases", "item": "https://mnemehq.com/use-cases/" },
+        { "@type": "ListItem", "position": 3, "name": "Design system governance" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does this expand Mneme beyond backend engineering?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Design system governance is one of the clearest examples of Mneme's value for frontend and full-stack teams. Any discipline with enforced conventions — design, data, security — benefits from the same decision-enforcement model." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can designers manage decisions without engineering involvement?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Decision YAML files are plain text in version control. Designers can open PRs to add token rules, component requirements, or accessibility constraints without writing any code." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do we handle design system evolution — new components, deprecated ones?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Update the YAML. Set old decisions to status: deprecated to stop enforcing them. Add new decisions for new components. The version history in git serves as your audit trail of design system changes." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this work with Tailwind, CSS Modules, and CSS-in-JS?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme enforces intent, not implementation. Your decisions describe what's allowed — the AI assistant uses whatever styling approach your project uses, constrained by those rules." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
