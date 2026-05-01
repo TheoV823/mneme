@@ -6,6 +6,18 @@
   <title>Mneme — Persistent project memory for LLM workflows</title>
   <meta name="description" content="Mneme adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
   <meta name="google-site-verification" content="eW7iETj7y-Ni_T0RYKR0cvBXhaz3y4NfEfHSwXbMlNQ" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mneme" />
+  <meta property="og:title" content="Mneme — Persistent project memory for LLM workflows" />
+  <meta property="og:description" content="Mneme adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <meta property="og:url" content="https://mnemehq.com/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mneme — Persistent project memory for LLM workflows" />
+  <meta name="twitter:description" content="Mneme adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
   <!-- End Google Tag Manager -->
@@ -519,7 +531,46 @@
     }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--text); }
+    .answer-capsule { max-width: 820px; margin: 0 auto; padding: 1.5rem 2rem; background: var(--surface); border-bottom: 1px solid rgba(200,240,96,0.18); font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
+    .answer-capsule strong { color: var(--accent); }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Mneme",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Linux, macOS, Windows",
+      "description": "Persistent project memory and decision enforcement for LLM-powered development workflows. Mneme stores architectural decisions, constraints, and anti-patterns as structured YAML and enforces them before AI-generated code reaches your repository.",
+      "url": "https://mnemehq.com/",
+      "downloadUrl": "https://github.com/TheoV823/mneme",
+      "codeRepository": "https://github.com/TheoV823/mneme",
+      "isAccessibleForFree": true,
+      "featureList": [
+        "Semantic decision retrieval at prompt time",
+        "CI enforcement gate for AI-generated code",
+        "YAML-based decision store in version control",
+        "Cursor Rules integration",
+        "CLAUDE.md integration",
+        "Multi-agent pipeline support",
+        "Tag-scoped rule enforcement"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "TheoV823",
+        "url": "https://github.com/TheoV823"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "Mneme",
+      "url": "https://mnemehq.com/"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -536,6 +587,11 @@
 </nav>
 
 <main>
+
+<!-- GEO / LLM answer capsule -->
+<div class="answer-capsule">
+  <strong>Mneme</strong> is a decision memory and governance layer for AI-assisted development workflows. It stores architectural decisions, constraints, and anti-patterns as structured YAML in version control, then surfaces the relevant rules at prompt time — so AI coding assistants generate code that fits your architecture. Violations are flagged before code reaches review.
+</div>
 
   <!-- HERO -->
   <div class="hero">
