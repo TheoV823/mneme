@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Security &amp; Compliance Guardrails — Mneme</title>
   <meta name="description" content="How Mneme prevents AI coding assistants from introducing security vulnerabilities and compliance violations by enforcing security decisions at prompt time." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme" />
+  <meta property="og:title" content="Security &amp; Compliance Guardrails | Mneme" />
+  <meta property="og:description" content="Enforce PII handling rules, auth requirements, and secrets policies before AI-generated code reaches review. Mneme is a scalable guardrail for LLM-powered development." />
+  <meta property="og:url" content="https://mnemehq.com/use-cases/security-compliance-guardrails/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Security &amp; Compliance Guardrails | Mneme" />
+  <meta name="twitter:description" content="Enforce PII handling rules, auth requirements, and secrets policies before AI-generated code reaches review. Mneme is a scalable guardrail for LLM-powered development." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/security-compliance-guardrails/" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
@@ -102,6 +112,46 @@
     .diagram-wrap { max-width: 960px; margin: 3rem auto 0; padding: 3rem 2rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
     .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Use cases", "item": "https://mnemehq.com/use-cases/" },
+        { "@type": "ListItem", "position": 3, "name": "Security & compliance guardrails" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can security teams manage decisions without engineering access?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The decisions YAML files are plain text, stored in version control. Security teams can open PRs to add or update rules like any other change — no code required." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Mneme replace a SAST tool?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No — they're complementary. SAST finds known vulnerability patterns in written code. Mneme enforces business-specific compliance rules before code is written. Use both." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do we handle rules that vary by region or environment?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use tags and separate decision files per context. You can scope checks with mneme check --tags gdpr for EU-specific rules or --tags soc2 for audit controls." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if a developer overrides a strict violation?",
+          "acceptedAnswer": { "@type": "Answer", "text": "In strict mode, the CI gate fails and the override is explicit — it must be merged with a documented exception. All violations are logged, creating an audit trail for security reviews." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
