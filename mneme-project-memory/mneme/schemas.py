@@ -248,3 +248,26 @@ class AlignmentResult:
     matched_rules: list[str]
     missed_rules: list[str]
     explanation: str
+
+
+# ── Errors ────────────────────────────────────────────────────────────────────
+
+class MnemeConflictError(Exception):
+    """Raised by Pipeline.run() in strict mode when conflicts are detected.
+
+    Carries both the list of Conflict records and the (partial) PipelineResult
+    so callers in a try/except can still inspect the LLM response, the
+    injected decisions, and the system prompt that produced the violation.
+
+    Attributes:
+        conflicts: List of Conflict records produced by ConflictDetector.
+        result:    The PipelineResult that would have been returned in
+                   warn mode. Typed as Any to avoid a circular import.
+    """
+
+    def __init__(self, conflicts: list, result: object) -> None:
+        self.conflicts = conflicts
+        self.result = result
+        super().__init__(
+            f"Strict enforcement: {len(conflicts)} conflict(s) detected"
+        )

@@ -34,3 +34,14 @@ def test_decision_defaults_are_independent_lists():
     b = Decision(id="b", decision="y")
     a.scope.append("storage")
     assert b.scope == []
+
+
+def test_mneme_conflict_error_carries_conflicts_and_result():
+    from mneme.schemas import MnemeConflictError
+
+    err = MnemeConflictError(conflicts=["c1", "c2"], result="r")
+    assert err.conflicts == ["c1", "c2"]
+    assert err.result == "r"
+    # The exception message should mention how many conflicts were found
+    # so it is informative when raised without being caught.
+    assert "2" in str(err)
