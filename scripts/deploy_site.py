@@ -1,4 +1,14 @@
 import urllib.request, urllib.parse, ssl, json, os, subprocess
+from pathlib import Path
+
+# Load .env if present (never committed — credentials stay local)
+_env = Path(__file__).parent.parent / '.env'
+if _env.exists():
+    for line in _env.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith('#') and '=' in line:
+            k, _, v = line.partition('=')
+            os.environ.setdefault(k.strip(), v.strip())
 
 # ── Deploy guards ────────────────────────────────────────────────────────────
 # Production deploys must originate from the canonical site working tree on
@@ -31,11 +41,13 @@ except subprocess.CalledProcessError:
 
 print(f"[OK] Branch: main  |  Clean: yes  |  Source: {BASE_LOCAL}")
 
-# ── cPanel credentials ───────────────────────────────────────────────────────
-HOST = '152.89.79.37'
-PORT = '2083'
-USER = 'cadafdd1'
-TOKEN = 'IQO8R2A9VRL2SMUUVSOP6KE3YO0F4V2D'
+# ── cPanel credentials — read from .env, never hardcoded ─────────────────────
+HOST  = os.environ.get('CPANEL_HOST',  '152.89.79.37')
+PORT  = os.environ.get('CPANEL_PORT',  '2083')
+USER  = os.environ.get('CPANEL_USER',  'cadafdd1')
+TOKEN = os.environ.get('CPANEL_API_TOKEN', '')
+if not TOKEN:
+    raise SystemExit('ERROR: CPANEL_API_TOKEN not set — add it to .env')
 AUTH = f'cpanel {USER}:{TOKEN}'
 
 ctx = ssl.create_default_context()

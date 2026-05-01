@@ -39,3 +39,24 @@ Thumbs.db
 /customer-notes/
 *.private.md
 *.internal.md
+
+# Working / scratch files (ADR-003 — not for deploy, not tracked)
+theovalmis_index.html
+why-i-built-mneme.html
+scratch/
+
+# Stale processed assets in site root (logo-v2.png is tracked; logo.png is the old dark variant)
+site/logo.png
+
+# Internal session memory
+.claude/
+
+# Screenshots and generated visuals
+screenshots/
+case studies/
+
+# Tools / internal MCP servers (ADR-002 — private repo only)
+tools/
+
+# Internal planning docs (ADR-002 — private repo only)
+docs/plans/
