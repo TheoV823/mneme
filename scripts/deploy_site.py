@@ -1,5 +1,34 @@
-import urllib.request, ssl, json, os
+import urllib.request, urllib.parse, ssl, json, os, subprocess
 
+# ── Deploy guards ────────────────────────────────────────────────────────────
+# Production deploys must originate from the canonical site working tree on
+# main. Feature worktrees are never valid production deploy sources.
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_LOCAL  = os.path.normpath(os.path.join(SCRIPT_DIR, '..', 'site'))
+
+def _git(args, cwd):
+    return subprocess.check_output(['git'] + args, cwd=cwd).decode().strip()
+
+# 1. Script repo must be on main and clean
+script_branch = _git(['rev-parse', '--abbrev-ref', 'HEAD'], SCRIPT_DIR)
+script_dirty  = _git(['status', '--porcelain'], SCRIPT_DIR)
+if script_branch != 'main':
+    raise SystemExit(f"ERROR: repo is on '{script_branch}' — must be on main to deploy.")
+if script_dirty:
+    raise SystemExit(f"ERROR: working tree is dirty — commit or stash before deploying.")
+
+# 2. site/ dir must also be on main if it is a separate git repo
+try:
+    site_branch = _git(['rev-parse', '--abbrev-ref', 'HEAD'], BASE_LOCAL)
+    if site_branch != 'main':
+        raise SystemExit(f"ERROR: site/ is on '{site_branch}' — must be on main to deploy.")
+except subprocess.CalledProcessError:
+    pass  # site/ is not a separate repo — fine
+
+print(f"✓ Branch: main  |  Clean: yes  |  Source: {BASE_LOCAL}")
+
+# ── cPanel credentials ───────────────────────────────────────────────────────
 HOST = '152.89.79.37'
 PORT = '2083'
 USER = 'cadafdd1'
@@ -10,68 +39,80 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-BASE_LOCAL = os.path.join(os.path.dirname(__file__), '..', '.worktrees', 'case-study-pages', 'site')
 BASE_REMOTE = '/home/cadafdd1/mnemehq.com'
 
+# ── File manifest ────────────────────────────────────────────────────────────
 FILES = [
-    ('index.html',                                                                      ''),
-    ('sitemap.xml',                                                                     ''),
-    (os.path.join('use-cases', 'index.html'),                                          'use-cases'),
-    (os.path.join('use-cases', 'coding-assistant-governance', 'index.html'),           'use-cases/coding-assistant-governance'),
-    (os.path.join('use-cases', 'legacy-codebase-memory', 'index.html'),                'use-cases/legacy-codebase-memory'),
-    (os.path.join('use-cases', 'security-compliance-guardrails', 'index.html'),        'use-cases/security-compliance-guardrails'),
-    (os.path.join('use-cases', 'data-platform-governance', 'index.html'),              'use-cases/data-platform-governance'),
-    (os.path.join('use-cases', 'design-system-governance', 'index.html'),              'use-cases/design-system-governance'),
-    (os.path.join('use-cases', 'multi-agent-workflow-governance', 'index.html'),       'use-cases/multi-agent-workflow-governance'),
+    ('index.html',                                                                ''),
+    ('sitemap.xml',                                                               ''),
+    ('og.png',                                                                    ''),
+    (os.path.join('use-cases', 'index.html'),                                    'use-cases'),
+    (os.path.join('use-cases', 'coding-assistant-governance',  'index.html'),    'use-cases/coding-assistant-governance'),
+    (os.path.join('use-cases', 'data-platform-governance',     'index.html'),    'use-cases/data-platform-governance'),
+    (os.path.join('use-cases', 'design-system-governance',     'index.html'),    'use-cases/design-system-governance'),
+    (os.path.join('use-cases', 'legacy-codebase-memory',       'index.html'),    'use-cases/legacy-codebase-memory'),
+    (os.path.join('use-cases', 'multi-agent-workflow-governance', 'index.html'), 'use-cases/multi-agent-workflow-governance'),
+    (os.path.join('use-cases', 'security-compliance-guardrails',  'index.html'), 'use-cases/security-compliance-guardrails'),
 ]
 
+BINARY_EXTS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.svg'}
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
 def mkdir(remote_path):
-    parent = remote_path.rsplit('/', 1)[0]
-    name = remote_path.rsplit('/', 1)[1]
+    parent, name = remote_path.rsplit('/', 1)
     params = {
         'cpanel_jsonapi_module': 'Fileman', 'cpanel_jsonapi_func': 'mkdir',
-        'cpanel_jsonapi_version': '2', 'path': parent, 'name': name
+        'cpanel_jsonapi_version': '2', 'path': parent, 'name': name,
     }
     data = urllib.parse.urlencode(params).encode('utf-8')
-    req = urllib.request.Request(f'https://{HOST}:{PORT}/json-api/cpanel', data=data, headers={'Authorization': AUTH})
+    req = urllib.request.Request(
+        f'https://{HOST}:{PORT}/json-api/cpanel', data=data,
+        headers={'Authorization': AUTH},
+    )
     with urllib.request.urlopen(req, context=ctx) as r:
         return json.loads(r.read())
 
 def upload(local_path, remote_subdir):
-    with open(local_path, 'r', encoding='utf-8') as f:
+    ext = os.path.splitext(local_path)[1].lower()
+    is_binary = ext in BINARY_EXTS
+    mode = 'rb' if is_binary else 'r'
+    enc  = {} if is_binary else {'encoding': 'utf-8'}
+    with open(local_path, mode, **enc) as f:
         content = f.read()
-    filename = os.path.basename(local_path)
-    remote_dir = BASE_REMOTE + ('/' + remote_subdir if remote_subdir else '')
-    boundary = '----MnemeDeploy2026'
-    body = (
+    if not is_binary:
+        content = content.encode('utf-8')
+
+    filename    = os.path.basename(local_path)
+    remote_dir  = BASE_REMOTE + ('/' + remote_subdir if remote_subdir else '')
+    content_type = 'image/png' if ext == '.png' else 'text/html'
+    boundary    = '----MnemeDeploy2026'
+
+    header = (
         f'--{boundary}\r\n'
         f'Content-Disposition: form-data; name="dir"\r\n\r\n{remote_dir}\r\n'
         f'--{boundary}\r\n'
         f'Content-Disposition: form-data; name="overwrite"\r\n\r\n1\r\n'
         f'--{boundary}\r\n'
         f'Content-Disposition: form-data; name="file-1"; filename="{filename}"\r\n'
-        f'Content-Type: text/html\r\n\r\n{content}\r\n'
-        f'--{boundary}--'
+        f'Content-Type: {content_type}\r\n\r\n'
     ).encode('utf-8')
+    body = header + content + f'\r\n--{boundary}--'.encode('utf-8')
+
     req = urllib.request.Request(
-        f'https://{HOST}:{PORT}/execute/Fileman/upload_files',
-        data=body,
-        headers={'Authorization': AUTH, 'Content-Type': f'multipart/form-data; boundary={boundary}'}
+        f'https://{HOST}:{PORT}/execute/Fileman/upload_files', data=body,
+        headers={'Authorization': AUTH, 'Content-Type': f'multipart/form-data; boundary={boundary}'},
     )
     with urllib.request.urlopen(req, context=ctx) as r:
         result = json.loads(r.read())
     ok = result.get('status') == 1 and result.get('data', {}).get('failed', 1) == 0
     return 'OK' if ok else f'FAIL: {result.get("errors", result)}'
 
-import urllib.parse
-
-# Ensure new directories exist
-new_dirs = [
+# ── Deploy ───────────────────────────────────────────────────────────────────
+for d in [
     BASE_REMOTE + '/use-cases/data-platform-governance',
     BASE_REMOTE + '/use-cases/design-system-governance',
     BASE_REMOTE + '/use-cases/multi-agent-workflow-governance',
-]
-for d in new_dirs:
+]:
     mkdir(d)
 
 for rel_path, subdir in FILES:
