@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Legacy Codebase Memory — Mneme</title>
   <meta name="description" content="How Mneme preserves tribal knowledge in legacy codebases, preventing AI coding assistants from breaking fragile systems by surfacing hidden constraints at query time." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme" />
+  <meta property="og:title" content="Legacy Codebase Memory | Mneme" />
+  <meta property="og:description" content="Capture undocumented constraints and tribal knowledge in a structured decision store. Mneme surfaces hidden rules before AI coding assistants can violate them." />
+  <meta property="og:url" content="https://mnemehq.com/use-cases/legacy-codebase-memory/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Legacy Codebase Memory | Mneme" />
+  <meta name="twitter:description" content="Capture undocumented constraints and tribal knowledge in a structured decision store. Mneme surfaces hidden rules before AI coding assistants can violate them." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/legacy-codebase-memory/" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
@@ -102,6 +112,46 @@
     .diagram-wrap { max-width: 960px; margin: 3rem auto 0; padding: 3rem 2rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
     .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Use cases", "item": "https://mnemehq.com/use-cases/" },
+        { "@type": "ListItem", "position": 3, "name": "Legacy codebase memory" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "We have thousands of undocumented rules. Where do we start?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Start with the last 5 PRs that had review comments like 'we don't do it this way'. Convert those comments into decisions. You'll cover ~80% of common violations in under an hour." }
+        },
+        {
+          "@type": "Question",
+          "name": "What if a constraint changes?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Update the YAML. You can set status: deprecated on a decision to disable enforcement without deleting the history. The decision record remains as context for why the rule existed." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this work without good test coverage?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme is a pre-flight layer on top of prompting — it doesn't require test coverage to enforce decisions. It operates before code is written, not after." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can we import from existing ADR documents?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Manual migration takes 2–3 minutes per decision. A future importer is on the roadmap. For now, treat existing ADRs as source material and transcribe the key rule and rationale into YAML." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
