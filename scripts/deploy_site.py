@@ -49,6 +49,9 @@ FILES = [
     ('index.html',                                                                ''),
     ('sitemap.xml',                                                               ''),
     ('og.png',                                                                    ''),
+    (os.path.join('founder',   'index.html'),                                    'founder'),
+    (os.path.join('contact',   'index.html'),                                    'contact'),
+    (os.path.join('privacy',   'index.html'),                                    'privacy'),
     (os.path.join('use-cases', 'index.html'),                                    'use-cases'),
     (os.path.join('use-cases', 'coding-assistant-governance',  'index.html'),    'use-cases/coding-assistant-governance'),
     (os.path.join('use-cases', 'data-platform-governance',     'index.html'),    'use-cases/data-platform-governance'),
@@ -112,6 +115,9 @@ def upload(local_path, remote_subdir):
 
 # ── Deploy ───────────────────────────────────────────────────────────────────
 for d in [
+    BASE_REMOTE + '/founder',
+    BASE_REMOTE + '/contact',
+    BASE_REMOTE + '/privacy',
     BASE_REMOTE + '/use-cases/data-platform-governance',
     BASE_REMOTE + '/use-cases/design-system-governance',
     BASE_REMOTE + '/use-cases/multi-agent-workflow-governance',
