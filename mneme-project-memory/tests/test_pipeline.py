@@ -44,3 +44,32 @@ def test_top_n_respected_even_when_more_match():
     p = Pipeline(memory_path=EXAMPLE, dry_run=True, max_decisions=1)
     result = p.run("storage retrieval agents postgres embeddings")
     assert len(result.injected_decisions) == 1
+
+
+import pytest
+
+
+def test_pipeline_default_enforcement_mode_is_warn():
+    p = Pipeline(memory_path=EXAMPLE, dry_run=True)
+    assert p.enforcement_mode == "warn"
+
+
+def test_pipeline_explicit_strict_mode_construction():
+    """Explicit valid 'strict' must round-trip onto the instance unchanged."""
+    p = Pipeline(memory_path=EXAMPLE, dry_run=True, enforcement_mode="strict")
+    assert p.enforcement_mode == "strict"
+
+
+def test_pipeline_invalid_enforcement_mode_raises_at_construction():
+    with pytest.raises(ValueError, match="enforcement_mode"):
+        Pipeline(memory_path=EXAMPLE, dry_run=True, enforcement_mode="bogus")
+
+
+def test_pipeline_warn_mode_returns_result_even_with_conflicts():
+    """warn mode is the existing behavior — surface conflicts, do not raise."""
+    p = Pipeline(memory_path=EXAMPLE, dry_run=True, enforcement_mode="warn")
+    result = p.run(
+        "Should I switch storage to Postgres?",
+        _override_response="We recommend introducing Postgres next quarter.",
+    )
+    assert len(result.conflicts) >= 1

@@ -51,9 +51,12 @@ class Pipeline:
     """Composes MemoryStore + DecisionRetriever + ContextBuilder + LLMAdapter + ConflictDetector.
 
     Args:
-        memory_path:   Path to project_memory.json.
-        dry_run:       Pass-through to LLMAdapter; if True, no API call.
-        max_decisions: Top-N cap on decisions injected per call.
+        memory_path:      Path to project_memory.json.
+        dry_run:          Pass-through to LLMAdapter; if True, no API call.
+        max_decisions:    Top-N cap on decisions injected per call.
+        enforcement_mode: "warn" (default) returns conflicts on PipelineResult.
+                          "strict" raises MnemeConflictError when any conflict
+                          is detected. Future modes (e.g. "retry") are deferred.
     """
 
     def __init__(
@@ -61,13 +64,20 @@ class Pipeline:
         memory_path: str | Path,
         dry_run: bool = False,
         max_decisions: int = DEFAULT_MAX_DECISIONS,
+        enforcement_mode: str = "warn",
     ) -> None:
+        if enforcement_mode not in ("warn", "strict"):
+            raise ValueError(
+                f"enforcement_mode must be 'warn' or 'strict', "
+                f"got {enforcement_mode!r}"
+            )
         self.store = MemoryStore(memory_path)
         self.store.load()
         self.retriever = DecisionRetriever(self.store.decisions())
         self.adapter = LLMAdapter(dry_run=dry_run)
         self.detector = ConflictDetector()
         self.max_decisions = max_decisions
+        self.enforcement_mode = enforcement_mode
 
     def run(
         self,
