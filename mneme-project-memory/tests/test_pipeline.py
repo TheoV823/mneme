@@ -73,3 +73,35 @@ def test_pipeline_warn_mode_returns_result_even_with_conflicts():
         _override_response="We recommend introducing Postgres next quarter.",
     )
     assert len(result.conflicts) >= 1
+
+
+def test_pipeline_strict_mode_raises_when_conflicts_detected():
+    from mneme.schemas import MnemeConflictError
+
+    p = Pipeline(memory_path=EXAMPLE, dry_run=True, enforcement_mode="strict")
+    with pytest.raises(MnemeConflictError) as excinfo:
+        p.run(
+            "Should I switch storage to Postgres?",
+            _override_response="We recommend introducing Postgres next quarter.",
+        )
+    err = excinfo.value
+    # Exception carries the conflict list...
+    assert len(err.conflicts) >= 1
+    assert any("postgres" in c.snippet.lower() for c in err.conflicts)
+    # ...and the partial result, so callers can inspect what was sent.
+    assert err.result is not None
+    assert err.result.query.startswith("Should I switch storage")
+    assert err.result.system_prompt  # non-empty
+    assert err.result.response.content.startswith("We recommend")
+
+
+def test_pipeline_strict_mode_returns_result_when_no_conflicts():
+    """strict mode only raises on conflicts; clean responses still return."""
+    p = Pipeline(memory_path=EXAMPLE, dry_run=True, enforcement_mode="strict")
+    result = p.run(
+        "Should I switch storage to Postgres?",
+        # A bland response that does not trigger any constraint match.
+        _override_response="Stay with the current local store and revisit later.",
+    )
+    assert result.conflicts == []
+    assert result.response.content.startswith("Stay with")

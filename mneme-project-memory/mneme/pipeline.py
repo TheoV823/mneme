@@ -122,7 +122,7 @@ class Pipeline:
 
         conflicts = self.detector.detect(response.content, injected)
 
-        return PipelineResult(
+        result = PipelineResult(
             query=query,
             scored=scored,
             injected_decisions=injected,
@@ -130,3 +130,9 @@ class Pipeline:
             response=response,
             conflicts=conflicts,
         )
+
+        if self.enforcement_mode == "strict" and conflicts:
+            from mneme.schemas import MnemeConflictError
+            raise MnemeConflictError(conflicts=conflicts, result=result)
+
+        return result
