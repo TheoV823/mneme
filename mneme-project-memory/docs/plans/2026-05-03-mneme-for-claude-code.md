@@ -99,7 +99,7 @@ git commit -m "docs(integrations): capture Claude Code PreToolUse hook spec"
 
 ### Task 2: Parse the PreToolUse envelope (pure parser, no IO)
 
-**Why pure:** Keep `parse_event` free of file IO so it's trivially testable. Materialization (reading the existing file and applying edits) is a separate function added in Task 2.5.
+**Why pure:** Keep `parse_event` free of file IO so it's trivially testable. Materialization (reading the existing file and applying edits) is a separate function added in Task 3.5.
 
 **Files:**
 - Test: `tests/integrations/claude_code/test_hook_parser.py`
@@ -222,7 +222,7 @@ git commit -m "feat(claude-code): parse PreToolUse envelopes (pure, no IO)"
 
 ---
 
-### Task 2.5: Materialize post-edit full file content
+### Task 3.5: Materialize post-edit full file content
 
 **Why:** `mneme check` scores text against decisions. Passing only `new_string` strips context, causes false positives, and concatenating `MultiEdit` `new_string` chunks produces incoherent text. Apply edits against existing file content to produce the actual post-edit file the user would see committed.
 
@@ -1207,7 +1207,8 @@ reaches your repo.
 
 ```bash
 pip install mneme
-python -m mneme.integrations.claude_code.install   # or: scripts/install_claude_code.py
+python scripts/install_claude_code.py        # project-scoped: writes to ./.claude/
+# or: python scripts/install_claude_code.py --user   # writes to ~/.claude/
 ```
 
 This installs a `PreToolUse` hook so every Edit/Write/MultiEdit is checked
@@ -1246,7 +1247,7 @@ git log main..claude-code-integration --oneline
 Read the full diff. Look for:
 - Any engine changes that snuck in (anything outside `mneme/integrations/claude_code/`, `tests/integrations/claude_code/`, `integrations/claude-code/`, `scripts/install_claude_code.py`, `pyproject.toml`, `README.md`, `docs/integrations/`). If yes → this is no longer packaging; reassess scope.
 - Comments / docstrings that overstate what the integration does.
-- Any remaining `proposed_content` references on `ToolEvent` (should be removed after Task 2.5 refactor).
+- Any remaining `proposed_content` references on `ToolEvent` (should be removed after Task 3.5 refactor).
 
 **Step 2: Full test suite**
 
@@ -1257,28 +1258,46 @@ pytest -q
 
 Expected: all 117 prior tests + new tests green. **No skips except the documented `mneme not on PATH` skipif.**
 
-**Step 3: Manual smoke test**
+**Step 3: Manual smoke test** (Git Bash on Windows, or any POSIX shell on macOS/Linux)
+
+Cross-platform path-portable script. Run from the repo root (`mneme-project-memory/`):
 
 ```bash
-# In a scratch dir:
-mkdir -p /tmp/mneme-smoke && cd /tmp/mneme-smoke
+SMOKE=$(mktemp -d) && cd "$SMOKE"
 mkdir .mneme
-cp C:/dev/mneme/mneme-project-memory/tests/integrations/claude_code/fixtures/project_memory.json .mneme/
-echo "import os" > target.py
-echo '{"hook_event_name":"PreToolUse","tool_name":"Edit","cwd":"'$(pwd)'","tool_input":{"file_path":"'$(pwd)'/target.py","old_string":"import os","new_string":"import psycopg2"}}' | mneme-hook
-echo "exit code: $?"
+cp "$OLDPWD/tests/integrations/claude_code/fixtures/project_memory.json" .mneme/
+printf 'import os\n' > target.py
+
+ENVELOPE=$(python -c "
+import json, os
+print(json.dumps({
+  'hook_event_name': 'PreToolUse',
+  'tool_name': 'Edit',
+  'cwd': os.getcwd(),
+  'tool_input': {
+    'file_path': os.path.join(os.getcwd(), 'target.py'),
+    'old_string': 'import os',
+    'new_string': 'import psycopg2',
+  },
+}))")
+
+# (a) Block path: mneme on PATH, violation expected.
+echo "$ENVELOPE" | mneme-hook
+echo "exit code: $?"   # expect 2; stderr should cite test_001 or psycopg2
 ```
 
 Expected: exit 2, stderr cites decision id `test_001`.
 
 ```bash
-# Verify fail-open with mneme renamed:
-which mneme
-PATH=/usr/bin echo '{"hook_event_name":"PreToolUse","tool_name":"Edit","cwd":"'$(pwd)'","tool_input":{"file_path":"'$(pwd)'/target.py","old_string":"import os","new_string":"import psycopg2"}}' | python -m mneme.integrations.claude_code.hook
-echo "exit code: $?"
+# (b) Fail-open path: invoke shim with mneme NOT on PATH.
+# Use env to scope PATH only to the pipeline's right-hand side.
+echo "$ENVELOPE" | env -i PATH="/usr/bin:/bin" PYTHONPATH="$OLDPWD" python -m mneme.integrations.claude_code.hook
+echo "exit code: $?"   # expect 0; stderr should mention 'mneme' not found
 ```
 
-Expected: exit 0, stderr complains about mneme not found.
+Expected: exit 0, stderr says `mneme` not found and the hook is failing open.
+
+**Note on Windows:** the snippets above require Git Bash, MSYS2, or WSL. CMD/PowerShell users should run the equivalent via `pytest tests/integrations/claude_code/test_hook_main.py -v` — the test suite covers both block and fail-open paths via mocking and is the authoritative check; the manual smoke just verifies the installed `mneme-hook` console script is wired up end-to-end.
 
 **Step 4: Decision**
 
@@ -1373,7 +1392,7 @@ These were considered and cut to keep the scope thin:
 
 - Marketplace listing / plugin packaging — depends on Anthropic surface that may not exist; revisit only after v0.3.2 has install signal.
 - Cursor/Copilot/Gemini analogues — same packaging pattern but separate plans.
-- Live diff parsing of `MultiEdit` (we concatenate `new_string` chunks; good enough for first ship).
+- Reading `transcript_path` to enrich the retrieval `--query` with recent user/assistant turns. Cheap improvement (~30 lines) but cut for v1; tune via docs once testers report retrieval misses.
 - Caching `mneme check` results across rapid edit bursts — premature; measure before optimizing.
 - Telemetry / install counter — privacy decisions need their own plan.
 
