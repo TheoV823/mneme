@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "name": "test-project",
+    "description": "Fixture for claude-code integration tests",
+    "version": "0.1.0",
+    "owner": "test",
+    "created": "2026-05-03"
+  },
+  "items": [],
+  "decisions": [
+    {
+      "id": "test_001",
+      "decision": "Use SQLite for local storage and database access",
+      "rationale": "single-file portability",
+      "scope": ["storage", "database"],
+      "constraints": ["no postgres"],
+      "anti_patterns": ["postgres", "Postgres", "psycopg2"]
+    }
+  ]
+}
