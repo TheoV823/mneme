@@ -8,6 +8,24 @@ Mneme makes AI coding behave like a consistent engineer, not a stateless assista
 
 ---
 
+## Mneme for Claude Code
+
+Architectural governance for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+Enforce ADRs and engineering constraints automatically — before drift reaches your repo.
+
+```bash
+pip install mneme
+python scripts/install_claude_code.py        # project-scoped: writes to ./.claude/
+# or: python scripts/install_claude_code.py --user   # writes to ~/.claude/
+```
+
+This installs a `PreToolUse` hook so every Edit / Write / MultiEdit is checked
+against `.mneme/project_memory.json` in strict mode by default. See
+[docs/integrations/claude-code.md](docs/integrations/claude-code.md) for
+details, including retrieval behaviour and mode switching.
+
+---
+
 ## The problem
 
 LLMs drift in long-running projects. They forget prior architecture choices, reintroduce rejected technologies, and suggest changes that violate decisions already made by the team.
