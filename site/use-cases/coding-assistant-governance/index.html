@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coding Assistant Governance — Mneme</title>
-  <meta name="description" content="How Mneme enforces architectural decisions when using Cursor, Claude Code, or Copilot — preventing drift, repeated violations, and wasted review cycles." />
+  <title>Coding Assistant Governance — Mneme HQ</title>
+  <meta name="description" content="How Mneme HQ enforces architectural decisions when using Cursor, Claude Code, or Copilot — preventing drift, repeated violations, and wasted review cycles." />
   <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="Mneme" />
-  <meta property="og:title" content="Coding Assistant Governance | Mneme" />
-  <meta property="og:description" content="Enforce architectural decisions for Cursor, Claude Code, and Copilot. Mneme flags violations before AI-generated code reaches review." />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Coding Assistant Governance | Mneme HQ" />
+  <meta property="og:description" content="Enforce architectural decisions for Cursor, Claude Code, and Copilot. Mneme HQ flags violations before AI-generated code reaches review." />
   <meta property="og:url" content="https://mnemehq.com/use-cases/coding-assistant-governance/" />
   <meta property="og:image" content="https://mnemehq.com/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Coding Assistant Governance | Mneme" />
-  <meta name="twitter:description" content="Enforce architectural decisions for Cursor, Claude Code, and Copilot. Mneme flags violations before AI-generated code reaches review." />
+  <meta name="twitter:title" content="Coding Assistant Governance | Mneme HQ" />
+  <meta name="twitter:description" content="Enforce architectural decisions for Cursor, Claude Code, and Copilot. Mneme HQ flags violations before AI-generated code reaches review." />
   <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/coding-assistant-governance/" />
   <!-- Google Tag Manager -->
@@ -130,18 +130,18 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Does Mneme work with Cursor, Claude Code, and Copilot?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme works at the workflow level — it's not an IDE plugin. mneme check runs before you prompt, and mneme cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
+          "name": "Does Mneme HQ work with Cursor, Claude Code, and Copilot?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. Mneme HQ check runs before you prompt, and Mneme HQ cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
         },
         {
           "@type": "Question",
-          "name": "What's the difference between Mneme and just writing better system prompts?",
-          "acceptedAnswer": { "@type": "Answer", "text": "System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves." }
+          "name": "What's the difference between Mneme HQ and just writing better system prompts?",
+          "acceptedAnswer": { "@type": "Answer", "text": "System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme HQ uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves." }
         },
         {
           "@type": "Question",
           "name": "How long does it take to set up?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Under 5 minutes for a project with existing documentation. pip install mneme-project-memory, create a decisions/ directory, add your first YAML decision, and run mneme check. See the README for the quickstart." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Under 5 minutes for a project with existing documentation. pip install Mneme HQ-project-memory, create a decisions/ directory, add your first YAML decision, and run Mneme HQ check. See the README for the quickstart." }
         },
         {
           "@type": "Question",
@@ -159,7 +159,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <nav>
-  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme" height="36" style="display:block;"></a>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
     <a href="/demo.html">Demo</a>
@@ -172,7 +172,7 @@
 
 <!-- GEO / LLM answer capsule -->
 <div class="answer-capsule">
-  <strong>Mneme</strong> enforces architectural decisions for AI coding assistants like Cursor, Claude Code, and Copilot by surfacing relevant decisions at query time. When a coding assistant proposes code that violates a decision — using the wrong abstraction, bypassing a service layer, or ignoring an ADR — Mneme flags the violation before the code reaches review. This reference architecture shows how to set it up.
+  <strong>Mneme HQ</strong> enforces architectural decisions for AI coding assistants like Cursor, Claude Code, and Copilot by surfacing relevant decisions at query time. When a coding assistant proposes code that violates a decision — using the wrong abstraction, bypassing a service layer, or ignoring an ADR — Mneme HQ flags the violation before the code reaches review. This reference architecture shows how to set it up.
 </div>
 
 <main>
@@ -183,10 +183,10 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-tag">Reference Architecture · Simulated Scenario</div>
-    <h1>How Mneme Prevents Coding Assistants from Violating Architecture Rules</h1>
+    <h1>How Mneme HQ Prevents Coding Assistants from Violating Architecture Rules</h1>
     <p class="hero-sub">Stop Cursor, Claude Code, and Copilot from ignoring your ADRs, service boundaries, and team conventions — session after session.</p>
     <div class="cta-group">
-      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme HQ</a>
       <a href="https://github.com/TheoV823/mneme" class="btn-ghost">View GitHub</a>
     </div>
   </div>
@@ -198,22 +198,22 @@
       <rect x="20" y="30" width="165" height="56" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
       <text x="102" y="52" font-family="monospace" font-size="9.5" fill="#88889a" text-anchor="middle">developer</text>
       <text x="102" y="72" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Prompt</text>
-      <!-- Arrow A→Mneme -->
+      <!-- Arrow A→Mneme HQ -->
       <line x1="185" y1="58" x2="218" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="214,54 225,58 214,62" fill="#2e2e34"/>
-      <!-- Mneme node -->
+      <!-- Mneme HQ node -->
       <rect x="225" y="18" width="215" height="80" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
-      <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">MNEME</text>
+      <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Pre-flight Check</text>
-      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --mode strict</text>
-      <!-- Arrow Mneme→B -->
+      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Mneme HQ check --mode strict</text>
+      <!-- Arrow Mneme HQ→B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
       <!-- Node B -->
       <rect x="480" y="30" width="185" height="56" rx="8" fill="#141416" stroke="#8be0c8" stroke-width="1.5"/>
       <text x="572" y="52" font-family="monospace" font-size="9.5" fill="#8be0c8" text-anchor="middle">decisions/</text>
       <text x="572" y="72" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Decision Store</text>
-      <!-- Vertical drop from Mneme -->
+      <!-- Vertical drop from Mneme HQ -->
       <line x1="332" y1="98" x2="332" y2="124" stroke="#2e2e34" stroke-width="1.5"/>
       <!-- Horizontal branch (pass-cx=102, fail-cx=572) -->
       <line x1="102" y1="124" x2="572" y2="124" stroke="#2e2e34" stroke-width="1.5"/>
@@ -243,7 +243,7 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div>
-          <span class="panel-label bad">Without Mneme — Cursor suggests:</span>
+          <span class="panel-label bad">Without Mneme HQ — Cursor suggests:</span>
         </div>
         <div class="panel-body">
           <div class="panel-prompt">Prompt: "Add a search endpoint to the API"</div>
@@ -253,10 +253,10 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div>
-          <span class="panel-label good">With Mneme — pre-flight check:</span>
+          <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">mneme check --mode strict</div>
+          <div class="panel-prompt">Mneme HQ check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-direct-db-queries<br>
           Rule: All database access must go through the repository layer.<br>
           Context: Direct queries in route handlers bypass transaction management and were banned in ADR-004.<br><br>
@@ -276,7 +276,7 @@
           <tr>
             <th>Approach</th>
             <th>Limitation</th>
-            <th>With Mneme</th>
+            <th>With Mneme HQ</th>
           </tr>
         </thead>
         <tbody>
@@ -298,16 +298,16 @@
           <tr>
             <td>CLAUDE.md / .cursorrules</td>
             <td>Flat text; no semantic retrieval; decays as teams add more rules</td>
-            <td>Mneme generates optimized rules files from structured decision store</td>
+            <td>Mneme HQ generates optimized rules files from structured decision store</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- HOW MNEME SOLVES IT -->
+  <!-- HOW Mneme HQ SOLVES IT -->
   <div class="section-wrap" id="how-it-works">
-    <div class="section-eyebrow">How Mneme Solves It</div>
+    <div class="section-eyebrow">How Mneme HQ Solves It</div>
     <h2 class="section-title">Decision-aware pre-flight checks for every AI request.</h2>
     <div class="steps">
       <div class="step">
@@ -320,22 +320,22 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Run <code>mneme check</code> before prompting</h4>
-          <p>Pass your intended prompt or planned change through Mneme. It retrieves relevant decisions and checks for potential violations.</p>
+          <h4>Run <code>Mneme HQ check</code> before prompting</h4>
+          <p>Pass your intended prompt or planned change through Mneme HQ. It retrieves relevant decisions and checks for potential violations.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Generate assistant-specific rules files</h4>
-          <p><code>mneme cursor generate</code> outputs <code>.cursor/rules/mneme.mdc</code> — a distilled ruleset the assistant sees in every session.</p>
+          <p><code>Mneme HQ cursor generate</code> outputs <code>.cursor/rules/Mneme HQ.mdc</code> — a distilled ruleset the assistant sees in every session.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
           <h4>Gate CI on decision compliance</h4>
-          <p>Add <code>mneme check --mode strict</code> to your CI pipeline. PRs that violate architectural decisions fail before review.</p>
+          <p>Add <code>Mneme HQ check --mode strict</code> to your CI pipeline. PRs that violate architectural decisions fail before review.</p>
         </div>
       </div>
     </div>
@@ -359,8 +359,8 @@
     </div>
 
     <div class="code-block">
-      <div class="code-block-label">Terminal — mneme check output</div>
-      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add a search endpoint that filters by tag"</span> --mode strict
+      <div class="code-block-label">Terminal — Mneme HQ check output</div>
+      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"add a search endpoint that filters by tag"</span> --mode strict
 
 <span class="cc">Retrieving relevant decisions... (3 matched)</span>
 
@@ -374,9 +374,9 @@
     </div>
 
     <div class="code-block">
-      <div class="code-block-label">CI — .github/workflows/mneme.yml</div>
+      <div class="code-block-label">CI — .github/workflows/Mneme HQ.yml</div>
       <pre><span class="ck">- name</span>: Check decision compliance
-  <span class="ck">run</span>: mneme check --mode strict --ci</pre>
+  <span class="ck">run</span>: Mneme HQ check --mode strict --ci</pre>
     </div>
   </div>
 
@@ -398,7 +398,7 @@
         <div class="metric-label">to add a new decision to the enforcement layer</div>
       </div>
     </div>
-    <div class="simulated-note">⚠ These figures are based on Mneme's internal benchmark harness across 18 simulated violation scenarios — not live customer data.</div>
+    <div class="simulated-note">⚠ These figures are based on Mneme HQ's internal benchmark harness across 18 simulated violation scenarios — not live customer data.</div>
   </div>
 
   <!-- FAQ -->
@@ -407,18 +407,18 @@
     <h2 class="section-title">Common questions.</h2>
 
     <details>
-      <summary>Does Mneme work with Cursor, Claude Code, and Copilot?</summary>
-      <div class="faq-body">Yes. Mneme works at the workflow level — it's not an IDE plugin. <code>mneme check</code> runs before you prompt, and <code>mneme cursor generate</code> writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via <code>CLAUDE.md</code>.</div>
+      <summary>Does Mneme HQ work with Cursor, Claude Code, and Copilot?</summary>
+      <div class="faq-body">Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. <code>Mneme HQ check</code> runs before you prompt, and <code>Mneme HQ cursor generate</code> writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via <code>CLAUDE.md</code>.</div>
     </details>
 
     <details>
-      <summary>What's the difference between Mneme and just writing better system prompts?</summary>
-      <div class="faq-body">System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves.</div>
+      <summary>What's the difference between Mneme HQ and just writing better system prompts?</summary>
+      <div class="faq-body">System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme HQ uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves.</div>
     </details>
 
     <details>
       <summary>How long does it take to set up?</summary>
-      <div class="faq-body">Under 5 minutes for a project with existing documentation. <code>pip install mneme-project-memory</code>, create a <code>decisions/</code> directory, add your first YAML decision, and run <code>mneme check</code>. See the <a href="https://github.com/TheoV823/mneme" style="color:var(--accent)">README</a> for the quickstart.</div>
+      <div class="faq-body">Under 5 minutes for a project with existing documentation. <code>pip install Mneme HQ-project-memory</code>, create a <code>decisions/</code> directory, add your first YAML decision, and run <code>Mneme HQ check</code>. See the <a href="https://github.com/TheoV823/mneme" style="color:var(--accent)">README</a> for the quickstart.</div>
     </details>
 
     <details>
@@ -439,7 +439,7 @@
   <div class="cta-footer">
     <h2>Add decision memory to your AI workflow in 5 minutes.</h2>
     <div class="cta-group">
-      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme HQ</a>
       <a href="/use-cases/" class="btn-ghost">More use cases</a>
     </div>
   </div>

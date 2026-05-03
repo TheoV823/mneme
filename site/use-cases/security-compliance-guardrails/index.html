@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Security &amp; Compliance Guardrails — Mneme</title>
-  <meta name="description" content="How Mneme prevents AI coding assistants from introducing security vulnerabilities and compliance violations by enforcing security decisions at prompt time." />
+  <title>Security &amp; Compliance Guardrails — Mneme HQ</title>
+  <meta name="description" content="How Mneme HQ prevents AI coding assistants from introducing security vulnerabilities and compliance violations by enforcing security decisions at prompt time." />
   <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="Mneme" />
-  <meta property="og:title" content="Security &amp; Compliance Guardrails | Mneme" />
-  <meta property="og:description" content="Enforce PII handling rules, auth requirements, and secrets policies before AI-generated code reaches review. Mneme is a scalable guardrail for LLM-powered development." />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Security &amp; Compliance Guardrails | Mneme HQ" />
+  <meta property="og:description" content="Enforce PII handling rules, auth requirements, and secrets policies before AI-generated code reaches review. Mneme HQ is a scalable guardrail for LLM-powered development." />
   <meta property="og:url" content="https://mnemehq.com/use-cases/security-compliance-guardrails/" />
   <meta property="og:image" content="https://mnemehq.com/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Security &amp; Compliance Guardrails | Mneme" />
-  <meta name="twitter:description" content="Enforce PII handling rules, auth requirements, and secrets policies before AI-generated code reaches review. Mneme is a scalable guardrail for LLM-powered development." />
+  <meta name="twitter:title" content="Security &amp; Compliance Guardrails | Mneme HQ" />
+  <meta name="twitter:description" content="Enforce PII handling rules, auth requirements, and secrets policies before AI-generated code reaches review. Mneme HQ is a scalable guardrail for LLM-powered development." />
   <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/security-compliance-guardrails/" />
   <!-- Google Tag Manager -->
@@ -135,13 +135,13 @@
         },
         {
           "@type": "Question",
-          "name": "Does Mneme replace a SAST tool?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No — they're complementary. SAST finds known vulnerability patterns in written code. Mneme enforces business-specific compliance rules before code is written. Use both." }
+          "name": "Does Mneme HQ replace a SAST tool?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No — they're complementary. SAST finds known vulnerability patterns in written code. Mneme HQ enforces business-specific compliance rules before code is written. Use both." }
         },
         {
           "@type": "Question",
           "name": "How do we handle rules that vary by region or environment?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Use tags and separate decision files per context. You can scope checks with mneme check --tags gdpr for EU-specific rules or --tags soc2 for audit controls." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Use tags and separate decision files per context. You can scope checks with Mneme HQ check --tags gdpr for EU-specific rules or --tags soc2 for audit controls." }
         },
         {
           "@type": "Question",
@@ -159,7 +159,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <nav>
-  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme" height="36" style="display:block;"></a>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
     <a href="/demo.html">Demo</a>
@@ -172,7 +172,7 @@
 
 <!-- GEO / LLM answer capsule -->
 <div class="answer-capsule">
-  <strong>Mneme</strong> enforces security and compliance decisions for AI-generated code by surfacing relevant rules at prompt time and flagging violations before code reaches review. Rules like "never log PII", "all endpoints require auth middleware", and "secrets must not appear in frontend code" are stored as structured decisions and checked against every AI-assisted change — giving security teams a scalable guardrail for LLM-powered development.
+  <strong>Mneme HQ</strong> enforces security and compliance decisions for AI-generated code by surfacing relevant rules at prompt time and flagging violations before code reaches review. Rules like "never log PII", "all endpoints require auth middleware", and "secrets must not appear in frontend code" are stored as structured decisions and checked against every AI-assisted change — giving security teams a scalable guardrail for LLM-powered development.
 </div>
 
 <main>
@@ -186,7 +186,7 @@
     <h1>Preventing LLMs from Introducing Security and Compliance Violations</h1>
     <p class="hero-sub">Enforce encryption standards, auth requirements, PII handling rules, and secrets policies — before the LLM generates a single line of non-compliant code.</p>
     <div class="cta-group">
-      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme HQ</a>
       <a href="https://github.com/TheoV823/mneme" class="btn-ghost">View GitHub</a>
     </div>
   </div>
@@ -198,22 +198,22 @@
       <rect x="20" y="30" width="165" height="56" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
       <text x="102" y="52" font-family="monospace" font-size="9.5" fill="#88889a" text-anchor="middle">AI-assisted</text>
       <text x="102" y="72" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Code Request</text>
-      <!-- Arrow A→Mneme -->
+      <!-- Arrow A→Mneme HQ -->
       <line x1="185" y1="58" x2="218" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="214,54 225,58 214,62" fill="#2e2e34"/>
-      <!-- Mneme node -->
+      <!-- Mneme HQ node -->
       <rect x="225" y="18" width="215" height="80" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
-      <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">MNEME</text>
+      <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Security Filter</text>
-      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --tags security,gdpr</text>
-      <!-- Arrow Mneme→B -->
+      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Mneme HQ check --tags security,gdpr</text>
+      <!-- Arrow Mneme HQ→B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
       <!-- Node B -->
       <rect x="480" y="30" width="185" height="56" rx="8" fill="#141416" stroke="#8be0c8" stroke-width="1.5"/>
       <text x="572" y="52" font-family="monospace" font-size="9.5" fill="#8be0c8" text-anchor="middle">compliance</text>
       <text x="572" y="72" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Policy Decisions</text>
-      <!-- Vertical drop from Mneme -->
+      <!-- Vertical drop from Mneme HQ -->
       <line x1="332" y1="98" x2="332" y2="124" stroke="#2e2e34" stroke-width="1.5"/>
       <!-- Horizontal branch (pass-cx=102, fail-cx=572) -->
       <line x1="102" y1="124" x2="572" y2="124" stroke="#2e2e34" stroke-width="1.5"/>
@@ -243,7 +243,7 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div>
-          <span class="panel-label bad">Without Mneme — assistant suggests:</span>
+          <span class="panel-label bad">Without Mneme HQ — assistant suggests:</span>
         </div>
         <div class="panel-body">
           <div class="panel-prompt">Prompt: "Add a debug logging endpoint that dumps recent user actions"</div>
@@ -253,10 +253,10 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div>
-          <span class="panel-label good">With Mneme — pre-flight check:</span>
+          <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">mneme check --mode strict</div>
+          <div class="panel-prompt">Mneme HQ check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-pii-in-logs<br>
           Rule: Never log or expose user email, name, or address.<br>
           Context: GDPR Article 5 compliance. Violations require DPA notification.<br><br>
@@ -279,7 +279,7 @@
           <tr>
             <th>Approach</th>
             <th>Limitation</th>
-            <th>With Mneme</th>
+            <th>With Mneme HQ</th>
           </tr>
         </thead>
         <tbody>
@@ -308,9 +308,9 @@
     </div>
   </div>
 
-  <!-- HOW MNEME SOLVES IT -->
+  <!-- HOW Mneme HQ SOLVES IT -->
   <div class="section-wrap" id="how-it-works">
-    <div class="section-eyebrow">How Mneme Solves It</div>
+    <div class="section-eyebrow">How Mneme HQ Solves It</div>
     <h2 class="section-title">Security rules enforced at the earliest possible moment.</h2>
     <div class="steps">
       <div class="step">
@@ -323,7 +323,7 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Run <code>mneme check</code> before prompting</h4>
+          <h4>Run <code>Mneme HQ check</code> before prompting</h4>
           <p>Every AI-assisted change is checked against relevant security decisions before code is written — not after it's merged.</p>
         </div>
       </div>
@@ -331,7 +331,7 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Generate assistant rules files with security context</h4>
-          <p><code>mneme cursor generate</code> produces a rules file that includes your security constraints, so assistants are compliance-aware in every session.</p>
+          <p><code>Mneme HQ cursor generate</code> produces a rules file that includes your security constraints, so assistants are compliance-aware in every session.</p>
         </div>
       </div>
       <div class="step">
@@ -376,7 +376,7 @@
 
     <div class="code-block">
       <div class="code-block-label">Terminal — scoped check with security tag filter</div>
-      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add debug endpoint for user actions"</span> --tags gdpr,soc2
+      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"add debug endpoint for user actions"</span> --tags gdpr,soc2
 
 <span class="cc">Checking against 6 security/compliance decisions...</span>
 
@@ -423,13 +423,13 @@
     </details>
 
     <details>
-      <summary>Does Mneme replace a SAST tool?</summary>
-      <div class="faq-body">No — they're complementary. SAST finds known vulnerability patterns in written code. Mneme enforces business-specific compliance rules before code is written. Use both.</div>
+      <summary>Does Mneme HQ replace a SAST tool?</summary>
+      <div class="faq-body">No — they're complementary. SAST finds known vulnerability patterns in written code. Mneme HQ enforces business-specific compliance rules before code is written. Use both.</div>
     </details>
 
     <details>
       <summary>How do we handle rules that vary by region or environment?</summary>
-      <div class="faq-body">Use tags and separate decision files per context. You can scope checks with <code>mneme check --tags gdpr</code> for EU-specific rules or <code>--tags soc2</code> for audit controls.</div>
+      <div class="faq-body">Use tags and separate decision files per context. You can scope checks with <code>Mneme HQ check --tags gdpr</code> for EU-specific rules or <code>--tags soc2</code> for audit controls.</div>
     </details>
 
     <details>
@@ -450,7 +450,7 @@
   <div class="cta-footer">
     <h2>Enforce compliance rules before the LLM writes a line.</h2>
     <div class="cta-group">
-      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme HQ</a>
       <a href="/use-cases/" class="btn-ghost">More use cases</a>
     </div>
   </div>
