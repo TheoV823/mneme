@@ -141,7 +141,7 @@
         {
           "@type": "Question",
           "name": "How do we handle rules that vary by region or environment?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Use tags and separate decision files per context. You can scope checks with Mneme HQ check --tags gdpr for EU-specific rules or --tags soc2 for audit controls." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Use tags and separate decision files per context. You can scope checks with mneme check --tags gdpr for EU-specific rules or --tags soc2 for audit controls." }
         },
         {
           "@type": "Question",
@@ -205,7 +205,7 @@
       <rect x="225" y="18" width="215" height="80" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
       <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Security Filter</text>
-      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Mneme HQ check --tags security,gdpr</text>
+      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --tags security,gdpr</text>
       <!-- Arrow Mneme HQ→B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
@@ -256,7 +256,7 @@
           <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">Mneme HQ check --mode strict</div>
+          <div class="panel-prompt">mneme check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-pii-in-logs<br>
           Rule: Never log or expose user email, name, or address.<br>
           Context: GDPR Article 5 compliance. Violations require DPA notification.<br><br>
@@ -323,7 +323,7 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Run <code>Mneme HQ check</code> before prompting</h4>
+          <h4>Run <code>mneme check</code> before prompting</h4>
           <p>Every AI-assisted change is checked against relevant security decisions before code is written — not after it's merged.</p>
         </div>
       </div>
@@ -331,7 +331,7 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Generate assistant rules files with security context</h4>
-          <p><code>Mneme HQ cursor generate</code> produces a rules file that includes your security constraints, so assistants are compliance-aware in every session.</p>
+          <p><code>mneme cursor generate</code> produces a rules file that includes your security constraints, so assistants are compliance-aware in every session.</p>
         </div>
       </div>
       <div class="step">
@@ -376,7 +376,7 @@
 
     <div class="code-block">
       <div class="code-block-label">Terminal — scoped check with security tag filter</div>
-      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"add debug endpoint for user actions"</span> --tags gdpr,soc2
+      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add debug endpoint for user actions"</span> --tags gdpr,soc2
 
 <span class="cc">Checking against 6 security/compliance decisions...</span>
 
@@ -429,7 +429,7 @@
 
     <details>
       <summary>How do we handle rules that vary by region or environment?</summary>
-      <div class="faq-body">Use tags and separate decision files per context. You can scope checks with <code>Mneme HQ check --tags gdpr</code> for EU-specific rules or <code>--tags soc2</code> for audit controls.</div>
+      <div class="faq-body">Use tags and separate decision files per context. You can scope checks with <code>mneme check --tags gdpr</code> for EU-specific rules or <code>--tags soc2</code> for audit controls.</div>
     </details>
 
     <details>

@@ -135,7 +135,7 @@
         {
           "@type": "Question",
           "name": "Does Mneme HQ work as a Python library or only as a CLI?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Mneme HQ exposes both a CLI (Mneme HQ check) and a Python API (from Mneme HQ import check), so it can be embedded directly into orchestration code — LangGraph, custom pipelines, or any Python-based agent framework." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Mneme HQ exposes both a CLI (mneme check) and a Python API (from mneme import check), so it can be embedded directly into orchestration code — LangGraph, custom pipelines, or any Python-based agent framework." }
         },
         {
           "@type": "Question",
@@ -292,7 +292,7 @@
           <span class="panel-label good">With Mneme HQ — gate before planning:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">Mneme HQ check --stage plan</div>
+          <div class="panel-prompt">mneme check --stage plan</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-direct-db-queries<br>
           Rule: All DB access via repository layer. Raw SQL in handlers banned ADR-004.<br><br>
           <span style="color:#ff7070">✗ FAIL</span> decision/search-via-indexed-view<br>
@@ -324,7 +324,7 @@
     <h2 class="section-title">A shared decision memory layer for every agent in the pipeline.</h2>
     <div class="steps">
       <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Build a shared decision store</h4><p>All architectural decisions, constraints, and anti-patterns live in one <code>decisions/</code> directory — a single source of truth every agent can query.</p></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Gate each pipeline stage</h4><p>Add a <code>Mneme HQ check</code> call before invoking the next agent. If the plan violates decisions, stop before the coder runs. If code violates decisions, stop before the reviewer runs.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Gate each pipeline stage</h4><p>Add a <code>mneme check</code> call before invoking the next agent. If the plan violates decisions, stop before the coder runs. If code violates decisions, stop before the reviewer runs.</p></div></div>
       <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Inject decision context per stage</h4><p>Each agent receives only the decisions relevant to its stage — planners see architecture rules, coders see implementation constraints, reviewers see the full violation report.</p></div></div>
       <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Log violations for audit</h4><p>Every check is logged. You get a full audit trail of which decisions were evaluated, which violations were caught, and at which stage — across every pipeline run.</p></div></div>
     </div>
@@ -355,7 +355,7 @@
 
     <div class="code-block">
       <div class="code-block-label">Terminal — stage-scoped check output</div>
-      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"plan: add search via raw SQL in handler"</span> --stage plan
+      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"plan: add search via raw SQL in handler"</span> --stage plan
 
 <span class="cc">Checking against 14 decisions (stage: plan)...</span>
 
@@ -385,7 +385,7 @@
   <div class="section-wrap">
     <div class="section-eyebrow">FAQ</div>
     <h2 class="section-title">Common questions.</h2>
-    <details><summary>Does Mneme HQ work as a Python library or only as a CLI?</summary><div class="faq-body">Mneme HQ exposes both a CLI (<code>Mneme HQ check</code>) and a Python API (<code>from Mneme HQ import check</code>), so it can be embedded directly into orchestration code — LangGraph, custom pipelines, or any Python-based agent framework.</div></details>
+    <details><summary>Does Mneme HQ work as a Python library or only as a CLI?</summary><div class="faq-body">Mneme HQ exposes both a CLI (<code>mneme check</code>) and a Python API (<code>from mneme import check</code>), so it can be embedded directly into orchestration code — LangGraph, custom pipelines, or any Python-based agent framework.</div></details>
     <details><summary>Can different agents query different subsets of decisions?</summary><div class="faq-body">Yes. Use <code>--tags</code> to scope checks per stage — e.g., <code>--tags architecture</code> for the planner, <code>--tags security,compliance</code> for the coder, and no filter for the reviewer to see everything.</div></details>
     <details><summary>How does this position Mneme HQ relative to single-agent copilots?</summary><div class="faq-body">Single-agent copilots enforce decisions at one point in the workflow. Mneme HQ as a shared memory layer scales that enforcement to every stage of a multi-agent pipeline — making it infrastructure for AI-assisted development, not just a copilot add-on.</div></details>
     <details><summary>What agent frameworks does this work with?</summary><div class="faq-body">Mneme HQ is framework-agnostic. It works anywhere you can run a Python function or shell command — LangChain, LangGraph, Claude Agent SDK, AutoGen, custom pipelines, or plain subprocess calls from any orchestrator.</div></details>

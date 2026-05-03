@@ -129,12 +129,12 @@
         {
           "@type": "Question",
           "name": "Does this work with dbt, Spark, and SQL-based pipelines?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ operates at the prompt level — it doesn't depend on your specific data tool. Whether you're generating dbt models, Spark jobs, or raw SQL, Mneme HQ check runs against the intent before you write any code." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ operates at the prompt level — it doesn't depend on your specific data tool. Whether you're generating dbt models, Spark jobs, or raw SQL, mneme check runs against the intent before you write any code." }
         },
         {
           "@type": "Question",
           "name": "Can we enforce regional data isolation rules?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Encode regional constraints as tagged decisions (e.g., --tags gdpr,eu-region) and check with Mneme HQ check --tags gdpr to scope enforcement to region-specific rules." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Encode regional constraints as tagged decisions (e.g., --tags gdpr,eu-region) and check with mneme check --tags gdpr to scope enforcement to region-specific rules." }
         },
         {
           "@type": "Question",
@@ -199,7 +199,7 @@
       <rect x="225" y="18" width="215" height="80" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
       <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Data Contract Check</text>
-      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Mneme HQ check --tags data-platform</text>
+      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --tags data-platform</text>
       <!-- Arrow Mneme HQ→B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
@@ -249,7 +249,7 @@
           <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">Mneme HQ check --mode strict</div>
+          <div class="panel-prompt">mneme check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-writes-to-raw-tables<br>
           Rule: Raw tables are append-only via ingestion pipelines only.<br>
           Context: Direct writes corrupt audit trail and break CDC.<br><br>
@@ -282,9 +282,9 @@
     <h2 class="section-title">Data architecture decisions, enforced at prompt time.</h2>
     <div class="steps">
       <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Encode warehouse standards as decisions</h4><p>Capture rules like layer boundaries, naming conventions, regional constraints, and anti-patterns in structured YAML.</p></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Check before generating pipeline code</h4><p>Run <code>Mneme HQ check</code> against your intended change. Mneme HQ retrieves relevant data architecture decisions and flags violations.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Check before generating pipeline code</h4><p>Run <code>mneme check</code> against your intended change. Mneme HQ retrieves relevant data architecture decisions and flags violations.</p></div></div>
       <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Generate scoped rules for data tools</h4><p>Mneme HQ can output rules files for tools like Cursor or Claude Code that surface the right constraints when working in dbt, Spark, or SQL files.</p></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Gate pipeline PRs in CI</h4><p>Add <code>Mneme HQ check --mode strict</code> to your data pipeline CI. Schema violations and layer boundary breaks fail before merge.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Gate pipeline PRs in CI</h4><p>Add <code>mneme check --mode strict</code> to your data pipeline CI. Schema violations and layer boundary breaks fail before merge.</p></div></div>
     </div>
   </div>
 
@@ -319,7 +319,7 @@
 
     <div class="code-block">
       <div class="code-block-label">Terminal — checking a dbt model prompt</div>
-      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"create a DAU model that reads from raw events"</span> --tags data-platform
+      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"create a DAU model that reads from raw events"</span> --tags data-platform
 
 <span class="cc">Checking against 8 data-platform decisions...</span>
 
@@ -348,8 +348,8 @@
   <div class="section-wrap">
     <div class="section-eyebrow">FAQ</div>
     <h2 class="section-title">Common questions.</h2>
-    <details><summary>Does this work with dbt, Spark, and SQL-based pipelines?</summary><div class="faq-body">Yes. Mneme HQ operates at the prompt level — it doesn't depend on your specific data tool. Whether you're generating dbt models, Spark jobs, or raw SQL, <code>Mneme HQ check</code> runs against the intent before you write any code.</div></details>
-    <details><summary>Can we enforce regional data isolation rules?</summary><div class="faq-body">Yes. Encode regional constraints as tagged decisions (e.g., <code>--tags gdpr,eu-region</code>) and check with <code>Mneme HQ check --tags gdpr</code> to scope enforcement to region-specific rules.</div></details>
+    <details><summary>Does this work with dbt, Spark, and SQL-based pipelines?</summary><div class="faq-body">Yes. Mneme HQ operates at the prompt level — it doesn't depend on your specific data tool. Whether you're generating dbt models, Spark jobs, or raw SQL, <code>mneme check</code> runs against the intent before you write any code.</div></details>
+    <details><summary>Can we enforce regional data isolation rules?</summary><div class="faq-body">Yes. Encode regional constraints as tagged decisions (e.g., <code>--tags gdpr,eu-region</code>) and check with <code>mneme check --tags gdpr</code> to scope enforcement to region-specific rules.</div></details>
     <details><summary>How do we handle schema evolution — rules that change over time?</summary><div class="faq-body">Update the YAML and set the old decision to <code>status: deprecated</code>. The history is preserved; enforcement is disabled. New rules take effect immediately on the next check.</div></details>
     <details><summary>Can data engineers without Python experience manage decisions?</summary><div class="faq-body">Yes. Decision files are plain YAML in version control. Any engineer comfortable opening a PR can add or update rules — no Python or programming required.</div></details>
   </div>

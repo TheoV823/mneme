@@ -131,7 +131,7 @@
         {
           "@type": "Question",
           "name": "Does Mneme HQ work with Cursor, Claude Code, and Copilot?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. Mneme HQ check runs before you prompt, and Mneme HQ cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. mneme check runs before you prompt, and mneme cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
         },
         {
           "@type": "Question",
@@ -141,7 +141,7 @@
         {
           "@type": "Question",
           "name": "How long does it take to set up?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Under 5 minutes for a project with existing documentation. pip install Mneme HQ-project-memory, create a decisions/ directory, add your first YAML decision, and run Mneme HQ check. See the README for the quickstart." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Under 5 minutes for a project with existing documentation. pip install mneme-project-memory, create a decisions/ directory, add your first YAML decision, and run mneme check. See the README for the quickstart." }
         },
         {
           "@type": "Question",
@@ -205,7 +205,7 @@
       <rect x="225" y="18" width="215" height="80" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
       <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Pre-flight Check</text>
-      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Mneme HQ check --mode strict</text>
+      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --mode strict</text>
       <!-- Arrow Mneme HQ→B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
@@ -256,7 +256,7 @@
           <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">Mneme HQ check --mode strict</div>
+          <div class="panel-prompt">mneme check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-direct-db-queries<br>
           Rule: All database access must go through the repository layer.<br>
           Context: Direct queries in route handlers bypass transaction management and were banned in ADR-004.<br><br>
@@ -320,7 +320,7 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Run <code>Mneme HQ check</code> before prompting</h4>
+          <h4>Run <code>mneme check</code> before prompting</h4>
           <p>Pass your intended prompt or planned change through Mneme HQ. It retrieves relevant decisions and checks for potential violations.</p>
         </div>
       </div>
@@ -328,14 +328,14 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Generate assistant-specific rules files</h4>
-          <p><code>Mneme HQ cursor generate</code> outputs <code>.cursor/rules/Mneme HQ.mdc</code> — a distilled ruleset the assistant sees in every session.</p>
+          <p><code>mneme cursor generate</code> outputs <code>.cursor/rules/Mneme HQ.mdc</code> — a distilled ruleset the assistant sees in every session.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
           <h4>Gate CI on decision compliance</h4>
-          <p>Add <code>Mneme HQ check --mode strict</code> to your CI pipeline. PRs that violate architectural decisions fail before review.</p>
+          <p>Add <code>mneme check --mode strict</code> to your CI pipeline. PRs that violate architectural decisions fail before review.</p>
         </div>
       </div>
     </div>
@@ -359,8 +359,8 @@
     </div>
 
     <div class="code-block">
-      <div class="code-block-label">Terminal — Mneme HQ check output</div>
-      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"add a search endpoint that filters by tag"</span> --mode strict
+      <div class="code-block-label">Terminal — mneme check output</div>
+      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add a search endpoint that filters by tag"</span> --mode strict
 
 <span class="cc">Retrieving relevant decisions... (3 matched)</span>
 
@@ -376,7 +376,7 @@
     <div class="code-block">
       <div class="code-block-label">CI — .github/workflows/Mneme HQ.yml</div>
       <pre><span class="ck">- name</span>: Check decision compliance
-  <span class="ck">run</span>: Mneme HQ check --mode strict --ci</pre>
+  <span class="ck">run</span>: mneme check --mode strict --ci</pre>
     </div>
   </div>
 
@@ -408,7 +408,7 @@
 
     <details>
       <summary>Does Mneme HQ work with Cursor, Claude Code, and Copilot?</summary>
-      <div class="faq-body">Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. <code>Mneme HQ check</code> runs before you prompt, and <code>Mneme HQ cursor generate</code> writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via <code>CLAUDE.md</code>.</div>
+      <div class="faq-body">Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. <code>mneme check</code> runs before you prompt, and <code>mneme cursor generate</code> writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via <code>CLAUDE.md</code>.</div>
     </details>
 
     <details>
@@ -418,7 +418,7 @@
 
     <details>
       <summary>How long does it take to set up?</summary>
-      <div class="faq-body">Under 5 minutes for a project with existing documentation. <code>pip install Mneme HQ-project-memory</code>, create a <code>decisions/</code> directory, add your first YAML decision, and run <code>Mneme HQ check</code>. See the <a href="https://github.com/TheoV823/mneme" style="color:var(--accent)">README</a> for the quickstart.</div>
+      <div class="faq-body">Under 5 minutes for a project with existing documentation. <code>pip install mneme-project-memory</code>, create a <code>decisions/</code> directory, add your first YAML decision, and run <code>mneme check</code>. See the <a href="https://github.com/TheoV823/mneme" style="color:var(--accent)">README</a> for the quickstart.</div>
     </details>
 
     <details>

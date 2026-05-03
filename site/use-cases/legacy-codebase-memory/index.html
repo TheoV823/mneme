@@ -222,7 +222,7 @@
       <rect x="701" y="24" width="195" height="60" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
       <text x="798" y="46" font-family="monospace" font-size="9.5" fill="#c8f060" text-anchor="middle">every session</text>
       <text x="798" y="66" font-family="monospace" font-size="12" fill="#e8e8ec" text-anchor="middle">AI Enforcement</text>
-      <text x="798" y="80" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">Mneme HQ check before every prompt</text>
+      <text x="798" y="80" font-family="monospace" font-size="8.5" fill="#88889a" text-anchor="middle">mneme check before every prompt</text>
     </svg>
   </div>
 
@@ -250,7 +250,7 @@
           <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">Mneme HQ check --mode strict</div>
+          <div class="panel-prompt">mneme check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-direct-billing-adapter<br>
           Rule: Never call BillingAdapter directly from controllers.<br>
           Context: Direct calls bypass audit logging. Route through PaymentService only.<br>
@@ -318,7 +318,7 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Run <code>Mneme HQ check</code> before prompting</h4>
+          <h4>Run <code>mneme check</code> before prompting</h4>
           <p>Pass your intended change through Mneme HQ. It retrieves relevant hidden constraints and flags any violations before the assistant generates a single line.</p>
         </div>
       </div>
@@ -326,14 +326,14 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Generate assistant-specific rules files</h4>
-          <p><code>Mneme HQ cursor generate</code> distills your decision store into a compact rules file every assistant session loads automatically.</p>
+          <p><code>mneme cursor generate</code> distills your decision store into a compact rules file every assistant session loads automatically.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
           <h4>Gate CI on decision compliance</h4>
-          <p>Add <code>Mneme HQ check --mode strict</code> to CI. PRs that violate legacy constraints fail before review — no senior engineer required.</p>
+          <p>Add <code>mneme check --mode strict</code> to CI. PRs that violate legacy constraints fail before review — no senior engineer required.</p>
         </div>
       </div>
     </div>
@@ -357,8 +357,8 @@
     </div>
 
     <div class="code-block">
-      <div class="code-block-label">Terminal — Mneme HQ check output</div>
-      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"add a payment method to checkout"</span> --mode strict
+      <div class="code-block-label">Terminal — mneme check output</div>
+      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add a payment method to checkout"</span> --mode strict
 
 <span class="cc">Retrieving relevant decisions... (4 matched)</span>
 

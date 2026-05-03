@@ -199,7 +199,7 @@
       <rect x="225" y="18" width="215" height="80" rx="8" fill="#141416" stroke="#c8f060" stroke-width="1.5"/>
       <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Design Token Filter</text>
-      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">Mneme HQ check --tags design-system</text>
+      <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --tags design-system</text>
       <!-- Arrow Mneme HQ→B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
@@ -249,7 +249,7 @@
           <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
-          <div class="panel-prompt">Mneme HQ check --mode strict</div>
+          <div class="panel-prompt">mneme check --mode strict</div>
           <span style="color:#ff7070">✗ FAIL</span> decision/use-approved-components<br>
           Rule: Use Modal from design-system/Modal, not custom implementations.<br><br>
           <span style="color:#ff7070">✗ FAIL</span> decision/no-hardcoded-colors<br>
@@ -283,9 +283,9 @@
     <h2 class="section-title">Design constraints enforced before the first JSX line.</h2>
     <div class="steps">
       <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Encode design system rules as decisions</h4><p>Capture approved tokens, required components, spacing rules, and accessibility requirements as structured YAML decisions.</p></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Check before generating UI code</h4><p>Run <code>Mneme HQ check</code> against your UI prompt. Relevant design decisions are retrieved and any violations flagged immediately.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Check before generating UI code</h4><p>Run <code>mneme check</code> against your UI prompt. Relevant design decisions are retrieved and any violations flagged immediately.</p></div></div>
       <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Inject design rules into assistant context</h4><p>Generate a rules file for Cursor or Claude Code that includes your design system constraints — so every UI generation session is token-aware.</p></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Gate frontend PRs on design compliance</h4><p>Add <code>Mneme HQ check --mode strict --tags design-system</code> to CI. PRs introducing unapproved tokens or missing accessibility attributes fail automatically.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Gate frontend PRs on design compliance</h4><p>Add <code>mneme check --mode strict --tags design-system</code> to CI. PRs introducing unapproved tokens or missing accessibility attributes fail automatically.</p></div></div>
     </div>
   </div>
 
@@ -320,7 +320,7 @@
 
     <div class="code-block">
       <div class="code-block-label">Terminal — checking a UI generation prompt</div>
-      <pre><span class="cc">$ </span><span class="ck">Mneme HQ check</span> <span class="cs">"add a delete account confirmation modal"</span> --tags design-system
+      <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add a delete account confirmation modal"</span> --tags design-system
 
 <span class="cc">Checking against 12 design-system decisions...</span>
 
