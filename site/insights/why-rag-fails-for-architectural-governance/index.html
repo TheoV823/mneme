@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why RAG Fails for Architectural Governance — Mneme HQ</title>
+  <meta name="description" content="RAG retrieves similar text. Architectural governance requires authoritative, precedence-aware constraint enforcement. Here's why they're fundamentally different problems." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/insights/why-rag-fails-for-architectural-governance/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Why RAG Fails for Architectural Governance" />
+  <meta property="og:description" content="RAG retrieves similar text. Architectural governance requires authoritative, precedence-aware constraint enforcement. Here's why they're fundamentally different problems." />
+  <meta property="og:url" content="https://mnemehq.com/insights/why-rag-fails-for-architectural-governance/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Why RAG Fails for Architectural Governance" />
+  <meta name="twitter:description" content="RAG retrieves similar text. Architectural governance requires authoritative, precedence-aware constraint enforcement. Here's why they're fundamentally different problems." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0d; --surface: #141416; --surface2: #1a1a1d;
+      --border: #222226; --border2: #2e2e34;
+      --text: #e8e8ec; --muted: #88889a;
+      --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 5rem 2rem 7rem; }
+    .article-header { margin-bottom: 3.5rem; }
+    .article-eyebrow { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .eyebrow-tag { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-family: 'DM Mono', monospace; }
+    .eyebrow-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border2); }
+    .eyebrow-meta { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .article-header h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    .article-lede { font-size: 1.1rem; color: var(--muted); line-height: 1.75; border-left: 2px solid var(--accent); padding-left: 1.25rem; }
+
+    .article-body { font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+    .article-body h2 { font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; margin: 3rem 0 1rem; color: var(--text); }
+    .article-body h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--text); }
+    .article-body p { margin-bottom: 1.25rem; color: var(--muted); }
+    .article-body p strong { color: var(--text); font-weight: 500; }
+    .article-body ul, .article-body ol { margin: 0 0 1.25rem 1.5rem; color: var(--muted); }
+    .article-body li { margin-bottom: 0.5rem; }
+    .article-body li strong { color: var(--text); font-weight: 500; }
+
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .callout p strong { color: var(--accent); }
+
+    .comparison-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
+    .comparison-table th { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border2); color: var(--muted); font-weight: 500; }
+    .comparison-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .comparison-table td:first-child { color: var(--muted); white-space: nowrap; }
+    .comparison-table td:nth-child(2) { color: var(--text); opacity: 0.5; }
+    .comparison-table td:nth-child(3) { color: var(--teal); }
+
+    .code-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); line-height: 1.7; overflow-x: auto; }
+    .code-block .comment { color: var(--border2); }
+    .code-block .key { color: var(--teal); }
+    .code-block .value { color: var(--accent); }
+    .code-block .str { color: #e8a87c; }
+
+    .article-footer { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .back-link { color: var(--muted); font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .back-link:hover { color: var(--text); }
+    .cta-block { margin-top: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2rem; }
+    .cta-block h3 { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .cta-block p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .btn-primary { display: inline-block; background: var(--accent); color: #0c0c0d; padding: 0.65rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; font-family: 'DM Mono', monospace; text-decoration: none; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent-dim); }
+
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .article-wrap { padding: 3rem 1.25rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/" class="active">Insights</a>
+    <a href="/demo.html">Demo</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+<article class="article-wrap">
+  <header class="article-header">
+    <div class="article-eyebrow">
+      <span class="eyebrow-tag">Category Education</span>
+      <span class="eyebrow-dot"></span>
+      <span class="eyebrow-meta">8 min read &nbsp;·&nbsp; May 2026</span>
+    </div>
+    <h1>Why RAG Fails for Architectural Governance</h1>
+    <p class="article-lede">Retrieval-augmented generation is an excellent tool for knowledge lookup. It is the wrong tool for enforcing architectural decisions. The distinction matters — and most teams building AI coding workflows haven't confronted it yet.</p>
+  </header>
+
+  <div class="article-body">
+
+    <p>When teams first encounter the problem of governing AI-generated code, RAG is the intuitive answer. You have a set of architectural decisions — ADRs, style guides, internal wikis, team conventions — and you want your AI coding assistant to respect them. RAG can retrieve relevant documents and inject them into the prompt. Problem solved, apparently.</p>
+
+    <p>It isn't. The mismatch between what RAG provides and what architectural governance requires is deep, and fixing it requires a different kind of system entirely.</p>
+
+    <h2>What RAG is actually good at</h2>
+
+    <p>RAG excels when the task is: given a query, find the most semantically relevant passages from a corpus and surface them to the model. It works well for:</p>
+
+    <ul>
+      <li><strong>Documentation lookup</strong> — "How does our auth middleware work?" retrieves the relevant design doc.</li>
+      <li><strong>FAQ / support</strong> — surface the right answer from a knowledge base.</li>
+      <li><strong>Context injection</strong> — prime the model with background it wouldn't otherwise have.</li>
+      <li><strong>Summarization</strong> — condense a retrieved document for downstream consumption.</li>
+    </ul>
+
+    <p>The common thread: RAG is a <strong>retrieval and suggestion</strong> mechanism. It finds relevant information. It does not enforce anything.</p>
+
+    <h2>What architectural governance actually requires</h2>
+
+    <p>Architectural governance is a different problem category. When you need to prevent an AI agent from making a decision that violates your service boundaries, your decisions need to be:</p>
+
+    <ol>
+      <li><strong>Authoritative</strong> — not "here's something relevant," but "this is the rule that applies here."</li>
+      <li><strong>Precedence-aware</strong> — when two decisions conflict (project-level vs. org-level, newer vs. older), the system must resolve the conflict deterministically, not leave it to the model's judgment.</li>
+      <li><strong>Scope-aware</strong> — a decision about the payments service should not fire when the model is editing the analytics pipeline.</li>
+      <li><strong>Enforcement-capable</strong> — the system needs to block or flag violations, not merely suggest alternatives.</li>
+      <li><strong>Structurally validated</strong> — decisions need a schema, not just free-form text, so violations can be detected consistently.</li>
+    </ol>
+
+    <p>RAG addresses exactly none of these requirements natively. Let's go through each failure mode.</p>
+
+    <h2>Failure mode 1: Semantic similarity ≠ decision authority</h2>
+
+    <p>RAG retrieves documents based on embedding similarity to the query. "Which cache library should I use?" might retrieve three documents: a blog post about Redis, an ADR mandating Valkey, and a benchmark comparing both. The ADR is authoritative. The blog post is noise. RAG has no mechanism to distinguish them.</p>
+
+    <p>You can try to patch this by tagging documents with metadata and filtering by source type. But you've now built a lightweight decision registry on top of your RAG system — which is a separate architectural layer. And you still haven't solved the next problem.</p>
+
+    <div class="callout">
+      <p><strong>The core issue:</strong> RAG ranks by similarity. Governance requires ranking by authority. These are orthogonal dimensions that need separate systems.</p>
+    </div>
+
+    <h2>Failure mode 2: No precedence resolution</h2>
+
+    <p>Real architectural decision sets contain conflicts. An org-level decision from 2022 says "use PostgreSQL for all relational storage." A project-level decision from 2024 says "this service uses SQLite for simplicity — approved by the platform team." Which wins?</p>
+
+    <p>The correct answer depends on scope, recency, and the explicit precedence relationship between the two decisions. A RAG system doesn't model any of this. It retrieves both, injects both, and leaves the model to interpret the contradiction. In practice, the model will pick whichever it finds more convincing in context — which is non-deterministic and ungovernable.</p>
+
+    <p>A proper governance system needs a precedence engine: an explicit, deterministic function that takes a set of retrieved decisions and produces a single authoritative answer for a given context. This is the architectural challenge RAG simply cannot address.</p>
+
+    <h2>Failure mode 3: Retrieval quality degrades at scale</h2>
+
+    <p>RAG retrieval quality is a function of embedding model quality, corpus size, and query construction. In small corpora (&lt;100 documents), RAG works reasonably well. As your decision corpus grows to hundreds of ADRs, style guides, runbooks, and policy documents, retrieval precision drops and recall degrades.</p>
+
+    <p>More importantly, architectural decisions have precise scope signals — file patterns, service names, module boundaries — that embedding-based retrieval handles poorly. The embedding for "use dependency injection for service construction" is not significantly closer to a file path like <code style="font-family:'DM Mono',monospace;font-size:0.82em;color:var(--teal)">services/payments/handler.py</code> than it is to an unrelated document. Scope-aware retrieval requires structured matching, not vector similarity.</p>
+
+    <h2>Failure mode 4: Suggestion, not enforcement</h2>
+
+    <p>Even when RAG retrieves the right decision, the model can ignore it. In a RAG-augmented coding workflow, the model sees the retrieved context and generates output. Whether it respects the retrieved constraint depends on prompt construction, model behavior, and context window dynamics — none of which are deterministic.</p>
+
+    <p>This isn't a theoretical concern. In practice, models under instruction to complete a coding task will prioritize task completion over constraint adherence when the two are in tension. A suggestion system isn't a governance system.</p>
+
+    <p>Enforcement requires a layer that can inspect generated output against structured constraints and block or flag violations before they reach review. This is architecturally separate from the generation layer, and RAG has no role in it.</p>
+
+    <h2>What a proper governance layer looks like</h2>
+
+    <p>The distinction between RAG-based context injection and governance enforcement is the difference between:</p>
+
+    <div style="overflow-x:auto;margin:2rem 0;">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>RAG approach</th>
+          <th>Governance layer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Retrieval basis</td>
+          <td>Embedding similarity</td>
+          <td>Scope + keyword + recency</td>
+        </tr>
+        <tr>
+          <td>Authority model</td>
+          <td>None — all documents equal</td>
+          <td>Explicit precedence hierarchy</td>
+        </tr>
+        <tr>
+          <td>Conflict resolution</td>
+          <td>Left to the model</td>
+          <td>Deterministic precedence engine</td>
+        </tr>
+        <tr>
+          <td>Enforcement</td>
+          <td>Suggestion only</td>
+          <td>Block / flag at generation time</td>
+        </tr>
+        <tr>
+          <td>Decision schema</td>
+          <td>Free-form text</td>
+          <td>Structured (ADR-like) with typed fields</td>
+        </tr>
+        <tr>
+          <td>Scope handling</td>
+          <td>Implicit / approximate</td>
+          <td>Explicit scope patterns per decision</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p>A governance layer needs a structured decision schema — typed fields for scope, rationale, status, superseded-by, and the constraint itself. It needs a retrieval mechanism that matches on scope patterns before invoking semantic similarity. And it needs a precedence engine that resolves conflicts deterministically before injecting context into the model.</p>
+
+    <p>An example of what a structured decision record looks like at the schema level:</p>
+
+    <div class="code-block">
+<span class="comment"># ADR-012: Payment service storage backend</span>
+<span class="key">id</span>: <span class="value">ADR-012</span>
+<span class="key">status</span>: <span class="value">active</span>
+<span class="key">scope</span>: <span class="str">services/payments/**</span>
+<span class="key">supersedes</span>: <span class="value">ADR-004</span>
+<span class="key">precedence</span>: <span class="value">project</span>   <span class="comment"># beats org-level if conflict</span>
+<span class="key">constraint</span>: <span class="str">Use PostgreSQL with SQLAlchemy ORM. No direct SQL. No SQLite.</span>
+<span class="key">rationale</span>: <span class="str">Consistency with audit logging requirements (SOC 2 TR-7).</span>
+    </div>
+
+    <p>When the model targets a file matching <code style="font-family:'DM Mono',monospace;font-size:0.82em;color:var(--teal)">services/payments/</code>, this decision fires. Its precedence level is checked against any conflicting org-level rules. The resolved constraint is injected authoritatively. If the model's output violates it, the enforcement layer blocks the write.</p>
+
+    <h2>When RAG is still useful in this context</h2>
+
+    <p>This isn't an argument that RAG has no role in AI coding workflows. It does — for the right tasks.</p>
+
+    <p>RAG is useful for surfacing relevant prior art, similar code patterns, and background context during generation. It's appropriate when you want to enrich the model's knowledge without binding it to specific constraints. It pairs well with a governance layer: RAG provides context, the governance layer provides constraints.</p>
+
+    <p>The error is conflating the two — assuming that injecting decision documents via RAG is equivalent to enforcing those decisions. It isn't. The retrieval problem and the enforcement problem require different architectures.</p>
+
+    <h2>The underlying principle</h2>
+
+    <p>The distinction maps to a simple principle: <strong>suggestion systems and enforcement systems are architecturally incompatible.</strong> You cannot make a suggestion system into an enforcement system by improving retrieval quality. The enforcement guarantee requires a structural property — a deterministic check against structured constraints — that retrieval-based systems cannot provide by design.</p>
+
+    <p>Architectural governance for AI coding is an enforcement problem. It should be solved with enforcement architecture.</p>
+
+  </div>
+
+  <footer class="article-footer">
+    <a href="/insights/" class="back-link">← Back to Insights</a>
+
+    <div class="cta-block">
+      <h3>Mneme HQ enforces architectural decisions at the source</h3>
+      <p>Structured decision schema, deterministic precedence engine, and hook-level enforcement for Claude Code. Open source.</p>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub →</a>
+    </div>
+  </footer>
+</article>
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/insights/">Insights</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/for/cto/">For CTOs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/privacy/">Privacy</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    Open source
+    &nbsp;&middot;&nbsp;
+    MIT License
+  </p>
+</footer>
+
+</body>
+</html>
