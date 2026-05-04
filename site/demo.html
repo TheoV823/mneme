@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mneme HQ — Architectural Governance Demo</title>
+  <meta name="description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model — compliant output when the governance layer is active." />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Mneme HQ — Architectural Governance Demo" />
+  <meta property="og:description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model — compliant output when the governance layer is active." />
+  <meta property="og:url" content="https://mnemehq.com/demo.html" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mneme HQ — Architectural Governance Demo" />
+  <meta name="twitter:description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model — compliant output when the governance layer is active." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0d;
+      --surface: #141416;
+      --surface2: #1a1a1d;
+      --border: #222226;
+      --border2: #2e2e34;
+      --text: #e8e8ec;
+      --muted: #88889a;
+      --accent: #c8f060;
+      --accent-dim: #a8d040;
+      --teal: #8be0c8;
+      --pass: #c8f060;
+      --warn: #f59e0b;
+      --fail: #ef4444;
+      --term-bad: #ff8585;
+      --term-bg: #0a0a0d;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: #0c0c0d;
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--accent); }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 5rem 2rem 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .demo-eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .demo-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+    .demo-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+    }
+
+    /* ── STEP INDICATOR ── */
+    .step-indicator {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border2);
+      transition: background 0.3s;
+    }
+    .step-dot.active { background: var(--accent); }
+    .step-dot.done { background: var(--teal); }
+
+    /* ── TERMINAL PANELS ── */
+    .demo-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      width: 100%;
+    }
+    @media (max-width: 680px) {
+      .demo-wrap { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--term-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: #0d0d10;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-family: 'DM Mono', monospace;
+    }
+    .panel-header.bad { color: var(--fail); }
+    .panel-header.good { color: var(--accent); }
+    .dot { width: 9px; height: 9px; border-radius: 50%; margin-right: 2px; }
+    .d-r { background: #ff5f57; }
+    .d-y { background: #febc2e; }
+    .d-g { background: #28c840; }
+
+    .panel-body {
+      padding: 1.25rem 1.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.9;
+      min-height: 260px;
+    }
+    .prompt-line { color: #a78bfa; }
+    .out-bad { color: var(--term-bad); }
+    .out-good { color: var(--accent); }
+    .out-muted { color: var(--muted); }
+    .out-warn { color: var(--warn); }
+    .out-fail { color: var(--fail); }
+
+    .check-panel {
+      grid-column: 1 / -1;
+      background: var(--term-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* ── BADGES ── */
+    .label-badge {
+      display: inline-block;
+      font-size: 0.63rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.12rem 0.45rem;
+      border-radius: 999px;
+      margin-right: 0.4rem;
+      font-family: 'DM Mono', monospace;
+    }
+    .badge-pass { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.25); }
+    .badge-warn { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
+    .badge-fail { background: rgba(239,68,68,0.12); color: var(--fail); border: 1px solid rgba(239,68,68,0.25); }
+
+    /* ── ANIMATIONS ── */
+    .hidden { display: none; }
+    .fade-in { animation: fadeIn 0.35s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
+    /* ── REPLAY BUTTON ── */
+    .replay-btn {
+      margin-top: 1.75rem;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border2);
+      padding: 0.55rem 1.3rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      display: none;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .replay-btn:hover { color: var(--text); border-color: var(--muted); }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      width: 100%;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 680px) {
+      .cta-section { grid-template-columns: 1fr; }
+    }
+    .cta-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+    .cta-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .snippet-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--term-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text);
+    }
+    .snippet-wrap code { flex: 1; }
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      border-radius: 4px;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.68rem;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .copy-btn.copied { color: var(--teal); border-color: var(--teal); }
+    .snippet-note {
+      margin-top: 0.65rem;
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+    .snippet-note a { color: var(--accent); text-decoration: none; }
+    .snippet-note a:hover { text-decoration: underline; }
+
+    .benchmark-teaser {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .benchmark-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .benchmark-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .benchmark-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .benchmark-coming {
+      font-size: 0.74rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 1.5rem 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme" height="36" style="vertical-align:middle;" /></a>
+    <div class="nav-links">
+      <a href="/#how-it-works">How it works</a>
+      <a href="/demo.html" class="active">Demo</a>
+      <a href="/#benchmarks">Benchmarks</a>
+      <a href="/use-cases/">Use cases</a>
+      <a href="https://github.com/TheoV823/mneme">GitHub</a>
+      <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="demo-eyebrow">Interactive demo</div>
+    <h1 class="demo-title">Same prompt. Same model.<br>Different answer.</h1>
+    <p class="demo-subtitle">Because it has your project's architectural decisions.</p>
+
+    <div class="step-indicator">
+      <div class="step-dot active" id="dot0"></div>
+      <div class="step-dot" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+    </div>
+
+    <div class="demo-wrap">
+      <!-- WITHOUT MNEME -->
+      <div class="panel">
+        <div class="panel-header bad">
+          <div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div>
+          Without Mneme
+        </div>
+        <div class="panel-body" id="without-body">
+          <div class="prompt-line" id="w-prompt"></div>
+          <div id="w-out" class="hidden"></div>
+        </div>
+      </div>
+
+      <!-- WITH MNEME -->
+      <div class="panel">
+        <div class="panel-header good">
+          <div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div>
+          With Mneme
+        </div>
+        <div class="panel-body" id="with-body">
+          <div class="prompt-line" id="m-prompt"></div>
+          <div id="m-out" class="hidden"></div>
+        </div>
+      </div>
+
+      <!-- MNEME CHECK -->
+      <div class="check-panel hidden" id="check-panel">
+        <div class="panel-header" style="color:var(--teal)">
+          <div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div>
+          mneme check --mode strict
+        </div>
+        <div class="panel-body" id="check-body" style="min-height:auto;"></div>
+      </div>
+    </div>
+
+    <button class="replay-btn" id="replay-btn" onclick="startDemo()">↩ Replay</button>
+
+    <div class="cta-section" id="cta-section" style="display:none;">
+      <!-- CLI install snippet -->
+      <div class="cta-block">
+        <div class="cta-label">Try it now</div>
+        <div class="snippet-wrap">
+          <code id="snippet-text">pip install mneme &amp;&amp; mneme init &amp;&amp; mneme check</code>
+          <button class="copy-btn" id="copy-btn" onclick="copySnippet()">Copy</button>
+        </div>
+        <p class="snippet-note">
+          Full docs and source on
+          <a href="https://github.com/TheoV823/mneme" target="_blank" rel="noopener">GitHub →</a>
+        </p>
+      </div>
+
+      <!-- Benchmark teaser -->
+      <div class="cta-block">
+        <div class="cta-label">Benchmark results</div>
+        <div class="benchmark-teaser">
+          <div>
+            <div class="benchmark-stat">
+              <span class="benchmark-num">18</span>
+              <span class="benchmark-desc">drift scenarios tested</span>
+            </div>
+            <div class="benchmark-stat">
+              <span class="benchmark-num">117</span>
+              <span class="benchmark-desc">passing tests in v0.3.0</span>
+            </div>
+          </div>
+          <p class="benchmark-coming">Formal benchmark suite with third-party verification — coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="/use-cases/">Use cases</a>
+      &nbsp;·&nbsp;
+      <a href="/demo.html">Demo</a>
+      &nbsp;·&nbsp;
+      <a href="/founder/">Founder</a>
+      &nbsp;·&nbsp;
+      <a href="/contact/">Contact</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/TheoV823/mneme">GitHub</a>
+      &nbsp;·&nbsp;
+      Open source
+      &nbsp;·&nbsp;
+      MIT License
+    </p>
+  </footer>
+
+<script>
+const PROMPT = '> "Refactor the storage backend for scalability."';
+
+const WITHOUT_LINES = [
+  { t: 800,  html: '<div class="out-muted">Thinking...</div>' },
+  { t: 1400, html: '<div class="out-bad">I recommend migrating to a distributed</div>' },
+  { t: 1800, html: '<div class="out-bad">database architecture. Consider replacing</div>' },
+  { t: 2200, html: '<div class="out-bad">JSON storage with PostgreSQL or Redis.</div>' },
+  { t: 2600, html: '<div class="out-bad">Add a migration layer and ORM for</div>' },
+  { t: 3000, html: '<div class="out-bad">long-term scalability.</div>' },
+];
+
+const WITH_LINES = [
+  { t: 800,  html: '<div class="out-muted">Injecting project decisions...</div>' },
+  { t: 1400, html: '<div class="out-muted" style="font-size:0.72rem;color:#3a3a4a;">↳ ADR-001: JSON storage only — no external DB<br>↳ ADR-003: No ORM in v1<br>↳ ADR-005: Extend before rebuild</div>' },
+  { t: 2000, html: '<br>' },
+  { t: 2100, html: '<div class="out-good">Storage decision enforced. Per ADR-001,</div>' },
+  { t: 2500, html: '<div class="out-good">JSON storage is locked — no Postgres,</div>' },
+  { t: 2900, html: '<div class="out-good">no Redis, no ORM in v1. Extend the</div>' },
+  { t: 3300, html: '<div class="out-good">current storage module instead.</div>' },
+];
+
+const CHECK_LINES = [
+  { t: 400,  html: '<div class="out-muted">Checking decisions against current context...</div><br>' },
+  { t: 900,  html: '<div><span class="label-badge badge-pass">PASS</span> <span style="color:var(--text)">Storage decision enforced</span> <span class="out-muted">— JSON only, no new DBs</span></div>' },
+  { t: 1300, html: '<div><span class="label-badge badge-pass">PASS</span> <span style="color:var(--text)">Auth pattern respected</span> <span class="out-muted">— JWT middleware unchanged</span></div>' },
+  { t: 1700, html: '<div><span class="label-badge badge-warn">WARN</span> <span style="color:var(--text)">New dependency introduced</span> <span class="out-muted">— prisma not in approved list</span></div>' },
+  { t: 2100, html: '<div><span class="label-badge badge-fail">FAIL</span> <span style="color:var(--text)">Violates ADR-004</span> <span class="out-muted">— Repository pattern bypassed in user.service.ts</span></div>' },
+  { t: 2600, html: '<br><div class="out-muted">2 passed · 1 warning · 1 failure</div>' },
+];
+
+let timers = [];
+
+function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+function typeText(el, text, cb) {
+  let i = 0;
+  el.textContent = '';
+  function next() {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      timers.push(setTimeout(next, 28));
+    } else if (cb) cb();
+  }
+  next();
+}
+
+function appendLines(containerId, lines, startDelay, onDone) {
+  const el = document.getElementById(containerId);
+  lines.forEach(({ t, html }) => {
+    const timer = setTimeout(() => {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      div.classList.add('fade-in');
+      el.appendChild(div);
+    }, startDelay + t);
+    timers.push(timer);
+  });
+  if (onDone) {
+    timers.push(setTimeout(onDone, startDelay + lines[lines.length - 1].t + 600));
+  }
+}
+
+function setDot(i) {
+  for (let d = 0; d < 3; d++) {
+    const el = document.getElementById('dot' + d);
+    el.classList.remove('active', 'done');
+    if (d < i) el.classList.add('done');
+    else if (d === i) el.classList.add('active');
+  }
+}
+
+function copySnippet() {
+  const text = 'pip install mneme && mneme init && mneme check';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function startDemo() {
+  clearTimers();
+  document.getElementById('replay-btn').style.display = 'none';
+  document.getElementById('cta-section').style.display = 'none';
+
+  const wPrompt = document.getElementById('w-prompt');
+  const mPrompt = document.getElementById('m-prompt');
+  const wOut = document.getElementById('w-out');
+  const mOut = document.getElementById('m-out');
+  const checkPanel = document.getElementById('check-panel');
+  const checkBody = document.getElementById('check-body');
+
+  wPrompt.textContent = '';
+  mPrompt.textContent = '';
+  wOut.innerHTML = ''; wOut.classList.add('hidden');
+  mOut.innerHTML = ''; mOut.classList.add('hidden');
+  checkPanel.classList.add('hidden');
+  checkBody.innerHTML = '';
+  setDot(0);
+
+  typeText(wPrompt, PROMPT, () => {
+    wOut.classList.remove('hidden');
+    appendLines('w-out', WITHOUT_LINES, 0);
+  });
+
+  timers.push(setTimeout(() => {
+    typeText(mPrompt, PROMPT, () => {
+      mOut.classList.remove('hidden');
+      appendLines('m-out', WITH_LINES, 0, () => {
+        setDot(1);
+        timers.push(setTimeout(() => {
+          checkPanel.classList.remove('hidden');
+          appendLines('check-body', CHECK_LINES, 0, () => {
+            setDot(2);
+            document.getElementById('replay-btn').style.display = 'inline-block';
+            document.getElementById('cta-section').style.display = 'grid';
+          });
+        }, 600));
+      });
+    });
+  }, 150));
+}
+
+startDemo();
+</script>
+</body>
+</html>
