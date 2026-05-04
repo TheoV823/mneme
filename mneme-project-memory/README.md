@@ -345,6 +345,75 @@ mneme check --mode warn \
 
 ---
 
+## v0.4: Architectural compiler
+
+Mneme v0.4 compiles a versioned corpus of ADR markdown files into a
+deterministic active constraint set. ADRs are the source of truth; the
+compiler is the deterministic rule for turning them into the constraints
+the runtime injects.
+
+```
+ADR corpus  ->  parse  ->  validate  ->  resolve precedence
+            ->  active constraint set  ->  Decision records  ->  runtime
+```
+
+### ADR frontmatter
+
+```yaml
+---
+id: ADR-001
+title: Use JSON file storage
+status: accepted          # proposed | accepted | deprecated | superseded
+priority: foundational    # foundational | normal | exception
+date: 2026-01-10
+scope: storage            # dotted path; empty string = global
+supersedes: []
+---
+
+Body markdown follows.
+```
+
+### Corpus validation
+
+`validate_corpus` aggregates every detected problem before raising — one
+pass surfaces every error so maintainers fix the corpus once:
+
+- required fields present
+- ADR id format (`ADR-\d+`) and uniqueness
+- valid `status` / `priority` enums
+- ISO 8601 date
+- scope grammar (lowercase dotted path, no leading/trailing dot)
+- `supersedes` references resolve to known ADRs
+- no supersession cycles (self / 2-node / N-node)
+
+### Precedence resolution
+
+Same-scope conflicts resolve via a deterministic hierarchy. The compiler
+never silently picks a winner:
+
+1. Explicit `supersedes` — referenced ADRs are removed (chain-aware)
+2. Same scope, higher priority wins (foundational > normal > exception)
+3. Same scope + priority, newer date wins
+4. Otherwise → `ADRPrecedenceError`
+
+Broader and narrower scopes coexist; output is sorted most-specific-first.
+
+### Usage
+
+```python
+from mneme.adr_compiler import compile_adrs, adrs_to_decisions
+from mneme.decision_retriever import DecisionRetriever
+
+decisions = adrs_to_decisions(compile_adrs("docs/adr"))
+retriever = DecisionRetriever(decisions)
+```
+
+The bridge into the existing `Decision` schema means the runtime pipeline
+(retriever, conflict detector, context builder) consumes ADR-driven
+corpora without code changes.
+
+---
+
 ## Cursor workflow
 
 Mneme generates a Cursor-compatible `.mdc` rules file from your project decisions.
@@ -644,7 +713,8 @@ See the [Adoption and Enhancement Roadmap](../docs/roadmap/2026-04-24-adoption-a
 |---------|-----------|
 | **v0.1** | JSON-backed memory, keyword retrieval, deterministic evaluation, before/after demo |
 | **v0.2** ✓ | Decision enforcement layer: `mneme check` (PASS/WARN/FAIL), Cursor rules generator, drift detection test harness |
-| **v0.3** ✓ | Configurable enforcement modes: `--mode strict` (default, CI-gate) and `--mode warn` (log-only, zero exit) |
+| **v0.3** ✓ | Configurable enforcement modes (`strict` / `warn`); Claude Code hook + slash commands (v0.3.2) |
+| **v0.4** ✓ | Architectural compiler: ADR frontmatter schema, corpus validation, deterministic precedence engine, Decision-bridge integration |
 | **v1.0** | Multi-project support, memory versioning, embedding-based retrieval (opt-in) |
 | **Beyond** | LLM-judge evaluator mode, learned retrieval ranking, cross-project memory |
 

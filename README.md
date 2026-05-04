@@ -147,6 +147,9 @@ Mneme HQ-project-memory/
     context_builder.py      format_context_packet (v1) + format_decisions/top-N (v2)
     conflict_detector.py    v2: post-response violation scanner
     pipeline.py             v2: MemoryStore -> DecisionRetriever -> inject -> LLM -> detect
+    adr_schema.py           v0.4: ADR dataclass, status/priority enums, errors
+    adr_parser.py           v0.4: YAML frontmatter parser
+    adr_compiler.py         v0.4: validate_corpus, resolve_precedence, compile_adrs
     llm_adapter.py          Thin Anthropic API wrapper with dry-run mode
     evaluator.py            v1: deterministic alignment checker (unchanged)
     cli.py                  v2: add_decision / list_decisions / test_query commands
@@ -286,6 +289,75 @@ mneme test_query --memory examples/project_memory.json \
 
 ---
 
+## v0.4: Architectural compiler
+
+Mneme HQ v0.4 compiles a versioned corpus of ADR markdown files into a
+deterministic active constraint set. ADRs are the source of truth; the
+compiler is the deterministic rule for turning them into the constraints
+the runtime injects.
+
+```
+ADR corpus  ->  parse  ->  validate  ->  resolve precedence
+            ->  active constraint set  ->  Decision records  ->  runtime
+```
+
+### ADR frontmatter
+
+```yaml
+---
+id: ADR-001
+title: Use JSON file storage
+status: accepted          # proposed | accepted | deprecated | superseded
+priority: foundational    # foundational | normal | exception
+date: 2026-01-10
+scope: storage            # dotted path; empty string = global
+supersedes: []
+---
+
+Body markdown follows.
+```
+
+### Corpus validation
+
+`validate_corpus` aggregates every detected problem before raising — one
+pass surfaces every error so maintainers fix the corpus once:
+
+- required fields present
+- ADR id format (`ADR-\d+`) and uniqueness
+- valid `status` / `priority` enums
+- ISO 8601 date
+- scope grammar (lowercase dotted path, no leading/trailing dot)
+- `supersedes` references resolve to known ADRs
+- no supersession cycles (self / 2-node / N-node)
+
+### Precedence resolution
+
+Same-scope conflicts resolve via a deterministic hierarchy. The compiler
+never silently picks a winner:
+
+1. Explicit `supersedes` — referenced ADRs are removed (chain-aware)
+2. Same scope, higher priority wins (foundational > normal > exception)
+3. Same scope + priority, newer date wins
+4. Otherwise → `ADRPrecedenceError`
+
+Broader and narrower scopes coexist; output is sorted most-specific-first.
+
+### Usage
+
+```python
+from mneme.adr_compiler import compile_adrs, adrs_to_decisions
+from mneme.decision_retriever import DecisionRetriever
+
+decisions = adrs_to_decisions(compile_adrs("docs/adr"))
+retriever = DecisionRetriever(decisions)
+```
+
+The bridge into the existing `Decision` schema means the runtime pipeline
+(retriever, conflict detector, context builder) consumes ADR-driven
+corpora without code changes.
+
+---
+
 ## Quick demo
 
 ```bash
@@ -400,11 +472,12 @@ See the [Adoption and Enhancement Roadmap](docs/roadmap/2026-04-24-adoption-and-
 
 | Version | Capability |
 |---------|-----------|
-| **v0.1** (this repo) | JSON-backed memory, keyword retrieval, deterministic evaluation, before/after demo |
-| **v0.2** | Embedding-based retrieval (opt-in), CLI tooling for memory management |
-| **v0.3** | LLM-judge evaluator mode, positive-alignment verification |
+| **v0.1** ✓ | JSON-backed memory, keyword retrieval, deterministic evaluation, before/after demo |
+| **v0.2** ✓ | Decision enforcement layer: structured `Decision`, field-weighted retrieval, conflict detector, CLI |
+| **v0.3** ✓ | Configurable enforcement modes (`strict` / `warn`); Cursor rules generator; Claude Code hook + slash commands (v0.3.2) |
+| **v0.4** ✓ | Architectural compiler: ADR frontmatter schema, corpus validation, deterministic precedence engine, Decision-bridge integration |
 | **v1.0** | Multi-project support, memory versioning, CI integration for alignment checks |
-| **Beyond** | Learned retrieval ranking, cross-project memory, multi-workflow memory management |
+| **Beyond** | LLM-judge evaluator mode, learned retrieval ranking, cross-project memory |
 
 ## Use Mneme HQ via API
 
