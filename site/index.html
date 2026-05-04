@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mneme HQ — Persistent project memory for LLM workflows</title>
-  <meta name="description" content="Mneme HQ adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <title>Mneme HQ — Architectural Governance for AI-Assisted Development</title>
+  <meta name="description" content="Mneme HQ enforces your team's architectural decisions before AI-generated code reaches review. Prevent drift, enforce standards, and govern AI coding at the source." />
   <meta name="google-site-verification" content="eW7iETj7y-Ni_T0RYKR0cvBXhaz3y4NfEfHSwXbMlNQ" />
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Mneme HQ" />
-  <meta property="og:title" content="Mneme HQ — Persistent project memory for LLM workflows" />
-  <meta property="og:description" content="Mneme HQ adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <meta property="og:title" content="Mneme HQ — Architectural Governance for AI-Assisted Development" />
+  <meta property="og:description" content="Mneme HQ enforces your team's architectural decisions before AI-generated code reaches review. Prevent drift, enforce standards, and govern AI coding at the source." />
   <meta property="og:url" content="https://mnemehq.com/" />
   <meta property="og:image" content="https://mnemehq.com/og.png" />
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Mneme HQ — Persistent project memory for LLM workflows" />
-  <meta name="twitter:description" content="Mneme HQ adds persistent project memory and guardrails to LLM-powered development workflows. Stop LLMs from forgetting how your project is built." />
+  <meta name="twitter:title" content="Mneme HQ — Architectural Governance for AI-Assisted Development" />
+  <meta name="twitter:description" content="Mneme HQ enforces your team's architectural decisions before AI-generated code reaches review. Prevent drift, enforce standards, and govern AI coding at the source." />
   <meta name="twitter:image" content="https://mnemehq.com/og.png" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
@@ -451,6 +451,16 @@
     @media (max-width: 680px) {
       .case-studies { grid-template-columns: 1fr; }
     }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto 1rem;
+    }
+    @media (max-width: 680px) {
+      .problem-grid { grid-template-columns: 1fr; }
+    }
     .case-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -577,6 +587,7 @@
   <div class="nav-links">
     <a href="#how-it-works">How it works</a>
     <a href="/demo.html">Demo</a>
+    <a href="#problem">The problem</a>
     <a href="#benchmarks">Benchmarks</a>
     <a href="/use-cases/">Use cases</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
@@ -600,6 +611,33 @@
     <div class="cta-group">
       <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
       <a href="/demo.html" class="btn-ghost">Watch 17-second demo</a>
+    </div>
+  </div>
+
+  <div class="section-wrap" id="problem" style="background:var(--surface2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);">
+    <div class="section-eyebrow">The bottleneck</div>
+    <h2 class="section-title" style="margin-bottom:0.5rem;">AI increased code output.<br><span style="color:#ff7070;">Review capacity did not.</span></h2>
+    <p style="max-width:620px;margin-bottom:2.5rem;color:var(--muted);font-size:1.05rem;line-height:1.7;">
+      Coding assistants generate code faster than teams can review it.<br>
+      But review bandwidth has not increased.<br><br>
+      That means more surface area to validate, more architectural drift to catch,
+      and more governance pushed downstream into PR review.<br><br>
+      The issue is not model quality.
+      It is that coding agents do not retain your architectural decisions by default.
+    </p>
+    <div class="problem-grid">
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;">
+        <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">More PR Surface Area</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">AI increases the amount of code reviewers must validate per change.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;">
+        <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">Reactive Governance</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">Architectural violations are caught after generation, during review.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;">
+        <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">Session Amnesia</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">Coding agents forget prior decisions unless re-prompted every time.</div>
+      </div>
     </div>
   </div>
 
