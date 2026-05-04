@@ -2,6 +2,14 @@
 
 ## Current status
 
+> **Update — 2026-05-04:** ADR compiler / precedence engine implemented
+> (parser → validator → precedence → Decision bridge). The core
+> architectural compiler foundation is now live on top of v0.3.2. The
+> deferred roadmap below now applies only to advanced governance /
+> enterprise / cloud / multi-IDE layers — the core compiler track is
+> open. Adoption-track checkpoints (Claude Code hook validation, SDK
+> hooks, external tester feedback) are unaffected.
+
 Mneme v0.2.x now has a working decision-enforcement foundation:
 
 - Structured `Decision` model
