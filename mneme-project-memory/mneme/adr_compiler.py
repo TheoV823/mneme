@@ -25,6 +25,7 @@ from mneme.adr_schema import (
     ADRPrecedenceError,
     ADRValidationError,
 )
+from mneme.schemas import Decision
 
 
 # ── Validation ────────────────────────────────────────────────────────────────
@@ -317,9 +318,53 @@ def compile_adrs(adr_dir: str | Path) -> list[ADR]:
     return resolve_precedence(adrs)
 
 
+# ── Bridge to existing Decision schema ───────────────────────────────────────
+
+
+def adrs_to_decisions(adrs: list[ADR]) -> list[Decision]:
+    """Convert compiled ADR records into Decision records.
+
+    The ``Decision`` dataclass is what the runtime pipeline (retriever,
+    conflict detector, context builder) already consumes. This bridge
+    lets ADR-driven corpora plug in without changing those components.
+
+    Mapping:
+        ADR.id      -> Decision.id
+        ADR.title   -> Decision.decision
+        ADR.body    -> Decision.rationale
+        ADR.scope   -> Decision.scope (wrapped in a single-element list)
+        ADR.date    -> Decision.created_at and Decision.updated_at
+
+    ``Decision.constraints`` and ``Decision.anti_patterns`` are left
+    empty: ADR-003's v1 schema does not have structured fields for them
+    (the body is free-form markdown). Future iterations can extend the
+    schema and enrich this mapping.
+
+    Args:
+        adrs: List of compiled (active) ADR records.
+
+    Returns:
+        Decision records in the same order as the input.
+    """
+    return [
+        Decision(
+            id=adr.id,
+            decision=adr.title,
+            rationale=adr.body,
+            scope=[adr.scope],
+            constraints=[],
+            anti_patterns=[],
+            created_at=adr.date,
+            updated_at=adr.date,
+        )
+        for adr in adrs
+    ]
+
+
 __all__ = [
     "validate_corpus",
     "resolve_precedence",
     "compile_adrs",
+    "adrs_to_decisions",
     "ADRPrecedenceError",
 ]
