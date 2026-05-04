@@ -461,6 +461,14 @@
     @media (max-width: 680px) {
       .problem-grid { grid-template-columns: 1fr; }
     }
+    .problem-card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .problem-card:hover { border-color: rgba(200,240,96,0.28); transform: translateY(-2px); }
     .case-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -614,10 +622,10 @@
     </div>
   </div>
 
-  <div class="section-wrap" id="problem" style="background:var(--surface2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);">
+  <div class="section-wrap" id="problem" style="background:var(--surface2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding-top:4.25rem;padding-bottom:4.25rem;">
     <div class="section-eyebrow">The bottleneck</div>
     <h2 class="section-title" style="margin-bottom:0.5rem;">AI increased code output.<br><span style="color:#ff7070;">Review capacity did not.</span></h2>
-    <p style="max-width:620px;margin-bottom:2.5rem;color:var(--muted);font-size:1.05rem;line-height:1.7;">
+    <p style="max-width:620px;margin-bottom:2.5rem;color:var(--muted);font-size:1.05rem;line-height:1.55;">
       Coding assistants generate code faster than teams can review it.<br>
       But review bandwidth has not increased.<br><br>
       That means more surface area to validate, more architectural drift to catch,
@@ -626,15 +634,15 @@
       It is that coding agents do not retain your architectural decisions by default.
     </p>
     <div class="problem-grid">
-      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;">
+      <div class="problem-card">
         <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">More PR Surface Area</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">AI increases the amount of code reviewers must validate per change.</div>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;">
+      <div class="problem-card">
         <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">Reactive Governance</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">Architectural violations are caught after generation, during review.</div>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;">
+      <div class="problem-card">
         <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.5rem;">Session Amnesia</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">Coding agents forget prior decisions unless re-prompted every time.</div>
       </div>
