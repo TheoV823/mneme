@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For CTOs &amp; VP Engineering — Mneme HQ</title>
+  <meta name="description" content="AI increases code throughput. Your review capacity does not. Mneme HQ enforces architectural governance before code reaches review." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/for/cto/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="For CTOs &amp; VP Engineering — Mneme HQ" />
+  <meta property="og:description" content="AI increases code throughput. Your review capacity does not. Mneme HQ enforces architectural governance before code reaches review." />
+  <meta property="og:url" content="https://mnemehq.com/for/cto/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="For CTOs &amp; VP Engineering — Mneme HQ" />
+  <meta name="twitter:description" content="AI increases code throughput. Your review capacity does not. Mneme HQ enforces architectural governance before code reaches review." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0d; --surface: #141416; --surface2: #1a1a1d;
+      --border: #222226; --border2: #2e2e34;
+      --text: #e8e8ec; --muted: #88889a;
+      --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+    .btn-primary { display: inline-block; background: var(--accent); color: #0c0c0d; padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.88rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-ghost { display: inline-block; background: transparent; border: 1px solid var(--border2); color: var(--text); padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.88rem; text-decoration: none; transition: border-color 0.15s, color 0.15s; }
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+    .hero { max-width: 800px; margin: 0 auto; padding: 5rem 2rem 4rem; text-align: center; }
+    .hero-tag { display: inline-block; color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .hero h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.25rem; }
+    .hero-sub { font-size: 1rem; color: var(--muted); max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .cta-group { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .section-wrap { max-width: 860px; margin: 0 auto; padding: 4.5rem 2rem; border-top: 1px solid var(--border); }
+    .section-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+    .section-title { font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2rem; }
+    .prose { font-size: 0.88rem; color: var(--muted); line-height: 1.9; max-width: 680px; }
+    .prose + .prose { margin-top: 1rem; }
+
+    /* Pain points cards */
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .pain-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; }
+    .pain-card-num { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent); margin-bottom: 0.6rem; letter-spacing: 0.06em; }
+    .pain-card h4 { font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; line-height: 1.4; }
+    .pain-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+    /* Comparison table */
+    .rag-table-wrap { overflow-x: auto; margin: 2rem 0; }
+    .rag-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .rag-table th { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border2); color: var(--muted); font-weight: 500; }
+    .rag-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .rag-table td:first-child { color: var(--muted); white-space: nowrap; }
+    .rag-table td:nth-child(2) { color: var(--text); opacity: 0.55; }
+    .rag-table td:nth-child(3) { color: var(--teal); }
+    .rag-table tr:last-child td { border-bottom: none; }
+    .rag-table a { color: var(--accent); text-decoration: none; }
+    .rag-table a:hover { color: var(--accent-dim); }
+
+    /* Pipeline steps */
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin: 2rem 0; }
+    .step { display: flex; gap: 1.25rem; align-items: flex-start; }
+    .step-num { flex-shrink: 0; width: 32px; height: 32px; border: 1px solid rgba(200,240,96,0.28); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--accent); font-family: 'DM Mono', monospace; }
+    .step-body h4 { font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text); }
+    .step-body p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+    /* Proof / stat */
+    .proof-block { display: flex; align-items: flex-start; gap: 2.5rem; flex-wrap: wrap; margin: 2rem 0; padding: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+    .stat-large { font-family: 'Instrument Serif', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); color: var(--accent); letter-spacing: -0.03em; line-height: 1; }
+    .stat-desc { font-size: 0.88rem; color: var(--muted); max-width: 340px; line-height: 1.6; margin-top: 0.4rem; }
+    .stat-desc a { color: var(--accent); text-decoration: none; }
+    .stat-desc a:hover { color: var(--accent-dim); }
+
+    /* CTA footer */
+    .cta-footer { border-top: 1px solid var(--border); text-align: center; padding: 5rem 2rem; }
+    .cta-footer h2 { font-family: 'Inter', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2rem; }
+
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1rem; }
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      .section-wrap { padding: 3rem 1.25rem; }
+      .proof-block { gap: 1.5rem; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/">Insights</a>
+    <a href="/demo.html">Demo</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">For CTOs &amp; VP Engineering</div>
+    <h1>AI Increases Code Throughput. Your Review Capacity Does Not.</h1>
+    <p class="hero-sub">Teams shipping 10&times; more AI-generated code with the same number of reviewers accumulate architectural debt at a pace that's invisible until it's expensive. Mneme HQ enforces architectural decisions before the code is written.</p>
+    <div class="cta-group">
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
+      <a href="/use-cases/" class="btn-ghost">See use cases</a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: THE PROBLEM -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">The Problem</div>
+    <h2 class="section-title">The bottleneck isn't generation. It's governance.</h2>
+    <p class="prose">AI coding assistants have eliminated the typing bottleneck. They haven't eliminated the governance bottleneck. Senior engineers are still the gate — reviewing more PRs, catching the same violations, and explaining the same decisions to tools that have no memory of them.</p>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-card-num">01</div>
+        <h4>AI output volume exceeding review capacity</h4>
+        <p>Assistants generate code faster than reviewers can validate it. The queue grows. Shortcuts follow.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-num">02</div>
+        <h4>Architectural inconsistency across teams</h4>
+        <p>Different engineers use different tools with different context. The codebase fragments.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-num">03</div>
+        <h4>Drift compounding into technical debt</h4>
+        <p>Each small violation is harmless. At scale, they harden into structural problems that are expensive to unwind.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-num">04</div>
+        <h4>Repeated PR corrections consuming senior time</h4>
+        <p>The same violations surface sprint after sprint. Reviewers explain decisions that were already made. Time compounds.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: WHY EXISTING APPROACHES DON'T SCALE -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">Why Existing Approaches Don't Scale</div>
+    <h2 class="section-title">Rules files, prompts, and RAG all break at the same point.</h2>
+    <p class="prose">The common thread: each approach depends on a human keeping something up to date, or a model remembering something it was told once. Neither scales with your decision history.</p>
+    <div class="rag-table-wrap">
+      <table class="rag-table">
+        <thead>
+          <tr>
+            <th>Approach</th>
+            <th>Why It Breaks</th>
+            <th>Mneme HQ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rules Files</td>
+            <td>Flat text decays as teams add more rules. No semantic retrieval. Context limit hit as the project grows.</td>
+            <td>Structured decision store — only relevant decisions are surfaced at query time</td>
+          </tr>
+          <tr>
+            <td>Prompt Templates</td>
+            <td>Static. Can't cover a growing decision history. Manually maintained and easily out of date.</td>
+            <td>Decisions retrieved dynamically — the constraint set stays current without manual curation</td>
+          </tr>
+          <tr>
+            <td>RAG</td>
+            <td>Documents aren't decisions. Retrieves text, not enforceable rules. No violation detection layer. <a href="/insights/why-rag-fails-for-architectural-governance/">Why RAG fails &rarr;</a></td>
+            <td>Enforcement layer on top of retrieval — checks for violations, not just relevance</td>
+          </tr>
+          <tr>
+            <td>Code Review</td>
+            <td>Catches violations after code is written. Wastes senior engineer time on avoidable corrections. <a href="/insights/why-code-review-cannot-scale-with-ai-output/">Why code review doesn't scale &rarr;</a></td>
+            <td>Pre-flight check surfaces violations before generation — review stays for judgment, not repetition</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 3: HOW MNEME HQ WORKS -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">How Mneme HQ Works</div>
+    <h2 class="section-title">Before the model writes a single line, it knows your architectural standards.</h2>
+    <p class="prose">The enforcement pipeline runs before generation. By the time the assistant receives the prompt, the relevant constraints are already in context and violations are already surfaced.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Decision stored</h4>
+          <p>Architectural decisions, constraints, and anti-patterns are captured in structured YAML inside <code>decisions/</code> — with a rule, rationale, scope, and enforcement level.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Scope matched</h4>
+          <p>When a prompt is issued, Mneme HQ retrieves only the decisions relevant to the current query and codebase scope — not the full history.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Hook fires</h4>
+          <p><code>mneme check --mode strict</code> runs pre-flight. Violations are flagged before any code is generated. In CI, failing checks block the build.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Constraint injected</h4>
+          <p>Matched decisions are injected into the assistant's context via generated rules files (<code>.cursor/rules/mneme.mdc</code>, <code>CLAUDE.md</code>, or similar).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Code generated against actual standards</h4>
+          <p>The model now has the architectural constraints it needs. Output is consistent with your decisions — not with whatever the model inferred from the codebase alone.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: PROOF -->
+  <div class="section-wrap">
+    <div class="section-eyebrow">Proof</div>
+    <h2 class="section-title">Deterministic. Tested. Production-ready.</h2>
+    <p class="prose">Mneme HQ is not a prototype. The enforcement pipeline is validated against a deterministic test harness with full coverage of the violation detection logic.</p>
+
+    <div class="proof-block">
+      <div>
+        <div class="stat-large">170</div>
+        <div class="stat-desc">integration tests covering deterministic enforcement — violation detection, scope matching, precedence resolution, and CI gate behavior. <a href="/demo.html">See the demo &rarr;</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: CTA -->
+  <div class="cta-footer">
+    <h2>Enforce your architecture before the code is written.</h2>
+    <div class="cta-group">
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub</a>
+      <a href="/use-cases/" class="btn-ghost">See use cases</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/insights/">Insights</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/for/cto/">For CTOs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/privacy/">Privacy</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    Open source
+    &nbsp;&middot;&nbsp;
+    MIT License
+  </p>
+</footer>
+</body>
+</html>
