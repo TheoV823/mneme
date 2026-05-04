@@ -6,6 +6,11 @@
   <title>Mneme HQ — Architectural Governance for AI-Assisted Development</title>
   <meta name="description" content="Mneme HQ enforces your team's architectural decisions before AI-generated code reaches review. Prevent drift, enforce standards, and govern AI coding at the source." />
   <meta name="google-site-verification" content="eW7iETj7y-Ni_T0RYKR0cvBXhaz3y4NfEfHSwXbMlNQ" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Mneme HQ" />
@@ -472,10 +477,11 @@
     .how-it-works-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      gap: 3rem;
       align-items: start;
       margin-top: 2.5rem;
     }
+    .how-it-works-grid > div { min-width: 0; }
     @media (max-width: 800px) {
       .how-it-works-grid { grid-template-columns: 1fr; gap: 2.5rem; }
     }
@@ -662,6 +668,31 @@
   <div class="section-wrap" id="benchmarks">
     <div class="section-eyebrow">See the difference</div>
     <h2 class="section-title">Same prompt. Same model. Different answer.</h2>
+
+    <div class="bench-stat-row">
+      <div>
+        <div class="bench-stat">94%</div>
+        <div class="bench-stat-label">constraint enforcement rate<br>across 30 real-world governance scenarios</div>
+      </div>
+    </div>
+    <div class="bench-categories">
+      <div class="bench-cat">architectural decisions <span>/ 8 rules</span></div>
+      <div class="bench-cat">API contracts <span>/ 6 rules</span></div>
+      <div class="bench-cat">dependency constraints <span>/ 7 rules</span></div>
+      <div class="bench-cat">testing standards <span>/ 5 rules</span></div>
+      <div class="bench-cat">naming conventions <span>/ 4 rules</span></div>
+    </div>
+    <div class="bench-scenarios">
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>no embeddings / no ML dependencies — enforced</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>extend before rebuild — enforced</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>keyword scoring stays deterministic — enforced</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>no new runtime dependencies without ADR — enforced</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>REST API versioning conventions — enforced</div>
+      <div class="bench-scenario-item"><div class="bench-pass-dot"></div>test coverage threshold ≥ 80% — enforced</div>
+    </div>
+    <div class="bench-note" style="margin-bottom:2.5rem;">Benchmarks run against 30 real-world governance scenarios. Source: <a href="https://github.com/TheoV823/mneme/tree/main/examples/benchmarks" style="color:var(--teal);">examples/benchmarks/</a></div>
+
+    <h3 style="font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Same prompt. Same model. Different answer.</h3>
 
     <div class="demo-panels">
       <div class="panel">
