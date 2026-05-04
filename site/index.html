@@ -824,7 +824,7 @@
       <div class="code-block">
         <div class="code-block-label">install</div>
         <pre><span class="cp">$</span> git clone https://github.com/TheoV823/mneme
-<span class="cp">$</span> cd Mneme HQ
+<span class="cp">$</span> cd mneme
 <span class="cp">$</span> pip install -e .</pre>
       </div>
       <div class="code-block">
@@ -834,14 +834,14 @@
       </div>
       <div class="code-block">
         <div class="code-block-label">run governance benchmarks</div>
-        <pre><span class="cp">$</span> Mneme HQ benchmark examples/benchmarks/ --memory examples/project_memory.json</pre>
+        <pre><span class="cp">$</span> mneme benchmark examples/benchmarks/ --memory examples/project_memory.json</pre>
       </div>
       <div class="code-block">
         <div class="code-block-label">usage example</div>
-        <pre><span class="ck">from</span> Mneme HQ.memory_store <span class="ck">import</span> MemoryStore
-<span class="ck">from</span> Mneme HQ.retriever <span class="ck">import</span> Retriever
-<span class="ck">from</span> Mneme HQ.context_builder <span class="ck">import</span> format_context_packet
-<span class="ck">from</span> Mneme HQ.llm_adapter <span class="ck">import</span> LLMAdapter
+        <pre><span class="ck">from</span> mneme.memory_store <span class="ck">import</span> MemoryStore
+<span class="ck">from</span> mneme.retriever <span class="ck">import</span> Retriever
+<span class="ck">from</span> mneme.context_builder <span class="ck">import</span> format_context_packet
+<span class="ck">from</span> mneme.llm_adapter <span class="ck">import</span> LLMAdapter
 
 memory = MemoryStore(<span class="cs">"examples/project_memory.json"</span>).load()
 packet = Retriever(memory).retrieve(<span class="cs">"Should we rebuild from scratch?"</span>)
