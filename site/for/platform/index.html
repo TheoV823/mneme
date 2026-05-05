@@ -98,9 +98,50 @@
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--text); }
 
+    
+    /* ── HAMBURGER ── */
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
     @media (max-width: 640px) {
       nav { padding: 1rem 1.25rem; }
-      .nav-links a:not(.btn-nav-cta) { display: none; }
+      .nav-hamburger { display: flex; }
+      nav { position: relative; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(12,12,13,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 1.25rem 1.25rem;
+        z-index: 99;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a:not(.btn-nav-cta) {
+        display: block;
+        color: var(--text);
+        font-size: 0.88rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
       .hero { padding: 3.5rem 1.25rem 3rem; }
       .section-wrap { padding: 3rem 1.25rem; }
     }
@@ -112,6 +153,7 @@
 
 <nav>
   <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
     <a href="/#benchmarks">Benchmarks</a>
@@ -237,5 +279,16 @@
     MIT License
   </p>
 </footer>
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+})();
+</script>
 </body>
 </html>
