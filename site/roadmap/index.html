@@ -109,12 +109,13 @@
 
     @media (max-width: 640px) {
       nav { padding: 1rem 1.25rem; }
-      .nav-links { gap: 1rem; }
+      .nav-links a:not(.btn-nav-cta) { display: none; }
       .hero { padding: 3.5rem 1.25rem 3rem; }
       .section-wrap { padding: 3rem 1.25rem; }
       .phase-header { padding: 1.25rem; }
       .phase-body { padding: 1.25rem; }
       .thesis-block { padding: 1.5rem; }
+      .thesis-item { gap: 0.75rem; }
     }
   </style>
 </head>
