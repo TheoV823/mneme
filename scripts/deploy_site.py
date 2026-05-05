@@ -74,6 +74,11 @@ FILES = [
     (os.path.join('use-cases', 'legacy-codebase-memory',       'index.html'),    'use-cases/legacy-codebase-memory'),
     (os.path.join('use-cases', 'multi-agent-workflow-governance', 'index.html'), 'use-cases/multi-agent-workflow-governance'),
     (os.path.join('use-cases', 'security-compliance-guardrails',  'index.html'), 'use-cases/security-compliance-guardrails'),
+    (os.path.join('roadmap',   'index.html'),                                    'roadmap'),
+    (os.path.join('insights',  'index.html'),                                    'insights'),
+    (os.path.join('for', 'cto',                'index.html'),                    'for/cto'),
+    (os.path.join('for', 'platform',           'index.html'),                    'for/platform'),
+    (os.path.join('for', 'principal-engineer', 'index.html'),                    'for/principal-engineer'),
 ]
 
 BINARY_EXTS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.svg'}
@@ -136,6 +141,12 @@ for d in [
     BASE_REMOTE + '/use-cases/data-platform-governance',
     BASE_REMOTE + '/use-cases/design-system-governance',
     BASE_REMOTE + '/use-cases/multi-agent-workflow-governance',
+    BASE_REMOTE + '/roadmap',
+    BASE_REMOTE + '/insights',
+    BASE_REMOTE + '/for',
+    BASE_REMOTE + '/for/cto',
+    BASE_REMOTE + '/for/platform',
+    BASE_REMOTE + '/for/principal-engineer',
 ]:
     mkdir(d)
 
