@@ -99,7 +99,7 @@ def upload(local_path, remote_subdir):
     return 'OK' if ok else f'FAIL: {result.get("errors", result)}'
 
 # ── Deploy: walk site/ — every file auto-included, zero manual maintenance ───
-print(f"\n── Deploying {BASE_LOCAL} → {BASE_REMOTE} ───────────────────────────────")
+print(f"\n-- Deploying {BASE_LOCAL} -> {BASE_REMOTE} --")
 
 # Collect dirs (sorted so parents are created before children) and files
 remote_dirs = set()
@@ -134,7 +134,7 @@ if failures:
 print(f"\n[OK] {len(files_to_upload)} files uploaded")
 
 # ── Post-deploy verification: every sitemap URL must return 200 ───────────────
-print("\n── Post-deploy verification ─────────────────────────────────────────────")
+print("\n-- Post-deploy verification --")
 sitemap_path = os.path.join(BASE_LOCAL, 'sitemap.xml')
 tree = ET.parse(sitemap_path)
 urls = [loc.text for loc in tree.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
