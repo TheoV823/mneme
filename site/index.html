@@ -381,7 +381,24 @@
       font-family: 'DM Mono', monospace;
       color: var(--muted);
       letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
     .code-block pre {
       padding: 1.25rem 1.5rem;
       font-family: 'DM Mono', monospace;
@@ -889,8 +906,8 @@
     <div class="section-eyebrow">Get started</div>
     <h2 class="section-title">Running in under two minutes.</h2>
     <div class="code-blocks">
-      <div class="code-block">
-        <div class="code-block-label">install</div>
+      <div class="code-block" data-copy-block>
+        <div class="code-block-label">install<button class="copy-btn" type="button" data-command="install" aria-label="Copy install commands">Copy</button></div>
         <pre><span class="cp">$</span> git clone https://github.com/TheoV823/mneme
 <span class="cp">$</span> cd mneme
 <span class="cp">$</span> pip install -e .</pre>
@@ -1069,6 +1086,47 @@ response = LLMAdapter().complete(
 
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<script>
+(function () {
+  window.dataLayer = window.dataLayer || [];
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var block = btn.closest('[data-copy-block]');
+      if (!block) return;
+      var pre = block.querySelector('pre');
+      if (!pre) return;
+      var text = pre.innerText.replace(/^\s*\$\s?/gm, '').trim();
+      var done = function () {
+        btn.classList.add('copied');
+        var original = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          btn.textContent = original;
+        }, 1800);
+        window.dataLayer.push({
+          event: 'install_command_copied',
+          command: btn.dataset.command || 'unknown'
+        });
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    });
+  });
+})();
+</script>
 <!-- End Google Tag Manager (noscript) -->
 <script>
 (function(){

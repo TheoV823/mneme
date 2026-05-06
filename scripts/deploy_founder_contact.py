@@ -1,9 +1,21 @@
+import os
+from pathlib import Path
+
+# Load .env
+_env = Path(__file__).parent.parent / '.env'
+if _env.exists():
+    for _line in _env.read_text().splitlines():
+        _line = _line.strip()
+        if _line and not _line.startswith('#') and '=' in _line:
+            k, _, v = _line.partition('=')
+            os.environ.setdefault(k.strip(), v.strip())
+
 import urllib.request, urllib.parse, ssl, json, os
 
 HOST = '152.89.79.37'
 PORT = '2083'
 USER = 'cadafdd1'
-TOKEN = 'IQO8R2A9VRL2SMUUVSOP6KE3YO0F4V2D'
+TOKEN = os.environ.get('CPANEL_API_TOKEN', '')
 AUTH = f'cpanel {USER}:{TOKEN}'
 
 ctx = ssl.create_default_context()
