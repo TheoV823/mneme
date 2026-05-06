@@ -606,6 +606,10 @@ This is the first public module of **Mneme HQ**. It is a narrow, intentional wed
 
 Mneme HQ is the architectural governance layer for AI-assisted development. This repo is where it starts.
 
+## Infrastructure
+
+See [docs/ops/mneme-hq-gcp.md](docs/ops/mneme-hq-gcp.md) for GCP project setup, BigQuery datasets, environment variable conventions, and data export links.
+
 ## License
 
 MIT
