@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Governing Claude Code Workflows — Mneme HQ</title>
-  <meta name="description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. No config required." />
+  <meta name="description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. Zero setup." />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0c0c0d" />
   <link rel="canonical" href="https://mnemehq.com/integrations/claude-code/" />
@@ -12,12 +12,12 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Mneme HQ" />
   <meta property="og:title" content="Governing Claude Code Workflows" />
-  <meta property="og:description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. No config required." />
+  <meta property="og:description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. Zero setup." />
   <meta property="og:url" content="https://mnemehq.com/integrations/claude-code/" />
   <meta property="og:image" content="https://mnemehq.com/integrations/claude-code/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Governing Claude Code Workflows" />
-  <meta name="twitter:description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. No config required." />
+  <meta name="twitter:description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. Zero setup." />
   <meta name="twitter:image" content="https://mnemehq.com/integrations/claude-code/og.png" />
   <meta name="author" content="Theo Valmis" />
   <meta property="article:published_time" content="2026-05-07T00:00:00Z" />
@@ -198,6 +198,14 @@
     <p>Every Edit, Write, or MultiEdit Claude Code attempts is intercepted by <code style="font-family:'DM Mono',monospace;font-size:0.82em;color:var(--teal)">mneme-hook</code> before it writes to disk. The hook reconstructs the full post-edit file content, checks it against your recorded decisions, and returns a verdict.</p>
 
     <p>The exit code semantics are deterministic: <strong>exit 0 allows the edit</strong>; <strong>exit 2 blocks it</strong> and surfaces the violated decision id as feedback to Claude Code. Claude Code sees the block as an error message, reads the decision id and rule, and adjusts its approach without you having to intervene.</p>
+
+    <pre><code>on Edit / Write / MultiEdit:
+  content = reconstruct_full_file(tool_input)
+  result  = mneme check --file &lt;path&gt; &lt;content&gt;
+  if result.violation:
+    exit 2   # block — surfaces decision_id to Claude Code
+  else:
+    exit 0   # allow</code></pre>
 
     <div class="callout">
       <p><strong>Fail-open by design.</strong> The hook never blocks on Mneme malfunction. If <code style="font-family:'DM Mono',monospace;font-size:0.82em;">mneme</code> is not found, the file can't be read, or <code style="font-family:'DM Mono',monospace;font-size:0.82em;">mneme check</code> times out (10 s limit), the hook exits 0 and allows the edit.</p>
