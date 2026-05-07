@@ -113,7 +113,7 @@ class BenchmarkRunner:
         if baseline_count == 0:
             verdict = ScenarioVerdict.WEAK
             explanation = (
-                "Baseline response had no violations — scenario fixtures may be too weak. "
+                "Baseline response had no violations - scenario fixtures may be too weak. "
                 "Strengthen without_mneme.txt to include more explicit failure terms."
             )
         elif enhanced_count > 0:
