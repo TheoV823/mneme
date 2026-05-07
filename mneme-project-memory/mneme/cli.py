@@ -134,7 +134,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
     if result.violations:
         for v in result.violations:
             kind = "anti_pattern" if v.severity == Severity.FAIL else "constraint"
-            print(f"{v.severity.value:4}  [{v.decision_id}] {kind} \"{v.rule}\" — trigger: {v.trigger}")
+            print(f"{v.severity.value:4}  [{v.decision_id}] {kind} \"{v.rule}\" -- trigger: {v.trigger}")
             print(f"      {v.decision_text}")
         print()
 
@@ -241,7 +241,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p_check.add_argument("--top", type=int, default=DEFAULT_MAX_DECISIONS)
     p_check.add_argument(
         "--mode", choices=["warn", "strict"], default="strict",
-        help="warn: all verdicts exit 0; strict (default): WARN→1, FAIL→2",
+        help="warn: all verdicts exit 0; strict (default): WARN->1, FAIL->2",
     )
     p_check.set_defaults(func=_cmd_check)
 

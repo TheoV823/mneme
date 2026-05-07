@@ -2,7 +2,7 @@
 benchmark_report.py — Format BenchmarkRunner results for terminal, Markdown, and JSON.
 
 Three formatters:
-  format_terminal(results) -> str   Pretty terminal table with emoji verdicts
+  format_terminal(results) -> str   Plain-text terminal table (ASCII-only, Windows-safe)
   format_markdown(results) -> str   GitHub-flavoured Markdown table + summary
   format_json(results)     -> str   JSON with summary + per-scenario detail
 """
@@ -14,13 +14,6 @@ from dataclasses import dataclass
 
 from mneme.benchmark import ScenarioResult, ScenarioVerdict
 
-
-_VERDICT_EMOJI = {
-    ScenarioVerdict.PASS: "✅",
-    ScenarioVerdict.FAIL: "❌",
-    ScenarioVerdict.WEAK: "⚠️",
-    ScenarioVerdict.WEAK_RETRIEVAL: "⚠️",
-}
 
 _WIDTH = 72
 
@@ -81,8 +74,7 @@ def format_terminal(results: list[ScenarioResult]) -> str:
     lines.append("")
 
     for r in results:
-        emoji = _VERDICT_EMOJI.get(r.verdict, "?")
-        lines.append(f"  {emoji} {r.verdict.value:<5}  {r.name}")
+        lines.append(f"  {r.verdict.value:<5}  {r.name}")
         lines.append(f"         {r.explanation}")
         if r.baseline_triggers:
             lines.append(
@@ -122,10 +114,9 @@ def format_markdown(results: list[ScenarioResult]) -> str:
     lines.append("|---|---|---|---|---|")
 
     for r in results:
-        emoji = _VERDICT_EMOJI.get(r.verdict, "?")
-        triggers = ", ".join(r.baseline_triggers[:3]) or "—"
+        triggers = ", ".join(r.baseline_triggers[:3]) or "--"
         lines.append(
-            f"| {r.name} | {emoji} {r.verdict.value} "
+            f"| {r.name} | {r.verdict.value} "
             f"| {r.baseline_violation_count} "
             f"| {r.enhanced_violation_count} "
             f"| {triggers} |"
