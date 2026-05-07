@@ -5,6 +5,14 @@ RewriteEngine On
 RewriteCond %{HTTP:CF-Visitor} '"scheme":"http"'
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Brotli compression (falls back to gzip if unavailable)
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript application/javascript text/xml application/xml image/svg+xml
+</IfModule>
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript text/xml application/xml image/svg+xml
+</IfModule>
+
 # Cache-Control headers — tell Cloudflare and browsers how long to cache
 <IfModule mod_expires.c>
     ExpiresActive On
