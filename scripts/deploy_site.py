@@ -120,22 +120,69 @@ def upload(local_path, remote_subdir):
     ok = result.get('status') == 1 and result.get('data', {}).get('failed', 1) == 0
     return 'OK' if ok else f'FAIL: {result.get("errors", result)}'
 
-# ── Deploy: walk site/ — every file auto-included, zero manual maintenance ───
-print(f"\n-- Deploying {BASE_LOCAL} -> {BASE_REMOTE} --")
+# ── Deploy: delta upload — only files changed since last deploy ───────────────
+DEPLOY_TAG = 'site-deployed'
 
-# Collect dirs (sorted so parents are created before children) and files
+def get_last_deployed_sha():
+    try:
+        return _git(['rev-parse', DEPLOY_TAG], SCRIPT_DIR)
+    except subprocess.CalledProcessError:
+        return None
+
+def get_changed_site_files(since_sha):
+    out = _git(['diff', '--name-only', '--diff-filter=ACM', f'{since_sha}..HEAD', '--', 'site/'], SCRIPT_DIR)
+    return [l for l in out.splitlines() if l]
+
+def tag_deployed():
+    try:
+        _git(['tag', '-f', DEPLOY_TAG], SCRIPT_DIR)
+        _git(['push', 'origin', '-f', f'refs/tags/{DEPLOY_TAG}'], SCRIPT_DIR)
+        print(f'[OK] Tagged {DEPLOY_TAG} at HEAD')
+    except subprocess.CalledProcessError as e:
+        print(f'[WARN] Could not push {DEPLOY_TAG} tag: {e}')
+
+last_sha = get_last_deployed_sha()
+if last_sha:
+    changed = get_changed_site_files(last_sha)
+    if not changed:
+        print(f'\n[OK] No site/ changes since last deploy ({last_sha[:8]}) - nothing to upload')
+        purge_cf_cache()
+        raise SystemExit(0)
+    print(f"\n-- Delta deploy: {len(changed)} changed file(s) since {last_sha[:8]} -> {BASE_REMOTE} --")
+    full_deploy = False
+else:
+    changed = None
+    print(f"\n-- Full deploy (no {DEPLOY_TAG} tag found): {BASE_LOCAL} -> {BASE_REMOTE} --")
+    full_deploy = True
+
+# Collect dirs and files to upload
 remote_dirs = set()
 files_to_upload = []
-for dirpath, dirnames, filenames in os.walk(BASE_LOCAL):
-    dirnames.sort()
-    rel_dir = os.path.relpath(dirpath, BASE_LOCAL).replace(os.sep, '/')
-    if rel_dir != '.':
-        remote_dirs.add(rel_dir)
-    for filename in sorted(filenames):
-        local_path   = os.path.join(dirpath, filename)
-        remote_subdir = '' if rel_dir == '.' else rel_dir
-        label         = (rel_dir + '/' + filename) if rel_dir != '.' else filename
-        files_to_upload.append((local_path, remote_subdir, label))
+
+if full_deploy:
+    for dirpath, dirnames, filenames in os.walk(BASE_LOCAL):
+        dirnames.sort()
+        rel_dir = os.path.relpath(dirpath, BASE_LOCAL).replace(os.sep, '/')
+        if rel_dir != '.':
+            remote_dirs.add(rel_dir)
+        for filename in sorted(filenames):
+            local_path    = os.path.join(dirpath, filename)
+            remote_subdir = '' if rel_dir == '.' else rel_dir
+            label         = (rel_dir + '/' + filename) if rel_dir != '.' else filename
+            files_to_upload.append((local_path, remote_subdir, label))
+else:
+    for git_path in changed:
+        # git_path is relative to repo root, e.g. "site/benchmark/index.html"
+        rel = git_path[len('site/'):] if git_path.startswith('site/') else git_path
+        local_path = os.path.join(BASE_LOCAL, rel.replace('/', os.sep))
+        if not os.path.exists(local_path):
+            print(f'SKIP (deleted)  {rel}')
+            continue
+        rel_dir = os.path.dirname(rel).replace(os.sep, '/')
+        if rel_dir:
+            remote_dirs.add(rel_dir)
+        remote_subdir = rel_dir
+        files_to_upload.append((local_path, remote_subdir, rel))
 
 for d in sorted(remote_dirs):
     mkdir(BASE_REMOTE + '/' + d)
@@ -154,6 +201,7 @@ if failures:
     raise SystemExit(1)
 
 print(f"\n[OK] {len(files_to_upload)} files uploaded")
+tag_deployed()
 
 # ── Post-deploy verification: every sitemap URL must return 200 ───────────────
 print("\n-- Post-deploy verification --")
