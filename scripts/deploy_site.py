@@ -1,4 +1,4 @@
-import urllib.request, urllib.parse, urllib.error, ssl, json, os, subprocess, xml.etree.ElementTree as ET
+import urllib.request, urllib.parse, urllib.error, ssl, json, os, subprocess, sys, xml.etree.ElementTree as ET
 from pathlib import Path
 
 # Load .env if present (never committed — credentials stay local)
@@ -119,6 +119,19 @@ def upload(local_path, remote_subdir):
         result = json.loads(r.read())
     ok = result.get('status') == 1 and result.get('data', {}).get('failed', 1) == 0
     return 'OK' if ok else f'FAIL: {result.get("errors", result)}'
+
+# Sync shared nav/footer snippets before upload
+result = subprocess.run(
+    [sys.executable, str(Path(__file__).parent / "sync_shared.py")],
+    capture_output=True, text=True
+)
+if result.returncode != 0:
+    print("[FAIL] sync_shared.py failed:")
+    print(result.stderr)
+    sys.exit(1)
+sync_lines = [l for l in result.stdout.splitlines() if l.strip() and not l.startswith("Skipped")]
+if sync_lines:
+    print(f"[sync] {sync_lines[0]}")
 
 # ── Deploy: walk site/ — every file auto-included, zero manual maintenance ───
 print(f"\n-- Deploying {BASE_LOCAL} -> {BASE_REMOTE} --")
