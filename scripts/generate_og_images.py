@@ -37,6 +37,7 @@ TEMPLATE_MAP = {
     "og-insights-code-review.html": "insights/ai-code-review/og.png",
     "og-insights-rag.html": "insights/rag-is-not-memory/og.png",
     "og-insights-cursor.html": "insights/cursor-rules-for-teams/og.png",
+    "og-insights-nonlinear-review.html": "insights/ai-code-review-does-not-scale-linearly/og.png",
     "og-for-cto.html": "for-cto/og.png",
     "og-for-platform.html": "for-platform/og.png",
     "og-for-principal.html": "for-principal/og.png",

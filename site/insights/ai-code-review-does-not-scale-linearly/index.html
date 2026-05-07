@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Code Review Does Not Scale Linearly — Mneme HQ</title>
+  <meta name="description" content="AI code generation scales nearly infinitely. Reviewer attention does not. The governance bottleneck this creates requires architectural enforcement at generation time, not more reviewers." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="AI Code Review Does Not Scale Linearly" />
+  <meta property="og:description" content="AI code generation scales nearly infinitely. Reviewer attention does not. The governance bottleneck this creates requires architectural enforcement at generation time, not more reviewers." />
+  <meta property="og:url" content="https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/" />
+  <meta property="og:image" content="https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI Code Review Does Not Scale Linearly" />
+  <meta name="twitter:description" content="AI code generation scales nearly infinitely. Reviewer attention does not. The governance bottleneck this creates requires architectural enforcement at generation time, not more reviewers." />
+  <meta name="twitter:image" content="https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/og.png" />
+  <meta name="author" content="Theo Valmis" />
+  <meta property="article:published_time" content="2026-05-07T00:00:00Z" />
+  <meta property="article:author" content="https://mnemehq.com/founder/" />
+  <meta property="article:section" content="Engineering" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0d; --surface: #141416; --surface2: #1a1a1d;
+      --border: #222226; --border2: #2e2e34;
+      --text: #e8e8ec; --muted: #88889a;
+      --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 5rem 2rem 7rem; }
+    .article-header { margin-bottom: 3.5rem; }
+    .article-eyebrow { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .eyebrow-tag { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-family: 'DM Mono', monospace; }
+    .eyebrow-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border2); }
+    .eyebrow-meta { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .article-header h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    .article-lede { font-size: 1.1rem; color: var(--muted); line-height: 1.75; border-left: 2px solid var(--accent); padding-left: 1.25rem; }
+
+    .article-body { font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+    .article-body h2 { font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; margin: 3rem 0 1rem; color: var(--text); }
+    .article-body h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--text); }
+    .article-body p { margin-bottom: 1.25rem; color: var(--muted); }
+    .article-body p strong { color: var(--text); font-weight: 500; }
+    .article-body ul, .article-body ol { margin: 0 0 1.25rem 1.5rem; color: var(--muted); }
+    .article-body li { margin-bottom: 0.5rem; }
+    .article-body li strong { color: var(--text); font-weight: 500; }
+
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .callout p strong { color: var(--accent); }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2.5rem 0; }
+    @media (max-width: 580px) { .stat-row { grid-template-columns: 1fr; } }
+    .stat-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.25rem; }
+    .stat-num { font-family: 'Instrument Serif', serif; font-size: 2rem; color: var(--accent); line-height: 1.1; margin-bottom: 0.35rem; }
+    .stat-label { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+    .scenario-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+    .scenario-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 1rem; }
+    .scenario-row { display: flex; gap: 1rem; justify-content: space-between; font-size: 0.85rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .scenario-row:last-child { border-bottom: none; }
+    .scenario-row .label { color: var(--muted); }
+    .scenario-row .before { color: var(--text); opacity: 0.45; text-align: right; }
+    .scenario-row .after { color: var(--teal); text-align: right; }
+    .scenario-headers { display: flex; gap: 1rem; justify-content: space-between; font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+
+    .article-footer { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .back-link { color: var(--muted); font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .back-link:hover { color: var(--text); }
+    .cta-block { margin-top: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2rem; }
+    .cta-block h3 { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .cta-block p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .btn-primary { display: inline-block; background: var(--accent); color: #0c0c0d; padding: 0.65rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; font-family: 'DM Mono', monospace; text-decoration: none; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent-dim); }
+
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    .breadcrumb-nav { max-width: 720px; margin: 0 auto; padding: 1.25rem 2rem 0; }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; list-style: none; font-size: 0.75rem; flex-wrap: wrap; }
+    .breadcrumb li + li::before { content: '/'; color: var(--border2); margin-right: 0.5rem; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb [aria-current="page"] { color: var(--text); }
+
+    .nav-hamburger { display: none; background: none; border: 1px solid var(--border2); color: var(--text); width: 36px; height: 36px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; }
+
+    .layer-stack { display: flex; flex-direction: column; gap: 0.75rem; margin: 2rem 0; }
+    .layer-item { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; }
+    .layer-num { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(200,240,96,0.08); width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .layer-text { font-size: 0.85rem; color: var(--muted); }
+    .layer-text strong { color: var(--text); font-weight: 500; }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; position: relative; }
+      .article-wrap { padding: 3rem 1.25rem 5rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(12,12,13,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.5rem 1.25rem 1.25rem; z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-links a:not(.btn-nav-cta) { display: block; color: var(--text); font-size: 0.88rem; padding: 0.7rem 0; border-bottom: 1px solid var(--border); }
+      .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/"},
+          {"@type": "ListItem", "position": 2, "name": "Insights", "item": "https://mnemehq.com/insights/"},
+          {"@type": "ListItem", "position": 3, "name": "AI Code Review Does Not Scale Linearly", "item": "https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/"}
+        ]
+      },
+      {
+        "@type": "Article",
+        "headline": "AI Code Review Does Not Scale Linearly",
+        "description": "AI code generation scales nearly infinitely. Reviewer attention does not. The governance bottleneck this creates requires architectural enforcement at generation time, not more reviewers.",
+        "url": "https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/",
+        "datePublished": "2026-05-07",
+        "dateModified": "2026-05-07",
+        "author": {"@type": "Person", "name": "Theo Valmis", "url": "https://mnemehq.com/founder/"},
+        "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/", "logo": {"@type": "ImageObject", "url": "https://mnemehq.com/logo-v2.png"}},
+        "image": "https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/og.png",
+        "mainEntityOfPage": "https://mnemehq.com/insights/ai-code-review-does-not-scale-linearly/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg></button>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/" class="active">Insights</a>
+    <a href="/roadmap/">Roadmap</a>
+    <a href="/demo.html">Demo</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+<nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/insights/">Insights</a></li>
+    <li aria-current="page">AI Code Review Does Not Scale Linearly</li>
+  </ol>
+</nav>
+<article class="article-wrap">
+  <header class="article-header">
+    <div class="article-eyebrow">
+      <span class="eyebrow-tag">Thought Leadership</span>
+      <span class="eyebrow-dot"></span>
+      <span class="eyebrow-meta">8 min read &nbsp;&middot;&nbsp; May 2026</span>
+    </div>
+    <h1>AI Code Review Does Not Scale Linearly</h1>
+    <p class="article-lede">AI code generation scales nearly infinitely. Reviewer attention does not. The result is a new class of engineering bottleneck — and it requires a fundamentally different response than hiring more senior engineers.</p>
+  </header>
+
+  <div class="article-body">
+
+    <h2>AI massively increases code generation throughput</h2>
+
+    <p>The throughput gains from AI coding assistants are not incremental. They are structural. A single engineer using Claude Code, Cursor, or Copilot can produce multi-file changesets in minutes that would take half a day to write manually. Devin and similar autonomous agents push this further — generating entire feature implementations from a task description while the engineer works on something else.</p>
+
+    <p>This is not a speculative future. Teams running AI-assisted development at scale today routinely report 5–50x increases in raw code output for well-scoped tasks. The variance depends on task complexity, but the direction is uniform: code generation is no longer the bottleneck.</p>
+
+    <div class="stat-row">
+      <div class="stat-block">
+        <div class="stat-num">5–50×</div>
+        <div class="stat-label">Code output increase on well-scoped tasks with AI coding assistants</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">Minutes</div>
+        <div class="stat-label">Time for an AI agent to produce a multi-file changeset that takes a human half a day</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">Fixed</div>
+        <div class="stat-label">Reviewer capacity — bounded by human headcount and attention, not tooling</div>
+      </div>
+    </div>
+
+    <h2>PR workflows were designed for human coding velocity</h2>
+
+    <p>Pull request review is a process designed around an implicit assumption: code arrives at roughly the pace a human can write it. One developer opens a PR. One or two reviewers read it. They leave comments. The author addresses them. The cycle takes hours to days, and the volume is manageable because human writing speed is the rate-limiting factor.</p>
+
+    <p>This assumption held for decades. Review processes, team structures, and engineering manager expectations were all calibrated to human throughput. A team of ten engineers might produce 15–30 meaningful PRs per week. Two or three senior reviewers could cover that load.</p>
+
+    <p>AI breaks this calibration entirely. The same team of ten engineers, each using an AI coding assistant, can produce 60–120 PRs per week. The code still needs review. The reviewers haven't multiplied.</p>
+
+    <h2>Review quality degrades as AI output scales</h2>
+
+    <p>Volume alone would be a problem. But the degradation is worse than linear, because AI-generated code is harder to review than human-written code in specific, compounding ways.</p>
+
+    <h3>Plausible but wrong</h3>
+
+    <p>AI-generated code is syntactically correct, compiles, and passes tests. It looks reasonable at a glance. But it lacks the institutional context that a human developer carries — the postmortem from last quarter, the verbal agreement about service boundaries, the naming convention that emerged from a Slack thread. The violations it introduces are subtle: a service reaching across a boundary via a shared utility, a new database table in a schema that was supposed to be read-only from that service, a dependency that was deprecated but not yet removed from the package registry.</p>
+
+    <p>These violations don't trigger linters or type checkers. They require a reviewer who understands the <em>intent</em> behind the architecture, not just the syntax. That reviewer's attention is exactly the resource that doesn't scale.</p>
+
+    <h3>Reviewer fatigue accelerates</h3>
+
+    <p>Cognitive load research is clear on this: review quality degrades sharply after the first 200–400 lines of code in a single session. When PR volume doubles or triples, reviewers either spend more hours reviewing (unsustainable) or review each PR less thoroughly (dangerous). In practice, most teams drift toward the second option without an explicit decision to do so.</p>
+
+    <div class="callout">
+      <p><strong>The core problem:</strong> AI increases the numerator (code output) while the denominator (reviewer attention) stays fixed. The ratio doesn't just get worse — it degrades the quality of each individual review as fatigue compounds across the growing queue.</p>
+    </div>
+
+    <h2>Architectural drift becomes probabilistic and cumulative</h2>
+
+    <p>When review quality degrades, violations don't stop at the PR boundary. They merge. And once a violation is in the codebase, it becomes a pattern that the AI assistant will replicate — because it reads the codebase for context, and now the violation <em>is</em> the context.</p>
+
+    <p>This creates a feedback loop:</p>
+
+    <ol>
+      <li>AI generates code that subtly violates an architectural constraint</li>
+      <li>Overwhelmed reviewer approves the PR (or misses the violation in a large diff)</li>
+      <li>The violation merges into the default branch</li>
+      <li>The AI assistant reads the updated codebase and treats the violation as precedent</li>
+      <li>Future generations replicate and extend the violation</li>
+    </ol>
+
+    <p>Drift under these conditions is not a risk to monitor. It is a statistical certainty that compounds with velocity. The faster you ship, the faster you drift — unless something intervenes before the code is written.</p>
+
+    <h2>Manual review cannot be the sole governance layer</h2>
+
+    <p>The intuitive response to this problem is to tighten review: require two approvals, mandate architect sign-off on structural changes, add checklists. Every engineering leader considers this first.</p>
+
+    <p>It doesn't work, for a reason that is structural rather than cultural. Tighter review requirements reduce velocity — which is precisely the benefit that AI-assisted development was supposed to deliver. You end up in a paradox: the faster AI generates code, the more review burden you add, until the review process itself becomes the bottleneck that negates the generation speed advantage.</p>
+
+    <p>Teams that have tried to solve this with AI-assisted review tools report partial improvement. Automated reviewers catch mechanical issues — type errors, unused imports, obvious anti-patterns. They cannot catch architectural violations that depend on decisions specific to your team, your services, and your constraints. That context is not in the training data and cannot be injected effectively at review time.</p>
+
+    <div class="scenario-block">
+      <div class="scenario-title">Where governance catches violations today vs. where it should</div>
+      <div class="scenario-headers">
+        <span>Governance layer</span>
+        <span>Today (reactive)</span>
+        <span>Target (preventive)</span>
+      </div>
+      <div class="scenario-row">
+        <span class="label">Generation time</span>
+        <span class="before">No enforcement</span>
+        <span class="after">Constraint injection before write</span>
+      </div>
+      <div class="scenario-row">
+        <span class="label">PR review</span>
+        <span class="before">Primary governance layer</span>
+        <span class="after">Validation, not first line of defense</span>
+      </div>
+      <div class="scenario-row">
+        <span class="label">CI pipeline</span>
+        <span class="before">Linting and tests only</span>
+        <span class="after">Architectural rule checks</span>
+      </div>
+      <div class="scenario-row">
+        <span class="label">Post-merge</span>
+        <span class="before">Drift discovered during incidents</span>
+        <span class="after">Drift prevented at source</span>
+      </div>
+    </div>
+
+    <h2>Governance must shift left into generation workflows</h2>
+
+    <p>Security engineering faced a structurally identical problem a decade ago. When application development accelerated, security reviews at the end of the pipeline couldn't keep up with the volume of vulnerabilities reaching production. The response — shift-left security — moved checks earlier in the development lifecycle, catching issues before they accumulated.</p>
+
+    <p>Architectural governance is at the same inflection point. The answer is not better review. It is enforcement that operates <em>before</em> the AI agent writes the file — at generation time, not after the PR is opened.</p>
+
+    <p>Pre-generation enforcement means the AI assistant receives the relevant architectural constraints for the specific file and module it's about to modify, and those constraints are injected as structured rules rather than advisory context. A service boundary violation is blocked before the code is written. A deprecated dependency is never introduced. A naming convention is enforced at the moment of generation, not caught in review three days later.</p>
+
+    <p>The economics are straightforward: preventing a violation costs zero reviewer time. Catching one in review costs one or more review cycles. Fixing one after it has merged and been replicated costs a refactor.</p>
+
+    <h2>The future stack: generation-time + PR-time + CI-time governance</h2>
+
+    <p>The mature governance architecture for AI-assisted development is not a single layer. It is three layers operating in sequence, each catching what the previous layer missed:</p>
+
+    <div class="layer-stack">
+      <div class="layer-item">
+        <span class="layer-num">1</span>
+        <span class="layer-text"><strong>Generation-time enforcement</strong> — Architectural constraints injected into the AI agent's context before it writes. Blocks violations at the source. Handles 80–90% of governance.</span>
+      </div>
+      <div class="layer-item">
+        <span class="layer-num">2</span>
+        <span class="layer-text"><strong>PR-time validation</strong> — Automated and human review focused on intent, edge cases, and cross-cutting concerns that generation-time rules can't fully capture. Handles the remaining 10–20%.</span>
+      </div>
+      <div class="layer-item">
+        <span class="layer-num">3</span>
+        <span class="layer-text"><strong>CI-time checks</strong> — Architectural rule validation in the pipeline, catching any violations that passed through the first two layers. The safety net.</span>
+      </div>
+    </div>
+
+    <p>This is the same defense-in-depth pattern that security engineering uses. It works because each layer is optimized for a different class of violation, and the most expensive layer (human review) only handles the subset of issues that truly require human judgment.</p>
+
+    <p>The key insight is that generation-time enforcement transforms review from an exhaustive governance process into a focused validation step. Reviewers stop policing architectural compliance and start evaluating design intent. The work becomes more interesting, less tedious, and dramatically more sustainable at AI-output volumes.</p>
+
+    <h2>Architectural governance is becoming infrastructure</h2>
+
+    <p>Logging was once a developer responsibility. Then it became infrastructure. Testing was once manual. Then it became automated. Security was once end-of-pipeline. Then it shifted left and became embedded in the development process.</p>
+
+    <p>Architectural governance is on the same trajectory. As AI coding assistants become the default way code is written, the constraints that govern that code must be embedded in the generation layer — not held in the heads of senior engineers who review PRs on Friday afternoons.</p>
+
+    <p>This is not a tooling convenience. It is an infrastructure requirement for any team that intends to maintain architectural coherence while shipping at AI-assisted velocity. The teams that treat governance as infrastructure will compound their speed advantage. The teams that rely solely on manual review will compound their architectural debt.</p>
+
+    <p>The math does not leave room for a middle path.</p>
+
+  </div>
+
+  <footer class="article-footer">
+    <a href="/insights/" class="back-link">&larr; Back to Insights</a>
+
+    <div class="cta-block">
+      <h3>Move governance before generation</h3>
+      <p>Mneme HQ enforces architectural decisions at generation time — before the AI agent writes the file, not after the PR is opened. Open source, hook-level integration with Claude Code.</p>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub &rarr;</a>
+    </div>
+  </footer>
+</article>
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/insights/">Insights</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/privacy/">Privacy</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a>
+    &nbsp;&middot;&nbsp;
+    Open source
+    &nbsp;&middot;&nbsp;
+    MIT License
+  </p>
+</footer>
+
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+})();
+</script>
+</body>
+</html>
