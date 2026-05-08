@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deployment Quality Will Define the AI Era — Mneme HQ</title>
+  <meta name="description" content="The first AI era rewarded early adoption. The next rewards operational quality. For engineering teams, that means governing what AI generates — not just shipping faster with it." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Deployment Quality Will Define the AI Era" />
+  <meta property="og:description" content="The first AI era rewarded early adoption. The next rewards operational quality. For engineering teams, that means governing what AI generates — not just shipping faster with it." />
+  <meta property="og:url" content="https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/" />
+  <meta property="og:image" content="https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Deployment Quality Will Define the AI Era" />
+  <meta name="twitter:description" content="The first AI era rewarded early adoption. The next rewards operational quality. For engineering teams, that means governing what AI generates — not just shipping faster with it." />
+  <meta name="twitter:image" content="https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/og.png" />
+  <meta name="author" content="Theo Valmis" />
+  <meta property="article:published_time" content="2026-05-08T00:00:00Z" />
+  <meta property="article:author" content="https://mnemehq.com/founder/" />
+  <meta property="article:section" content="Engineering" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0d; --surface: #141416; --surface2: #1a1a1d;
+      --border: #222226; --border2: #2e2e34;
+      --text: #e8e8ec; --muted: #88889a;
+      --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 5rem 2rem 7rem; }
+    .article-header { margin-bottom: 3.5rem; }
+    .article-eyebrow { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .eyebrow-tag { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-family: 'DM Mono', monospace; }
+    .eyebrow-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border2); }
+    .eyebrow-meta { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .article-header h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    .article-lede { font-size: 1.1rem; color: var(--muted); line-height: 1.75; border-left: 2px solid var(--accent); padding-left: 1.25rem; }
+
+    .article-body { font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+    .article-body h2 { font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; margin: 3rem 0 1rem; color: var(--text); }
+    .article-body h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--text); }
+    .article-body p { margin-bottom: 1.25rem; color: var(--muted); }
+    .article-body p strong { color: var(--text); font-weight: 500; }
+    .article-body ul, .article-body ol { margin: 0 0 1.25rem 1.5rem; color: var(--muted); }
+    .article-body li { margin-bottom: 0.5rem; }
+    .article-body li strong { color: var(--text); font-weight: 500; }
+
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .callout p strong { color: var(--accent); }
+
+    .pullquote { margin: 2.5rem 0; padding: 1.75rem 2rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border2); }
+    .pullquote blockquote { font-family: 'Instrument Serif', serif; font-size: 1.2rem; line-height: 1.6; color: var(--text); font-style: italic; margin-bottom: 0.85rem; }
+    .pullquote cite { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.03em; font-style: normal; }
+    .pullquote cite a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+    .pullquote cite a:hover { color: var(--text); }
+
+    .phase-stack { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; margin: 2.5rem 0; }
+    .phase-row { background: var(--surface); padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; }
+    .phase-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--accent); background: rgba(200,240,96,0.08); border: 1px solid rgba(200,240,96,0.2); border-radius: 6px; padding: 0.2rem 0.55rem; flex-shrink: 0; margin-top: 2px; }
+    .phase-content .phase-title { font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .phase-content .phase-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2.5rem 0; }
+    @media (max-width: 580px) { .stat-row { grid-template-columns: 1fr; } }
+    .stat-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .stat-num { font-family: 'Instrument Serif', serif; font-size: 2rem; color: var(--accent); line-height: 1.1; margin-bottom: 0.35rem; }
+    .stat-label { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+    .article-footer { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .back-link { color: var(--muted); font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .back-link:hover { color: var(--text); }
+    .cta-block { margin-top: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
+    .cta-block h3 { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .cta-block p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .btn-primary { display: inline-block; background: var(--accent); color: #0c0c0d; padding: 0.65rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; font-family: 'DM Mono', monospace; text-decoration: none; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent-dim); }
+
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    .breadcrumb-nav { max-width: 720px; margin: 0 auto; padding: 1.25rem 2rem 0; }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; list-style: none; font-size: 0.75rem; flex-wrap: wrap; }
+    .breadcrumb li + li::before { content: '/'; color: var(--border2); margin-right: 0.5rem; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb [aria-current="page"] { color: var(--text); }
+
+    .nav-hamburger { display: none; background: none; border: 1px solid var(--border2); color: var(--text); width: 36px; height: 36px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; position: relative; }
+      .article-wrap { padding: 3rem 1.25rem 5rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(12,12,13,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.5rem 1.25rem 1.25rem; z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-links a:not(.btn-nav-cta) { display: block; color: var(--text); font-size: 0.88rem; padding: 0.7rem 0; border-bottom: 1px solid var(--border); }
+      .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/"},
+          {"@type": "ListItem", "position": 2, "name": "Insights", "item": "https://mnemehq.com/insights/"},
+          {"@type": "ListItem", "position": 3, "name": "Deployment Quality Will Define the AI Era", "item": "https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/"}
+        ]
+      },
+      {
+        "@type": "Article",
+        "headline": "Deployment Quality Will Define the AI Era",
+        "description": "The first AI era rewarded early adoption. The next rewards operational quality. For engineering teams, that means governing what AI generates — not just shipping faster with it.",
+        "url": "https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/",
+        "datePublished": "2026-05-08",
+        "dateModified": "2026-05-08",
+        "author": {"@type": "Person", "name": "Theo Valmis", "url": "https://mnemehq.com/founder/"},
+        "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/", "logo": {"@type": "ImageObject", "url": "https://mnemehq.com/logo-v2.png"}},
+        "image": "https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/og.png",
+        "mainEntityOfPage": "https://mnemehq.com/insights/deployment-quality-will-define-the-ai-era/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg></button>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/" class="active">Insights</a>
+    <a href="/roadmap/">Roadmap</a>
+    <a href="/demo.html">Demo</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+<nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/insights/">Insights</a></li>
+    <li aria-current="page">Deployment Quality Will Define the AI Era</li>
+  </ol>
+</nav>
+<article class="article-wrap">
+  <header class="article-header">
+    <div class="article-eyebrow">
+      <span class="eyebrow-tag">Thought Leadership</span>
+      <span class="eyebrow-dot"></span>
+      <span class="eyebrow-meta">7 min read &nbsp;&middot;&nbsp; May 2026</span>
+    </div>
+    <h1>Deployment Quality Will Define the AI Era</h1>
+    <p class="article-lede">The first wave of AI advantage went to organizations that adopted early. The next wave goes to those that can operationalize AI with consistency and governance. For engineering teams, those are very different problems.</p>
+  </header>
+
+  <div class="article-body">
+
+    <p>KPMG recently surveyed 200 UK technology, media, and telecom leaders on AI maturity. Ninety percent had moved beyond exploratory adoption. The majority expected double-digit ROI within twelve months. But the headline finding was not about adoption rates or expected returns. It was about what separates the organizations that will actually realize those returns from the ones that won't.</p>
+
+    <div class="pullquote">
+      <blockquote>"The challenge now shifts from adoption to scaling sustainably and ensuring visible value, making competitive differentiation a matter of deployment quality, not just early adoption."</blockquote>
+      <cite>Nat Gross, Partner and EMA Head, KPMG Media Practice &mdash; <a href="https://kpmg.com/uk/en/insights/transformation/turning-ai-leadership-into-cx-impact.html" target="_blank" rel="noopener">Turning AI Leadership into CX Impact</a>, KPMG UK, 2026</cite>
+    </div>
+
+    <p>Deployment quality. Not speed of adoption. Not model selection. Not prompt sophistication. The differentiator in the next phase is whether organizations can execute AI-assisted work at scale without quality degrading as output volume grows.</p>
+
+    <p>That framing matters beyond CX strategy. It is precisely the problem facing AI-assisted engineering teams right now.</p>
+
+    <h2>Phase 1: Adoption advantage</h2>
+
+    <p>The first AI era in software engineering was straightforward. Organizations that adopted AI coding assistants early — Copilot, Cursor, Claude Code — got a speed advantage over those that didn't. The advantage was real and measurable: faster feature delivery, faster prototyping, smaller teams shipping more.</p>
+
+    <p>That advantage is eroding. Adoption is now table stakes. The 2026 engineering team that hasn't deployed AI coding tooling is rare enough to be notable. The question has shifted from <em>whether</em> to use AI in engineering workflows to <em>how well</em>.</p>
+
+    <div class="stat-row">
+      <div class="stat-block">
+        <div class="stat-num">90%</div>
+        <div class="stat-label">of UK TMT organizations have moved beyond exploratory AI adoption phases (KPMG, 2026)</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">10–50×</div>
+        <div class="stat-label">Typical code output increase for AI-assisted engineers on contained tasks</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">Linear</div>
+        <div class="stat-label">How review and governance capacity scales — bounded by human headcount, not AI throughput</div>
+      </div>
+    </div>
+
+    <h2>Phase 2: Operationalization</h2>
+
+    <p>The organizations pulling ahead now are not the ones with the best models or the most aggressive adoption mandates. They are the ones that have operationalized AI: built repeatable processes, governance layers, and quality feedback loops that keep AI-generated output aligned with engineering standards as volume scales.</p>
+
+    <p>This is harder than it sounds, specifically because of a structural mismatch that AI-assisted development introduces.</p>
+
+    <p>AI coding assistants dramatically increase code throughput. A single engineer using Claude Code or Cursor can produce in an hour what previously took half a day. Autonomous agents push this further. But the downstream processes that govern code quality — review, architectural validation, compliance checking — were designed for human writing speed. They do not scale at the same rate as AI output.</p>
+
+    <p>The result is a widening gap between what AI-assisted teams can generate and what their governance processes can reliably oversee. Teams that have not operationalized AI governance are generating code faster than they can validate it. Architectural drift compounds. Technical debt accumulates at AI velocity.</p>
+
+    <div class="callout">
+      <p><strong>The operationalization gap:</strong> AI increases the volume of code entering your codebase. Governance processes that were designed for human coding velocity cannot keep pace. Quality degrades not from negligence but from structural mismatch between output speed and oversight capacity.</p>
+    </div>
+
+    <h2>Phase 3: Governance at scale</h2>
+
+    <p>The organizations that will define the next phase are not just operationalizing AI. They are building governance infrastructure that scales with AI output — systems that enforce engineering decisions, architectural constraints, and quality standards at the moment code is generated rather than after it has been reviewed, merged, and replicated.</p>
+
+    <p>This is the shift from reactive to preventive governance. It mirrors a transition that security engineering made a decade ago, when the volume of software development outpaced the capacity of end-of-pipeline security testing. The response was shift-left security: move vulnerability checks earlier in the development process, closer to the point of code creation. Architectural governance is undergoing the same transition.</p>
+
+    <div class="phase-stack">
+      <div class="phase-row">
+        <span class="phase-num">01</span>
+        <div class="phase-content">
+          <div class="phase-title">Adoption advantage</div>
+          <div class="phase-desc">Who deployed AI coding tools first. Speed advantage from raw throughput increase. Table stakes by 2026.</div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <span class="phase-num">02</span>
+        <div class="phase-content">
+          <div class="phase-title">Operationalization</div>
+          <div class="phase-desc">Who can maintain quality as AI output scales. Requires governance processes that don't degrade under AI-velocity code generation. Current battleground.</div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <span class="phase-num">03</span>
+        <div class="phase-content">
+          <div class="phase-title">Governance infrastructure</div>
+          <div class="phase-desc">Who builds systems that enforce architectural decisions at generation time. Preventive rather than reactive. The emerging differentiator.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>What deployment quality means for engineering</h2>
+
+    <p>In the KPMG framing, deployment quality is about converting AI adoption into visible, sustainable value. In engineering specifically, that means something concrete: the code AI generates must consistently reflect your team's architectural decisions, naming conventions, service boundaries, and compliance requirements — not just at the moment of generation, but as the codebase evolves and the AI assistant encounters new context.</p>
+
+    <p>This is not a problem that better prompting solves. A system prompt containing your architecture documentation is advisory, not enforceable. An AI agent that starts a new session has no memory of the architectural decisions made in previous sessions unless they are explicitly injected as structured constraints. The more code the agent generates, the more opportunities for drift from decisions that exist only in documents the model may or may not have seen.</p>
+
+    <p>Deployment quality in AI-assisted engineering requires three things:</p>
+
+    <ul>
+      <li><strong>Structured decision capture</strong> — architectural decisions encoded in machine-readable form with explicit scope, status, and constraints, not free-form documentation.</li>
+      <li><strong>Generation-time enforcement</strong> — constraints injected into the agent's context before it writes, not reviewed after the PR opens.</li>
+      <li><strong>Continuity across the repository lifecycle</strong> — governance state that persists across sessions, branches, and team members, so decisions made six months ago are enforced as reliably as decisions made today.</li>
+    </ul>
+
+    <p>Organizations that build this infrastructure are not just maintaining quality at AI velocity. They are compounding it: each architectural decision captured and enforced reduces the cognitive load on reviewers, reduces the accumulation of drift, and reduces the cost of maintaining coherence as the codebase grows.</p>
+
+    <h2>The window is narrowing</h2>
+
+    <p>KPMG's finding that 90% of TMT organizations have moved beyond exploratory AI adoption is a signal that competitive differentiation has already shifted. The adoption race is largely over. The operationalization race is underway.</p>
+
+    <p>For engineering leaders, the implication is direct. The question is no longer whether your team uses AI coding tools. It is whether the governance infrastructure around those tools is ready to maintain architectural quality at the velocity AI enables. Teams that answer that question now, before drift compounds and technical debt accumulates, will carry a structural advantage into the next phase. Teams that defer it will spend the next two years correcting what their AI assistants generated without constraint.</p>
+
+    <p>Deployment quality will define the AI era. In engineering, deployment quality starts with what the AI is governed to generate.</p>
+
+  </div>
+
+  <footer class="article-footer">
+    <a href="/insights/" class="back-link">&larr; Back to Insights</a>
+
+    <div class="cta-block">
+      <h3>Build governance infrastructure for AI-assisted engineering</h3>
+      <p>Mneme HQ enforces architectural decisions at generation time — before the AI agent writes the file. Open source, hook-level integration with Claude Code.</p>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub &rarr;</a>
+    </div>
+  </footer>
+</article>
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/insights/">Insights</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/privacy/">Privacy</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a>
+    &nbsp;&middot;&nbsp;
+    Open source
+    &nbsp;&middot;&nbsp;
+    MIT License
+  </p>
+</footer>
+
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+})();
+</script>
+</body>
+</html>
