@@ -146,6 +146,9 @@
     .case-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; flex: 1; }
     .case-card a.read-link { color: var(--accent); font-size: 0.82rem; text-decoration: none; margin-top: 0.5rem; }
     .case-card a.read-link:hover { color: var(--accent-dim); }
+    .case-card-upcoming { border-style: dashed; opacity: 0.85; }
+    .case-card-upcoming .case-card-eyebrow { color: var(--teal); }
+    .case-card .read-link.upcoming { color: var(--teal); font-size: 0.82rem; margin-top: 0.5rem; cursor: default; }
 
     .hub-intro { font-size: 0.88rem; color: var(--muted); line-height: 1.8; max-width: 660px; margin: 0 auto; padding-bottom: 0; }
     footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
@@ -396,6 +399,13 @@
         <h3>Multi-Agent Workflow Governance</h3>
         <p>Give every agent in your pipeline — planner, coder, reviewer — a shared memory of architectural decisions. One decision store enforced at every stage.</p>
         <a href="/use-cases/multi-agent-workflow-governance/" class="read-link">Read →</a>
+      </div>
+
+      <div class="case-card case-card-upcoming">
+        <div class="case-card-eyebrow">Coming up</div>
+        <h3>ADR Enforcement</h3>
+        <p>Deterministic ADR enforcement for AI coding agents — turning architectural decision records into pre-generation constraints with CI gates and drift telemetry. Dedicated reference architecture in progress.</p>
+        <span class="read-link upcoming">In progress →</span>
       </div>
 
     </div>
