@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Prompt Memory Fails at Scale — Mneme HQ</title>
+  <meta name="description" content="Teams paste their architectural rules into CLAUDE.md and call it governance. At small scale it half-works. At large scale it collapses. Here is why context injection is not governance memory." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Why Prompt Memory Fails at Scale" />
+  <meta property="og:description" content="Teams paste their architectural rules into CLAUDE.md and call it governance. At small scale it half-works. At large scale it collapses. Here is why context injection is not governance memory." />
+  <meta property="og:url" content="https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/" />
+  <meta property="og:image" content="https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Why Prompt Memory Fails at Scale" />
+  <meta name="twitter:description" content="Teams paste their architectural rules into CLAUDE.md and call it governance. At small scale it half-works. At large scale it collapses. Here is why context injection is not governance memory." />
+  <meta name="twitter:image" content="https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/og.png" />
+  <meta name="author" content="Theo Valmis" />
+  <meta property="article:published_time" content="2026-05-08T00:00:00Z" />
+  <meta property="article:author" content="https://mnemehq.com/founder/" />
+  <meta property="article:section" content="Engineering" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0d; --surface: #141416; --surface2: #1a1a1d;
+      --border: #222226; --border2: #2e2e34;
+      --text: #e8e8ec; --muted: #88889a;
+      --accent: #c8f060; --accent-dim: #a8d040; --teal: #8be0c8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(12,12,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 5rem 2rem 7rem; }
+    .article-header { margin-bottom: 3.5rem; }
+    .article-eyebrow { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .eyebrow-tag { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-family: 'DM Mono', monospace; }
+    .eyebrow-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border2); }
+    .eyebrow-meta { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .article-header h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    .article-lede { font-size: 1.1rem; color: var(--muted); line-height: 1.75; border-left: 2px solid var(--accent); padding-left: 1.25rem; }
+
+    .article-body { font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+    .article-body h2 { font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; margin: 3rem 0 1rem; color: var(--text); }
+    .article-body p { margin-bottom: 1.25rem; color: var(--muted); }
+    .article-body p strong { color: var(--text); font-weight: 500; }
+    .article-body ul { margin: 0 0 1.25rem 1.5rem; color: var(--muted); }
+    .article-body ul li { margin-bottom: 0.5rem; line-height: 1.8; }
+    .article-body ul li strong { color: var(--text); font-weight: 500; }
+
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .callout p strong { color: var(--accent); }
+
+    .failure-stack { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2rem; margin: 2.5rem 0; }
+    .failure-stack .stack-title { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+    .stack-row { display: flex; align-items: flex-start; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+    .stack-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .stack-row:first-of-type { padding-top: 0; }
+    .stack-num { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--border2); flex-shrink: 0; padding-top: 0.1rem; min-width: 1.5rem; }
+    .stack-content { flex: 1; }
+    .stack-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+    .stack-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.7; }
+
+    .contrast-block { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; margin: 2.5rem 0; }
+    .contrast-cell { background: var(--surface); padding: 1.75rem; }
+    .contrast-cell .label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+    .contrast-cell .tool { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    .contrast-cell .desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+    .contrast-cell.accent-left { border-left: 3px solid var(--border2); }
+    .contrast-cell.accent-right { border-left: 3px solid var(--accent); }
+    @media (max-width: 540px) { .contrast-block { grid-template-columns: 1fr; } }
+
+    .article-footer { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .back-link { color: var(--muted); font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .back-link:hover { color: var(--text); }
+    .cta-block { margin-top: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2rem; }
+    .cta-block h3 { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .cta-block p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .btn-primary { display: inline-block; background: var(--accent); color: #0c0c0d; padding: 0.65rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; font-family: 'DM Mono', monospace; text-decoration: none; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent-dim); }
+
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem 2rem; font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    .breadcrumb-nav { max-width: 720px; margin: 0 auto; padding: 1.25rem 2rem 0; }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; list-style: none; font-size: 0.75rem; flex-wrap: wrap; }
+    .breadcrumb li + li::before { content: '/'; color: var(--border2); margin-right: 0.5rem; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb [aria-current="page"] { color: var(--text); }
+
+    .nav-hamburger { display: none; background: none; border: 1px solid var(--border2); color: var(--text); width: 36px; height: 36px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; position: relative; }
+      .article-wrap { padding: 3rem 1.25rem 5rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(12,12,13,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.5rem 1.25rem 1.25rem; z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-links a:not(.btn-nav-cta) { display: block; color: var(--text); font-size: 0.88rem; padding: 0.7rem 0; border-bottom: 1px solid var(--border); }
+      .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/"},
+          {"@type": "ListItem", "position": 2, "name": "Insights", "item": "https://mnemehq.com/insights/"},
+          {"@type": "ListItem", "position": 3, "name": "Why Prompt Memory Fails at Scale", "item": "https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/"}
+        ]
+      },
+      {
+        "@type": "Article",
+        "headline": "Why Prompt Memory Fails at Scale",
+        "description": "Teams paste their architectural rules into CLAUDE.md and call it governance. At small scale it half-works. At large scale it collapses. Here is why context injection is not governance memory.",
+        "url": "https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/",
+        "datePublished": "2026-05-08",
+        "dateModified": "2026-05-08",
+        "author": {"@type": "Person", "name": "Theo Valmis", "url": "https://mnemehq.com/founder/"},
+        "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/", "logo": {"@type": "ImageObject", "url": "https://mnemehq.com/logo-v2.png"}},
+        "image": "https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/og.png",
+        "mainEntityOfPage": "https://mnemehq.com/insights/why-prompt-memory-fails-at-scale/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg></button>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/" class="active">Insights</a>
+    <a href="/roadmap/">Roadmap</a>
+    <a href="/demo.html">Demo</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+<nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/insights/">Insights</a></li>
+    <li aria-current="page">Why Prompt Memory Fails at Scale</li>
+  </ol>
+</nav>
+<article class="article-wrap">
+  <header class="article-header">
+    <div class="article-eyebrow">
+      <span class="eyebrow-tag">Category Education</span>
+      <span class="eyebrow-dot"></span>
+      <span class="eyebrow-meta">7 min read &nbsp;&middot;&nbsp; May 2026</span>
+    </div>
+    <h1>Why Prompt Memory Fails at Scale</h1>
+    <p class="article-lede">Teams paste their architectural rules into CLAUDE.md and call it governance. At small scale it half-works. At large scale it collapses. Context injection is not governance memory, and the difference matters more as your codebase grows.</p>
+  </header>
+
+  <div class="article-body">
+
+    <p>Every engineering team that adopts an AI coding assistant goes through the same evolution. The first sessions produce inconsistent output. Naming conventions get ignored. Service boundaries blur. Approved dependencies get substituted for whatever the model prefers.</p>
+
+    <p>The natural response is to write it all down. A CLAUDE.md file in the repo root. A system prompt injected at session start. A context block prepended to every request. "Use PostgreSQL, not SQLite. Services must not call each other directly. All data access goes through the repository layer." The rules are all there. The AI reads them. The sessions improve.</p>
+
+    <p>For a team of two, on a codebase that is six months old, this works well enough to feel like a solution. It is not.</p>
+
+    <h2>What context injection actually is</h2>
+
+    <p>CLAUDE.md files and system prompt injection are forms of static context. At session start, a block of text is prepended to the model's context window, and the model is asked to respect it for the duration of the session. The rules exist as natural language instructions, and compliance depends on the model interpreting them correctly and consistently.</p>
+
+    <p>This is a useful technique. It is also fundamentally different from governance memory. The distinction matters:</p>
+
+    <div class="contrast-block">
+      <div class="contrast-cell accent-left">
+        <div class="label">Context injection</div>
+        <div class="tool">Static, textual, advisory</div>
+        <div class="desc">Rules exist as natural language in a file. The model reads them at session start. Compliance is probabilistic. Nothing enforces them.</div>
+      </div>
+      <div class="contrast-cell accent-right">
+        <div class="label">Governance memory</div>
+        <div class="tool">Structured, precedence-aware, enforced</div>
+        <div class="desc">Decisions are stored as typed records with metadata, scope, and precedence. They are injected at the moment of generation and enforced at hook level.</div>
+      </div>
+    </div>
+
+    <p>Teams using CLAUDE.md as governance are solving a real problem with the wrong tool. They feel the friction of inconsistency and add more rules. The file grows. The problem does not go away.</p>
+
+    <h2>The four failure modes</h2>
+
+    <p>Context injection breaks down in predictable ways. Each one compounds as the codebase ages and the team grows.</p>
+
+    <div class="failure-stack">
+      <div class="stack-title">Failure progression</div>
+
+      <div class="stack-row">
+        <div class="stack-num">01</div>
+        <div class="stack-content">
+          <div class="stack-label">Context window pressure</div>
+          <div class="stack-desc">Every token of injected rules competes with the actual task. A 3,000-token context block on a complex refactoring session degrades output quality and increases inference cost. Teams discover this when their CLAUDE.md hits 500 lines and sessions start feeling slower and less accurate.</div>
+        </div>
+      </div>
+
+      <div class="stack-row">
+        <div class="stack-num">02</div>
+        <div class="stack-content">
+          <div class="stack-label">Maintenance lag</div>
+          <div class="stack-desc">The codebase evolves. The CLAUDE.md does not. An architectural decision made in January is still in the file in October, but the decision was superseded in March and nobody updated the context file. The model enforces a rule that no longer applies. The team writes the old pattern and wonders why review keeps flagging it.</div>
+        </div>
+      </div>
+
+      <div class="stack-row">
+        <div class="stack-num">03</div>
+        <div class="stack-content">
+          <div class="stack-label">No precedence engine</div>
+          <div class="stack-desc">Rules accumulate and eventually conflict. Rule 14 says all async operations use the task queue. Rule 47 says new notification services can call external APIs directly. Both are in the file. The model must resolve the conflict using natural language interpretation. Sometimes it picks correctly. Sometimes it does not. There is no structured way to express that one rule supersedes another in a specific scope.</div>
+        </div>
+      </div>
+
+      <div class="stack-row">
+        <div class="stack-num">04</div>
+        <div class="stack-content">
+          <div class="stack-label">Enforcement is advisory only</div>
+          <div class="stack-desc">The model can read the rules. It cannot be compelled to follow them. Every instruction in a CLAUDE.md is a suggestion. If the model's strongest signal for a given generation task contradicts the context file, the context file loses. Governance that depends on probabilistic compliance is not governance.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h2>The session boundary problem</h2>
+
+    <p>There is a fifth failure mode that affects every team eventually: context injection does not persist.</p>
+
+    <p>Each new session starts from zero. The CLAUDE.md is re-read, the system prompt is re-injected, and the model re-learns the rules. There is no continuity. The AI assistant has no memory of why a decision was made, what alternatives were considered, or which rule takes precedence when two rules conflict on this specific class of problem.</p>
+
+    <p>This is not a solvable problem within the context injection paradigm. It is a structural limitation. A text file cannot carry the reasoning that an architectural decision record contains. "Use the repository pattern" cannot communicate what a decision record communicates: who made this decision, when, why, what alternatives were rejected, which services it applies to, and when it was last reviewed.</p>
+
+    <div class="callout">
+      <p><strong>The session boundary problem amplifies with team size.</strong> Two engineers sharing a CLAUDE.md can manually coordinate. Ten engineers, three repositories, and eighteen months of accumulated decisions cannot. The file becomes a maintenance problem before it becomes a governance solution.</p>
+    </div>
+
+    <h2>Why large codebases expose the limits faster</h2>
+
+    <p>Context injection can feel adequate on a small codebase because the failure modes are invisible. The team knows the rules well enough to catch violations in review. The file is short enough to maintain. The decisions are recent enough to still be accurate.</p>
+
+    <p>Scale breaks these compensating factors in order:</p>
+
+    <ul>
+      <li><strong>At 3 engineers,</strong> the team can remember the rules that the file does not capture.</li>
+      <li><strong>At 8 engineers,</strong> the institutional knowledge is distributed and unreliable. The file is the only canonical source, and it is already stale.</li>
+      <li><strong>At 20 engineers across 5 repositories,</strong> there is no single file that covers all relevant decisions. There are multiple files, possibly conflicting, with no defined precedence relationship between them.</li>
+      <li><strong>At AI-assisted velocity,</strong> the problem compounds faster. A team generating code at 10x human pace needs governance that operates at 10x human pace. A text file maintained by engineers does not scale with AI output.</li>
+    </ul>
+
+    <h2>What governance memory actually requires</h2>
+
+    <p>The teams discovering these limits are correctly identifying that they have a memory problem. What they misdiagnose is the structure that memory needs to have.</p>
+
+    <p>Governance memory is not a text document. It is a structured record of decisions, each with scope, rationale, precedence, and status. The difference between a CLAUDE.md rule and a governance record is the difference between a sticky note and a ticket in your issue tracker. One is a reminder. The other is a traceable, queryable, maintainable artifact.</p>
+
+    <p>Effective governance memory has four properties that static context injection cannot provide:</p>
+
+    <ul>
+      <li><strong>Structure.</strong> Decisions are typed records, not paragraphs. The system knows what kind of decision it is, what scope it applies to, and when it was created.</li>
+      <li><strong>Precedence.</strong> When two decisions conflict, the system resolves the conflict based on explicit precedence rules, not natural language interpretation.</li>
+      <li><strong>Enforcement.</strong> Decisions are enforced at the hook level, before generation output is accepted. Compliance is not probabilistic.</li>
+      <li><strong>Maintenance.</strong> The system tracks decision status. Superseded decisions are flagged, not silently ignored or accidentally applied.</li>
+    </ul>
+
+    <p>These are infrastructure properties. They require infrastructure to implement, not a better-maintained text file.</p>
+
+    <h2>The category framing</h2>
+
+    <p>Context injection served a purpose. It was the first tool available for communicating architectural intent to an AI assistant, and it moved the problem forward. But it has a ceiling, and most teams building with AI at scale are already above it.</p>
+
+    <p>The next step is not a more organized CLAUDE.md. It is a structured decision memory that operates at the layer the problem actually lives in: between the engineer's intent, the AI assistant's generation process, and the codebase that inherits the output.</p>
+
+    <p>That is the infrastructure problem Mneme is designed to solve.</p>
+
+  </div>
+
+  <footer class="article-footer">
+    <a href="/insights/" class="back-link">&larr; Back to Insights</a>
+
+    <div class="cta-block">
+      <h3>Structured governance memory for AI coding</h3>
+      <p>Mneme HQ replaces context injection with a precedence-aware decision engine that enforces architectural constraints before generation. Open source.</p>
+      <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub &rarr;</a>
+    </div>
+  </footer>
+</article>
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/insights/">Insights</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/compare/">Compare</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/integrations/">Integrations</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/privacy/">Privacy</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a>
+    &nbsp;&middot;&nbsp;
+    Open source
+    &nbsp;&middot;&nbsp;
+    MIT License
+  </p>
+</footer>
+
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+})();
+</script>
+<script><!-- nav-active -->
+(function(){
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var href = a.getAttribute('href');
+    if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
+      a.classList.add('active');
+    }
+  });
+})();
+</script>
+</body>
+</html>
