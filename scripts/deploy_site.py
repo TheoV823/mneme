@@ -143,7 +143,7 @@ def get_last_deployed_sha():
         return None
 
 def get_changed_site_files(since_sha):
-    out = _git(['diff', '--name-only', '--diff-filter=ACM', f'{since_sha}..HEAD', '--', 'site/'], SCRIPT_DIR)
+    out = _git(['diff', '--name-only', '--diff-filter=ACM', f'{since_sha}..HEAD', '--', ':(top)site/'], SCRIPT_DIR)
     return [l for l in out.splitlines() if l]
 
 def tag_deployed():
