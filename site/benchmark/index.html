@@ -574,7 +574,7 @@
     <a href="/insights/">Insights</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo.html">Demo</a>
-    <a href="/benchmark/">Benchmark</a>
+    <a href="/#benchmarks">Benchmarks</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
     <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
   </div>
@@ -885,9 +885,9 @@
     &nbsp;&middot;&nbsp;
     <a href="/insights/">Insights</a>
     &nbsp;&middot;&nbsp;
-    <a href="/roadmap/">Roadmap</a>
+    <a href="/compare/">Compare</a>
     &nbsp;&middot;&nbsp;
-    <a href="/benchmark/">Benchmark</a>
+    <a href="/integrations/">Integrations</a>
     &nbsp;&middot;&nbsp;
     <a href="/founder/">Founder</a>
     &nbsp;&middot;&nbsp;
@@ -896,6 +896,8 @@
     <a href="/privacy/">Privacy</a>
     &nbsp;&middot;&nbsp;
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a>
     &nbsp;&middot;&nbsp;
     Open source
     &nbsp;&middot;&nbsp;
@@ -917,5 +919,27 @@
   });
 </script>
 
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+})();
+</script>
+<script><!-- nav-active -->
+(function(){
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var href = a.getAttribute('href');
+    if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
+      a.classList.add('active');
+    }
+  });
+})();
+</script>
 </body>
 </html>
