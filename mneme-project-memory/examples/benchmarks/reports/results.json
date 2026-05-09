@@ -22,6 +22,20 @@
         "fail": 0,
         "total": 2
       }
+    },
+    "layer1": {
+      "k": 3,
+      "mean_recall_at_k": 1.0,
+      "mean_precision_at_k": 0.333,
+      "irrelevant_injection_rate": 1.0,
+      "scored_count": 5
+    },
+    "layer2": {
+      "passed": 5,
+      "failed": 0,
+      "weak": 0,
+      "weak_retrieval": 0,
+      "pass_rate": 1.0
     }
   },
   "results": [
@@ -37,7 +51,37 @@
         "between"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 4 violation(s) (tool, function, multi); enhanced response had none. Retrieved: anti-002."
+      "explanation": "Mneme prevented the violation. Baseline triggered 4 violation(s) (tool, function, multi); enhanced response had none. Retrieved: anti-002.",
+      "layer1": {
+        "k": 3,
+        "retrieved_ids": [
+          "mneme_no_agents_v1",
+          "anti-003",
+          "anti-002"
+        ],
+        "expected_ids": [
+          "anti-002"
+        ],
+        "acceptable_ids": [],
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "irrelevant_injection": true
+      },
+      "layer2": {
+        "verdict": "PASS",
+        "baseline_violation_count": 4,
+        "enhanced_violation_count": 0,
+        "baseline_triggers": [
+          "tool",
+          "function",
+          "multi",
+          "between"
+        ],
+        "enhanced_triggers": [],
+        "protected_decision_ids_hit": [
+          "anti-002"
+        ]
+      }
     },
     {
       "name": "framework_abstraction_violation",
@@ -48,7 +92,34 @@
         "langchain"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 1 violation(s) (langchain); enhanced response had none. Retrieved: anti-001."
+      "explanation": "Mneme prevented the violation. Baseline triggered 1 violation(s) (langchain); enhanced response had none. Retrieved: anti-001.",
+      "layer1": {
+        "k": 3,
+        "retrieved_ids": [
+          "anti-001",
+          "mneme_storage_json",
+          "anti-002"
+        ],
+        "expected_ids": [
+          "anti-001"
+        ],
+        "acceptable_ids": [],
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "irrelevant_injection": true
+      },
+      "layer2": {
+        "verdict": "PASS",
+        "baseline_violation_count": 1,
+        "enhanced_violation_count": 0,
+        "baseline_triggers": [
+          "langchain"
+        ],
+        "enhanced_triggers": [],
+        "protected_decision_ids_hit": [
+          "anti-001"
+        ]
+      }
     },
     {
       "name": "infra_scope_creep_violation",
@@ -62,7 +133,37 @@
         "multi"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 4 violation(s) (agentic, tool, function); enhanced response had none. Retrieved: anti-002."
+      "explanation": "Mneme prevented the violation. Baseline triggered 4 violation(s) (agentic, tool, function); enhanced response had none. Retrieved: anti-002.",
+      "layer1": {
+        "k": 3,
+        "retrieved_ids": [
+          "anti-002",
+          "mneme_no_agents_v1",
+          "rule-004"
+        ],
+        "expected_ids": [
+          "anti-002"
+        ],
+        "acceptable_ids": [],
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "irrelevant_injection": true
+      },
+      "layer2": {
+        "verdict": "PASS",
+        "baseline_violation_count": 4,
+        "enhanced_violation_count": 0,
+        "baseline_triggers": [
+          "agentic",
+          "tool",
+          "function",
+          "multi"
+        ],
+        "enhanced_triggers": [],
+        "protected_decision_ids_hit": [
+          "anti-002"
+        ]
+      }
     },
     {
       "name": "retrieval_complexity_violation",
@@ -75,7 +176,36 @@
         "embeddings"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 3 violation(s) (sentence, vector, embeddings); enhanced response had none. Retrieved: mneme_retrieval_deterministic."
+      "explanation": "Mneme prevented the violation. Baseline triggered 3 violation(s) (sentence, vector, embeddings); enhanced response had none. Retrieved: mneme_retrieval_deterministic.",
+      "layer1": {
+        "k": 3,
+        "retrieved_ids": [
+          "mneme_retrieval_deterministic",
+          "rule-002",
+          "rule-005"
+        ],
+        "expected_ids": [
+          "mneme_retrieval_deterministic"
+        ],
+        "acceptable_ids": [],
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "irrelevant_injection": true
+      },
+      "layer2": {
+        "verdict": "PASS",
+        "baseline_violation_count": 3,
+        "enhanced_violation_count": 0,
+        "baseline_triggers": [
+          "sentence",
+          "vector",
+          "embeddings"
+        ],
+        "enhanced_triggers": [],
+        "protected_decision_ids_hit": [
+          "mneme_retrieval_deterministic"
+        ]
+      }
     },
     {
       "name": "storage_backend_violation",
@@ -83,14 +213,45 @@
       "baseline_violation_count": 5,
       "enhanced_violation_count": 0,
       "baseline_triggers": [
-        "orm",
-        "layer",
         "sqlalchemy",
-        "postgres",
-        "orm"
+        "alembic",
+        "psycopg2-binary",
+        "migrations/0001_initial.py",
+        "alembic/env.py"
       ],
       "enhanced_triggers": [],
-      "explanation": "Mneme prevented the violation. Baseline triggered 5 violation(s) (orm, layer, sqlalchemy); enhanced response had none. Retrieved: mneme_storage_json."
+      "explanation": "Mneme prevented the violation. Baseline triggered 5 violation(s) (sqlalchemy, alembic, psycopg2-binary); enhanced response had none. Retrieved: mneme_storage_json.",
+      "layer1": {
+        "k": 3,
+        "retrieved_ids": [
+          "mneme_storage_json",
+          "rule-003",
+          "rule-002"
+        ],
+        "expected_ids": [
+          "mneme_storage_json"
+        ],
+        "acceptable_ids": [],
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "irrelevant_injection": true
+      },
+      "layer2": {
+        "verdict": "PASS",
+        "baseline_violation_count": 5,
+        "enhanced_violation_count": 0,
+        "baseline_triggers": [
+          "sqlalchemy",
+          "alembic",
+          "psycopg2-binary",
+          "migrations/0001_initial.py",
+          "alembic/env.py"
+        ],
+        "enhanced_triggers": [],
+        "protected_decision_ids_hit": [
+          "mneme_storage_json"
+        ]
+      }
     }
   ]
 }
