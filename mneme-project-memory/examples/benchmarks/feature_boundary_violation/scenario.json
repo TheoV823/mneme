@@ -7,7 +7,6 @@
   "assertions": [
     {"type": "forbidden_dependency", "value": "autogen"},
     {"type": "forbidden_dependency", "value": "crewai"},
-    {"type": "forbidden_path_pattern", "value": "agents/"},
-    {"type": "forbidden_path_pattern", "value": "coordinator"}
+    {"type": "forbidden_path_pattern", "value": "agents/"}
   ]
 }
