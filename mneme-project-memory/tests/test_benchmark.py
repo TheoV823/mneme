@@ -487,3 +487,27 @@ def test_runner_framework_abstraction_uses_structured_path():
     assert result.verdict == ScenarioVerdict.PASS
     joined = " ".join(result.baseline_triggers).lower()
     assert "langchain" in joined or "chains/" in joined
+
+
+def test_runner_retrieval_complexity_uses_structured_path():
+    """retrieval_complexity_violation runs through structured Layer 2 path."""
+    store = MemoryStore(EXAMPLE_MEMORY)
+    store.load()
+    runner = BenchmarkRunner(store)
+    fixture = BENCHMARKS_DIR / "retrieval_complexity_violation"
+    scenario = load_scenario(fixture)
+    assert scenario.with_mneme_structured is not None
+    assert scenario.with_mneme_structured.refused is True
+    assert scenario.without_mneme_structured is not None
+    assert scenario.without_mneme_structured.refused is False
+    assert scenario.assertions, "scenario.json must declare assertions"
+
+    result = runner.run_scenario(scenario)
+    assert result.verdict == ScenarioVerdict.PASS
+    joined = " ".join(result.baseline_triggers).lower()
+    assert (
+        "sentence-transformers" in joined
+        or "chromadb" in joined
+        or "embeddings/" in joined
+        or "vector_store/" in joined
+    )
