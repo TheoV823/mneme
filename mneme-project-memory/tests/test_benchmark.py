@@ -486,7 +486,7 @@ def test_runner_framework_abstraction_uses_structured_path():
     result = runner.run_scenario(scenario)
     assert result.verdict == ScenarioVerdict.PASS
     joined = " ".join(result.baseline_triggers).lower()
-    assert "langchain" in joined or "chains/" in joined
+    assert "langchain-anthropic" in joined or "src/chains/" in joined
 
 
 def test_runner_retrieval_complexity_uses_structured_path():
