@@ -1,5 +1,6 @@
 """Tests for BenchmarkRunner — scenario loading and PASS/FAIL/WEAK verdicts."""
 import json
+import warnings
 from pathlib import Path
 
 import pytest
@@ -932,3 +933,85 @@ def test_runner_dedups_decisions_with_duplicate_ids_via_memory_file(tmp_path):
     # contains "dupe_id" exactly once.
     assert result.layer1_retrieved_ids.count("dupe_id") == 1
     assert result.layer1_recall == 1.0
+
+
+# ── Task 4: TXT-fallback warning ──────────────────────────────────────────
+
+
+def test_load_scenario_warns_when_txt_only_no_json_siblings(tmp_path):
+    """When a scenario has TXT but no JSON siblings, a UserWarning is
+    emitted once per missing side. Behaviour is otherwise identical:
+    scenario still loads, no MALFORMED, TXT keyword path still drives
+    Layer 2."""
+    _write_minimal_txt_pair(tmp_path)
+    (tmp_path / "scenario.json").write_text(json.dumps({
+        "name": "txt_only_warning",
+        "category": "architecture",
+        "description": "TXT only — should produce a UserWarning per side.",
+        "expected_failure_terms": ["postgres"],
+        "expected_protected_decision_ids": ["mneme_storage_json"],
+    }))
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        scenario = load_scenario(tmp_path)
+    msgs = [str(w.message) for w in caught
+            if issubclass(w.category, UserWarning)]
+    assert any("with_mneme.json" in m for m in msgs), (
+        f"Expected with_mneme.json warning; got: {msgs}"
+    )
+    assert any("without_mneme.json" in m for m in msgs), (
+        f"Expected without_mneme.json warning; got: {msgs}"
+    )
+    # Behaviour preserved: structured payloads None, malformed_reason empty.
+    assert scenario.malformed_reason == ""
+    assert scenario.with_mneme_structured is None
+    assert scenario.without_mneme_structured is None
+
+
+def test_load_scenario_no_warning_when_both_json_present(tmp_path):
+    """When both JSON siblings exist and parse, no UserWarning is emitted."""
+    _write_minimal_txt_pair(tmp_path)
+    (tmp_path / "with_mneme.json").write_text(json.dumps({
+        "refused": True, "files_changed": [], "dependencies_added": [],
+    }))
+    (tmp_path / "without_mneme.json").write_text(json.dumps({
+        "refused": False,
+        "files_changed": ["alembic/env.py"],
+        "dependencies_added": ["sqlalchemy"],
+    }))
+    (tmp_path / "scenario.json").write_text(json.dumps({
+        "name": "both_json_no_warning",
+        "category": "architecture",
+        "description": "Both JSON sides present — no warning.",
+        "expected_failure_terms": ["postgres"],
+        "expected_protected_decision_ids": ["mneme_storage_json"],
+    }))
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        load_scenario(tmp_path)
+    user_warnings = [w for w in caught
+                     if issubclass(w.category, UserWarning)]
+    assert user_warnings == [], (
+        f"Expected no UserWarning; got {[str(w.message) for w in user_warnings]}"
+    )
+
+
+def test_run_suite_on_shipped_fixtures_emits_no_warnings():
+    """Regression guard: every shipped fixture now has both JSON siblings,
+    so a clean suite run must emit no UserWarning. If this fires, someone
+    removed a JSON sibling from an examples/benchmarks/ fixture."""
+    store = MemoryStore(EXAMPLE_MEMORY); store.load()
+    runner = BenchmarkRunner(store)
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        runner.run_suite(BENCHMARKS_DIR)
+    txt_fallback = [
+        w for w in caught
+        if issubclass(w.category, UserWarning)
+        and ("with_mneme.json" in str(w.message)
+             or "without_mneme.json" in str(w.message))
+    ]
+    assert txt_fallback == [], (
+        f"Shipped fixtures should not trigger TXT-fallback warnings. "
+        f"Got: {[str(w.message) for w in txt_fallback]}"
+    )
