@@ -13,6 +13,7 @@ from mneme.benchmark import (
     load_scenario,
     score_layer1,
 )
+from mneme.context_builder import DEFAULT_MAX_DECISIONS
 from mneme.decision_retriever import ScoredDecision
 from mneme.memory_store import MemoryStore
 from mneme.schemas import Decision
@@ -284,7 +285,7 @@ def test_runner_records_layer1_on_result():
     store.load()
     runner = BenchmarkRunner(store)
     result = runner.run_scenario(load_scenario(FIXTURE_SCENARIO))
-    assert result.layer1_k == 5
+    assert result.layer1_k == DEFAULT_MAX_DECISIONS
     assert result.layer1_expected_ids == ["mneme_storage_json"]
     assert "mneme_storage_json" in result.layer1_retrieved_ids
     assert result.layer1_recall == 1.0
