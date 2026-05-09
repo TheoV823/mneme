@@ -148,7 +148,7 @@ def test_run_suite_loads_all_benchmark_scenarios():
 
 
 def test_run_suite_all_scenarios_pass():
-    """All 5 shipped benchmark scenarios should pass."""
+    """All shipped benchmark scenarios should pass."""
     store = MemoryStore(EXAMPLE_MEMORY)
     store.load()
     runner = BenchmarkRunner(store)
