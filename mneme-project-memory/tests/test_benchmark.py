@@ -468,3 +468,22 @@ def test_runner_storage_backend_uses_structured_path():
     # Triggers come from the asserted dep/path values, not enforcer keywords.
     joined = " ".join(result.baseline_triggers).lower()
     assert "sqlalchemy" in joined or "alembic" in joined or "migrations/" in joined
+
+
+def test_runner_framework_abstraction_uses_structured_path():
+    """framework_abstraction_violation runs through structured Layer 2 path."""
+    store = MemoryStore(EXAMPLE_MEMORY)
+    store.load()
+    runner = BenchmarkRunner(store)
+    fixture = BENCHMARKS_DIR / "framework_abstraction_violation"
+    scenario = load_scenario(fixture)
+    assert scenario.with_mneme_structured is not None
+    assert scenario.with_mneme_structured.refused is True
+    assert scenario.without_mneme_structured is not None
+    assert scenario.without_mneme_structured.refused is False
+    assert scenario.assertions, "scenario.json must declare assertions"
+
+    result = runner.run_scenario(scenario)
+    assert result.verdict == ScenarioVerdict.PASS
+    joined = " ".join(result.baseline_triggers).lower()
+    assert "langchain" in joined or "chains/" in joined
