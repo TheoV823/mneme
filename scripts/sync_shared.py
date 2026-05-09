@@ -58,8 +58,8 @@ for html in sorted(SITE.rglob("*.html")):
         else:
             print(f"  WARN: no </style> in {html.relative_to(SITE)} — hamburger CSS not injected")
 
-    # 3. Inject hamburger JS if missing (but only after CSS is confirmed present)
-    if adapt(HAMBURGER_JS_BLOCK) not in text:
+    # 3. Inject hamburger JS if missing — check for any toggle handler, not just our exact block
+    if "classList.toggle" not in text:
         if "</body>" in text:
             text = text.replace("</body>", adapt(HAMBURGER_JS_BLOCK) + adapt("\n") + "</body>", 1)
         else:

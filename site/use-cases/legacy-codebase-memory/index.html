@@ -497,17 +497,6 @@ legacy-mailer-wrapper.yml  <span class="cc"># 6 decisions captured in one sessio
     MIT License
   </p>
 </footer>
-<script>
-(function(){
-  var btn = document.querySelector('.nav-hamburger');
-  var links = document.querySelector('.nav-links');
-  if (!btn || !links) return;
-  btn.addEventListener('click', function(){
-    var open = links.classList.toggle('open');
-    btn.setAttribute('aria-expanded', String(open));
-  });
-})();
-</script>
 <script><!-- nav-active -->
 (function(){
   var path = window.location.pathname;
@@ -516,6 +505,17 @@ legacy-mailer-wrapper.yml  <span class="cc"># 6 decisions captured in one sessio
     if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
       a.classList.add('active');
     }
+  });
+})();
+</script>
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
   });
 })();
 </script>
