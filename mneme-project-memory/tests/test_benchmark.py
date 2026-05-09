@@ -749,11 +749,13 @@ def test_layer1_irrelevant_injection_stress_at_default_k():
 
 
 def test_layer1_handles_empty_id_decision_robustly():
-    """A retrieval result whose Decision has an empty id is treated as a
-    distinct id (empty string). It does not crash scoring; it is included
-    in retrieved_ids and counted toward irrelevant_injection if not
-    expected. Documents current robustness — score_layer1 makes no
-    well-formedness assumptions about Decision.id beyond hashability."""
+    """Documents one corruption mode (empty Decision.id) of the broader
+    "partial retrieval corruption" category: an empty id is treated as a
+    distinct hashable key by the seen-set, included in retrieved_ids, and
+    counted toward irrelevant_injection if not expected. score_layer1 makes
+    no well-formedness assumptions about Decision.id beyond hashability.
+    Other corruption modes (None decision, invalid scoring) are not
+    covered here."""
     valid = _decision("d1")
     corrupted = _decision("")
     scored = [
@@ -772,8 +774,9 @@ def test_layer1_handles_empty_id_decision_robustly():
 def test_layer1_dedups_decisions_with_duplicate_ids_first_seen_wins():
     """When the same id appears multiple times with different scores, the
     higher-score occurrence is retained (it appears first in the sorted-desc
-    list passed by the runner). Documents score_layer1's seen-set dedup
-    behavior at benchmark.py:213."""
+    list passed by the runner). Documents the seen-set dedup behavior in
+    score_layer1. Tied-score dedup is not exercised here — input order
+    would tie-break, which is non-deterministic across retrievers."""
     scored = _scored(
         ("d1", 5.0),  # higher-score d1, retained
         ("d1", 4.0),  # duplicate id, dropped
@@ -862,14 +865,15 @@ def test_runner_handles_contradictory_decisions_in_retrieval(tmp_path):
     assert "policy_postgres_required" in result.layer1_retrieved_ids
     # Recall is 1.0 because both expected IDs are retrieved.
     assert result.layer1_recall == 1.0
-    # Verdict still resolves deterministically (verdict semantics depend on
-    # whether the TXT enforcer caught the violation in this constructed
-    # scenario — assert only on the governance-integrity property: the
-    # scenario completes without crashing and both contradictory decisions
-    # are visible in the retrieved set for the operator to resolve).
-    assert result.verdict in {
-        ScenarioVerdict.PASS, ScenarioVerdict.FAIL, ScenarioVerdict.WEAK,
-    }
+    # Verdict resolves deterministically: without_mneme.txt ("Use Postgres
+    # with SQLAlchemy") matches anti_patterns of both retrieved decisions
+    # (sqlalchemy and postgres), so baseline_count >= 1. with_mneme.txt
+    # ("Two contradicting policies retrieved; deferring") trips no
+    # forbidden term, so enhanced_count == 0. Both expected ids retrieved
+    # → PASS. The governance-integrity property is that the runner
+    # surfaces both contradictory decisions for operator review without
+    # silently picking one.
+    assert result.verdict == ScenarioVerdict.PASS
 
 
 def test_runner_dedups_decisions_with_duplicate_ids_via_memory_file(tmp_path):
