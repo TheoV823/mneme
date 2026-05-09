@@ -40,6 +40,7 @@ TEMPLATE_MAP = {
     "og-insights-nonlinear-review.html": "insights/ai-code-review-does-not-scale-linearly/og.png",
     "og-insights-review-not-governance.html": "insights/review-is-not-governance/og.png",
     "og-insights-prompt-memory-fails.html": "insights/why-prompt-memory-fails-at-scale/og.png",
+    "og-insights-heterogeneous-agents.html": "insights/architectural-governance-across-heterogeneous-ai-coding-agents/og.png",
     "og-for-cto.html": "for-cto/og.png",
     "og-for-platform.html": "for-platform/og.png",
     "og-for-principal.html": "for-principal/og.png",
