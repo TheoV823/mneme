@@ -96,6 +96,52 @@ Pages on `theovalmis.com` are edited by downloading via cPanel API, modifying lo
 re-uploading to `/home/cadafdd1/public_html/`. They are **not** part of the Mneme site deploy
 and must not appear in `site/`.
 
+### 8. Hub-page completeness for every URL segment
+
+Every directory referenced from canonical nav, footer, or `sitemap.xml` must have an
+`index.html` at that directory. Subpages must not be reachable via a URL whose parent
+returns 404. When a new persona/category subpage is added (e.g. `/for/cto/`), an
+`/for/index.html` hub must exist before deploy.
+
+This was added after `/for/` returned 404 for weeks because subpages shipped without
+a parent hub.
+
+### 9. Breadcrumb depth must mirror URL depth
+
+Both **JSON-LD `BreadcrumbList`** and the **visible breadcrumb nav** on each page must
+include one `ListItem` per URL segment, in order. A page at `/for/cto/` has three
+breadcrumb items: `Home → For → For CTOs`. Two-segment chains (`Home → For CTOs`) that
+skip an existing intermediate hub are not valid.
+
+When a hub page is added (per Decision 8 above), every subpage's breadcrumb chain must
+be updated to route through it in the same change.
+
+### 10. CSS class hygiene
+
+Every `class="…"` on an element in `<body>` must resolve to a CSS rule defined on the
+same page (inline `<style>`) or an explicitly-allowlisted state class (`active`, `open`,
+`hidden`, `selected`, `current`, `sr-only`).
+
+Typos in `class=` attributes produce silent layout failures: the HTML parses, headings
+and word counts and JSON-LD all remain valid, but the section renders without its
+intended wrapper styling and content bleeds past the viewport. The `style.classes` rule
+in `scripts/seo_check.py` enforces this and must remain a publishing gate.
+
+### 11. Delta-deploy must handle file renames
+
+`scripts/deploy_site.py` uses `git diff --name-only --diff-filter=ACM site-deployed..HEAD`
+to compute the upload delta. Renames detected by Git (`R`) are excluded by that filter
+and will not be uploaded. When a rename is part of a deploy (e.g.
+`site/demo.html → site/demo/index.html`), the deploy must additionally:
+
+- include the new path as a uploaded file (either via `--diff-filter=ACMR` plus rename-pair
+  handling, or by making a no-op edit on the new path so it shows as `M`)
+- remove the old path on the host so existing `.htaccess` rewrites do not redirect to a
+  newly-empty directory
+
+Until the script handles this natively, the workaround is a trailing-newline edit on the
+post-rename path before the deploy.
+
 ---
 
 ## Rationale
