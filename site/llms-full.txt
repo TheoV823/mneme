@@ -86,6 +86,18 @@ The third panel runs `mneme check --mode strict` against the generated diff and 
 
 The demo illustrates the difference between context injection and architectural governance. Injection makes the rules visible to the model. Enforcement makes generated output answer to them. Mneme does both, in one tool-agnostic layer that works across Claude Code, Cursor, GitHub Copilot, Windsurf, and custom SDK agents.
 
+## Demo scenarios
+
+Each scenario below walks through one verdict from the mneme check sample output. URLs are at https://mnemehq.com/demo/<slug>/.
+
+Storage decision (PASS) — slug: storage-decision. ADR-001 is the rule "JSON storage only — no external database" plus ADR-003 (no ORM in v1) and ADR-005 (extend before rebuild). Without Mneme, the model recommends migrating to PostgreSQL or Redis with an ORM and a migration layer, silently violating all three ADRs. With Mneme, the relevant decision records are injected before generation and the model proposes extending the existing JSON storage module. mneme check returns PASS on the storage decision, with the originating decision ID surfaced in structured output.
+
+Dependency policy (WARN) — slug: dependency-policy. The team's approved dependency list lives in project_memory.json with type "dependency_policy" and an explicit allowlist (FastAPI, Pydantic, httpx, pytest, ruff, internal packages). During an AI-assisted refactor, the agent reaches for prisma — a real, popular library, but not on the approved list. Without Mneme the import lands silently in the next PR. With Mneme, mneme check emits a structured WARN with the originating decision ID and a tracked override path. WARN rather than FAIL is intentional: dependency introductions often have legitimate reasons (security re-approval, deliberate spike), so the default is "flag for review" not "hard-block." Strict enforcement is available via mneme check --mode strict.
+
+Repository pattern (FAIL) — slug: repository-pattern. ADR-004 records the rule "Repository pattern is the only data-access boundary." Service classes depend on repository interfaces, never on the underlying storage. During a "speed up user.service.ts" refactor the agent inlines a direct database query, bypassing the abstraction. The diff looks clean in the editor; the linter is happy; the tests pass. mneme check --mode strict catches the architectural-pattern violation and emits a hard FAIL with file path and decision ID. In CI via the GitHub Actions integration the FAIL exit code blocks the PR until the violation is resolved or an explicit override decision record is added.
+
+The three scenarios cover the full PASS / WARN / FAIL verdict spectrum and demonstrate the governance loop end to end: decisions stored as structured records, injected pre-generation, enforced post-generation, with override events themselves tracked as first-class decisions.
+
 ## Standards landscape
 
 Three efforts are forming the credible foundation for a future cross-tool agent governance standard. The standards landscape page at https://mnemehq.com/standards/ tracks all three with links to organizational primary sources only.

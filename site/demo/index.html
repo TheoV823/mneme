@@ -522,6 +522,20 @@
     .check-row .verdict.fail { background: rgba(239,68,68,0.12); color: var(--fail); border: 1px solid rgba(239,68,68,0.25); }
     .check-row .desc strong { color: var(--text); font-weight: 500; }
 
+    .scenarios-grid { display: grid; grid-template-columns: 1fr; gap: 0.85rem; margin: 1.5rem 0 0.5rem; }
+    @media (min-width: 640px) { .scenarios-grid { grid-template-columns: repeat(3, 1fr); } }
+    .scenario-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.55rem; transition: border-color 0.15s, transform 0.15s; }
+    .scenario-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+    .scenario-card .sc-meta { display: flex; align-items: center; gap: 0.55rem; }
+    .scenario-card .sc-num { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .scenario-card .sc-verdict { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 0.13rem 0.5rem; border-radius: 4px; letter-spacing: 0.06em; }
+    .scenario-card .sc-verdict.pass { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.25); }
+    .scenario-card .sc-verdict.warn { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
+    .scenario-card .sc-verdict.fail { background: rgba(239,68,68,0.12); color: var(--fail); border: 1px solid rgba(239,68,68,0.25); }
+    .scenario-card h3 { font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text); margin: 0; line-height: 1.35; }
+    .scenario-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.55; margin: 0; }
+    .scenario-card .sc-arrow { color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.78rem; margin-top: auto; }
+
     .faq-list { margin-top: 1.5rem; }
     .faq-item { border-top: 1px solid var(--border); padding: 1.05rem 0; }
     .faq-item:last-child { border-bottom: 1px solid var(--border); }
@@ -783,6 +797,40 @@
       <p>The full source, hook integrations for <a href="/integrations/claude-code/">Claude Code</a> and <a href="/integrations/cursor/">Cursor</a>, the GitHub Actions enforcement gate, and the <code>project_memory.json</code> schema are open source under the MIT license on <a href="https://github.com/TheoV823/mneme" target="_blank" rel="noopener">GitHub</a>.</p>
 
       <p>For the methodology behind the 18-scenario drift test, see the <a href="/benchmark/">benchmark page</a>. For how Mneme aligns with NIST CAISI, the Model Context Protocol, and AGENTS.md, see the <a href="/standards/">standards landscape</a>. For the long-form argument that governance has to live outside any one AI coding tool, see <a href="/insights/architectural-governance-across-heterogeneous-ai-coding-agents/">architectural governance across heterogeneous AI coding agents</a>.</p>
+
+      <h2 id="scenarios">More scenarios</h2>
+
+      <p>Each scenario walks through one verdict the demo above produces &mdash; what the AI agent is asked to do, what it would generate without Mneme, what changes when the relevant decision records are injected, and what <code>mneme check</code> emits afterward.</p>
+
+      <div class="scenarios-grid">
+        <a class="scenario-card" href="/demo/storage-decision/">
+          <div class="sc-meta">
+            <span class="sc-num">Scenario 1</span>
+            <span class="sc-verdict pass">PASS</span>
+          </div>
+          <h3>Storage decision enforcement</h3>
+          <p>ADR-001 keeps the codebase on JSON storage. The model proposes extending the existing module instead of migrating to Postgres or Redis.</p>
+          <span class="sc-arrow">Read &rarr;</span>
+        </a>
+        <a class="scenario-card" href="/demo/dependency-policy/">
+          <div class="sc-meta">
+            <span class="sc-num">Scenario 2</span>
+            <span class="sc-verdict warn">WARN</span>
+          </div>
+          <h3>Dependency policy enforcement</h3>
+          <p>An unapproved dependency (<code>prisma</code>) is flagged with a structured WARN, the originating decision ID, and a tracked override path.</p>
+          <span class="sc-arrow">Read &rarr;</span>
+        </a>
+        <a class="scenario-card" href="/demo/repository-pattern/">
+          <div class="sc-meta">
+            <span class="sc-num">Scenario 3</span>
+            <span class="sc-verdict fail">FAIL</span>
+          </div>
+          <h3>Repository pattern enforcement</h3>
+          <p>An ADR-004 violation in <code>user.service.ts</code> hard-fails <code>mneme check</code> in CI, blocking the PR until resolved or explicitly overridden.</p>
+          <span class="sc-arrow">Read &rarr;</span>
+        </a>
+      </div>
 
       <h2>Frequently asked questions</h2>
 
