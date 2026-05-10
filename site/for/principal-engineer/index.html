@@ -168,7 +168,13 @@
     .breadcrumb .sep { color: var(--border2); margin: 0 0.5rem; }
     .breadcrumb [aria-current] { color: var(--text); }
     @media (max-width: 640px) { .breadcrumb { padding: 1rem 1.25rem 0; } }
-  </style>
+      /* class hygiene: definitions for previously inline-styled classes */
+    .faq-list { margin: 1.5rem 0 0; }
+    .faq-item { }
+    .faq-item summary { cursor: pointer; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-body { font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+</style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -365,6 +371,8 @@
     <a href="/insights/">Insights</a>
     &nbsp;&middot;&nbsp;
     <a href="/standards/">Standards</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/for/">For</a>
     &nbsp;&middot;&nbsp;
     <a href="/compare/">Compare</a>
     &nbsp;&middot;&nbsp;
