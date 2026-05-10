@@ -4,6 +4,65 @@
 
 Mneme HQ is the architectural governance layer for AI-assisted development.
 
+> **Current phase: Layer 1 — validation.** Mechanism is frozen at commit [`e73ff7d`](https://github.com/TheoV823/mneme/commit/e73ff7d). Local-repo, single-developer, project-scoped governance. Layer 2 (multi-repo, team sync, org policy distribution) is intentionally deferred. See [docs/architecture/current-phase.md](docs/architecture/current-phase.md) and [docs/architecture/layer1-freeze-e73ff7d.md](docs/architecture/layer1-freeze-e73ff7d.md).
+
+---
+
+## Current Status
+
+- **Layer 1 frozen at `e73ff7d`** — retrieval mechanics, enforcement semantics, and benchmark methodology are pinned. No behavioral change without an explicit charter amendment.
+- **Benchmark methodology stabilized** — two-layer scoring, deterministic retrieval, structured-fixture path, regression pins. Suite at 7/7 PASS, recall@3 = 1.00, recall@1 = 5/5 = 1.00.
+- **Validating with design partners** — real-world drift prevention and design-partner feedback are the open Layer 1 exit criteria.
+- **Local-repo governance only** — no multi-developer coordination, no remote policy store, no cross-repo synchronization in Layer 1.
+- **Layer 2 intentionally deferred** — team governance, shared policy packs, deeper IDE integrations, CI enforcement evolution, org-wide distribution.
+
+## What Mneme Is
+
+Local-repo, single-developer, project-scoped architectural governance for AI-assisted code generation. Specifically:
+
+- A way to **encode architectural decisions** as structured records in `project_memory.json`.
+- A **deterministic retriever** that selects relevant decisions for any given prompt or task.
+- A **pre-flight enforcer** that flags violations before the LLM generates output.
+- A **reproducible benchmark** that makes every change to retrieval or enforcement visible.
+
+The wedge is intentionally narrow: explicit recorded decisions, deterministically retrieved, enforced before generation.
+
+## What Mneme Is Not
+
+These are not on Mneme's roadmap. Not "later" — *not Mneme*:
+
+- **Generalized agent memory.** Not a vector store, not a conversational memory system.
+- **Autonomous planning.** No multi-step agent loops, no tool-use orchestration.
+- **Prompt optimization.** Mneme does not rewrite prompts; it blocks ones that violate governance.
+- **Long-term conversational memory.** Not a chat history system.
+- **Enterprise workflow orchestration.** Not a workflow engine.
+- **Deployment governance, runtime observability.** Not an APM, not a release-pipeline policy tool.
+- **Code-generation quality scoring.** Mneme does not rate output quality; it checks whether generation violated a recorded decision.
+- **Auto-fixing code.** Mneme blocks. The human or model fixes.
+
+## Architectural Principles
+
+The freeze is governed by three load-bearing principles. Every feature is judged against them:
+
+- **Deterministic > clever.** Same memory plus same query produces byte-identical retrieval order on every run. A simpler retriever that gives the same answer twice is preferred to a smarter retriever that does not.
+- **Auditable > autonomous.** Every block records which decision matched, which rule triggered, which term in the input fired it. A human can reconstruct any verdict from the artifacts.
+- **Prevention before review.** Mneme runs *before* the LLM generates output, not after. The intervention point is the prompt boundary.
+
+## Benchmark Philosophy
+
+The benchmark is a **regression and integrity instrument**, not a generalization claim. Its job is to make every change to retrieval or enforcement visible and reproducible — so a regression cannot land silently, a PASS cannot be coincidence, and external numbers cannot drift away from what the code does.
+
+- **Canned LLM responses, fixed retrieval, rule-text matching.** No live model calls in the suite. Run-to-run model variance cannot leak into verdicts.
+- **Two-layer scoring.** Layer 1 (retrieval) and Layer 2 (enforcement) recorded independently per scenario. The `WEAK_RETRIEVAL` verdict explicitly flags coincidental passes.
+- **recall@1 reported, never optimized.** It is the sharpest tuning dial under fixed methodology, deliberately excluded from pass/fail to prevent overfitting to a small suite.
+- **K=3 canonical.** The enforcer reads the top-3 retrieved decisions and only those. K is a property of the system, not a benchmark parameter.
+
+Full methodology philosophy: [/docs/benchmark-methodology/](https://mnemehq.com/docs/benchmark-methodology/). Full methodology spec: [/benchmark/](https://mnemehq.com/benchmark/).
+
+## Current Scope
+
+Contributor guidance: changes to `decision_retriever.py`, `enforcer.py`, `benchmark.py`, or any benchmark fixture are charter-level changes and require the freeze doc's amendment procedure. Docs, tooling, integrations, site, and examples proceed normally with `[memory]` prefix discipline for `project_memory.json` edits.
+
 ---
 
 ## Demo
@@ -505,8 +564,21 @@ See the [Adoption and Enhancement Roadmap](docs/roadmap/2026-04-24-adoption-and-
 | **v0.3** ✓ | Configurable enforcement modes (`strict` / `warn`); Cursor rules generator; Claude Code hook + slash commands (v0.3.2) |
 | **v0.4** ✓ | Architectural compiler: ADR frontmatter schema, corpus validation, deterministic precedence engine, Decision-bridge integration |
 | **v0.5** ✓ | Repo-level governance: `.mneme/` canonical enforcement memory, `mneme check`, GitHub PR workflow integration (warn mode) |
-| **v1.0** | Multi-project support, memory versioning, strict-mode CI rollout |
-| **Beyond** | LLM-judge evaluator mode, learned retrieval ranking, cross-project memory |
+| **Layer 1 freeze** ✓ | v1.1 stabilization complete at `e73ff7d`: deterministic retrieval pinned, two-layer benchmark methodology, structured-fixture path, charter discipline. See [docs/architecture/layer1-freeze-e73ff7d.md](docs/architecture/layer1-freeze-e73ff7d.md). |
+| **Layer 1 validation** | Real-world drift prevention, design-partner feedback, governance wedge validation. Open exit criteria. |
+
+### Layer 2 — intentionally deferred
+
+The following are out of scope for Layer 1 and require the Layer 1 exit criteria to be met before they are promoted into the roadmap:
+
+- Multi-project / multi-repo support, cross-project memory, memory versioning across projects.
+- Team governance, shared policy packs, org-wide policy distribution.
+- Strict-mode CI rollout beyond the current single-repo scope.
+- LLM-judge evaluator mode (substitutes deterministic enforcement with a model judge — incompatible with the "deterministic > clever" charter principle in Layer 1).
+- Learned retrieval ranking (incompatible with "no auto-learning").
+- Deeper IDE integrations (LSP, JetBrains).
+
+These are listed so they cannot be re-derived as "missing." The freeze doc's "Intentionally NOT Solved" section enumerates work that is not on Mneme's roadmap at all.
 
 ## Use Mneme HQ via API
 
@@ -631,9 +703,11 @@ It exists to prove the core Mneme HQ loop in the simplest usable form:
 
 ## Status
 
-This is the first public module of **Mneme HQ**. It is a narrow, intentional wedge: one capability, demonstrated clearly, with a clean upgrade path.
+Mneme is in **Layer 1 — validation phase**. The mechanism is frozen at commit [`e73ff7d`](https://github.com/TheoV823/mneme/commit/e73ff7d): deterministic retrieval, pre-flight enforcement, two-layer benchmark methodology, charter discipline. The freeze artifact is at [docs/architecture/layer1-freeze-e73ff7d.md](docs/architecture/layer1-freeze-e73ff7d.md); the orientation doc is at [docs/architecture/current-phase.md](docs/architecture/current-phase.md).
 
-Mneme HQ is the architectural governance layer for AI-assisted development. This repo is where it starts.
+What remains in Layer 1 is **validation**, not extension. Layer 1 exit criteria are met when the wedge is validated against real repos with design partners; the open criteria are real-world drift prevention, design-partner validation, and governance wedge validation. Layer 2 (multi-repo, team sync, org policy distribution) opens only after exit.
+
+The Mneme positioning is intentional: narrow scope, explicit governance boundaries, reproducible benchmark methodology. Not eval-score inflation. Not a coding-benchmark leaderboard play. Architectural continuity, governance reliability, deterministic enforcement.
 
 ## Infrastructure
 

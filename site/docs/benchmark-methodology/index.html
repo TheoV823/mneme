@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmark Methodology Philosophy — Mneme HQ</title>
+  <meta name="description" content="Why the Mneme governance benchmark is deterministic, why recall@1 is reported but not optimized, and what Mneme intentionally does not solve. Layer 1 freeze framing." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/docs/benchmark-methodology/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Benchmark Methodology Philosophy — Mneme HQ" />
+  <meta property="og:description" content="Why Mneme's governance benchmark is intentionally constrained instead of accidentally weak. Determinism, reproducibility, and what the benchmark explicitly does not prove." />
+  <meta property="og:url" content="https://mnemehq.com/docs/benchmark-methodology/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Benchmark Methodology Philosophy — Mneme HQ" />
+  <meta name="twitter:description" content="Why Mneme's governance benchmark is intentionally constrained instead of accidentally weak." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0d;
+      --surface: #141416;
+      --surface2: #1a1a1d;
+      --border: #222226;
+      --border2: #2e2e34;
+      --text: #e8e8ec;
+      --muted: #88889a;
+      --accent: #c8f060;
+      --accent-dim: #a8d040;
+      --teal: #8be0c8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(12,12,13,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #000 !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-family: 'DM Mono', monospace;
+    }
+    .btn-nav-cta:hover { background: var(--accent-dim); }
+
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        flex-direction: column;
+        align-items: stretch;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 1rem 1.25rem;
+        gap: 0.75rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a:not(.btn-nav-cta) { padding: 0.5rem 0; }
+      .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
+    }
+
+    .answer-capsule {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      background: var(--surface);
+      border-bottom: 1px solid rgba(200,240,96,0.18);
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .answer-capsule strong { color: var(--accent); }
+
+    .doc-hero {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 5rem 2rem 3rem;
+    }
+    .doc-eyebrow {
+      font-size: 0.72rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .doc-hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+    .doc-hero .doc-meta {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .doc-meta span strong { color: var(--text); font-weight: 500; }
+
+    .doc-lede {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .doc-body {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+    .doc-body h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--text);
+      margin-top: 3.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-body h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-top: 2rem;
+      margin-bottom: 0.6rem;
+    }
+    .doc-body p {
+      color: var(--text);
+      margin-bottom: 1.1rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .doc-body p.muted { color: var(--muted); }
+    .doc-body strong { color: var(--accent); font-weight: 600; }
+    .doc-body em { color: var(--teal); font-style: normal; font-family: 'DM Mono', monospace; font-size: 0.92em; }
+    .doc-body a {
+      color: var(--teal);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139,224,200,0.4);
+      transition: border-color 0.15s;
+    }
+    .doc-body a:hover { border-color: var(--teal); }
+
+    .doc-body ul, .doc-body ol {
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      padding-left: 1.4rem;
+      line-height: 1.75;
+    }
+    .doc-body ul li, .doc-body ol li {
+      margin-bottom: 0.4rem;
+    }
+    .doc-body ul li::marker { color: var(--accent); }
+
+    .callout {
+      background: rgba(200,240,96,0.05);
+      border: 1px solid rgba(200,240,96,0.20);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0 1.75rem;
+    }
+    .callout p { color: var(--text); margin-bottom: 0; font-size: 0.95rem; line-height: 1.65; }
+    .callout p + p { margin-top: 0.75rem; }
+    .callout strong { color: var(--accent); }
+
+    .doc-cta {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 2rem 5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .doc-cta h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      border: none;
+      padding: 0;
+    }
+    .doc-cta p { color: var(--muted); margin-bottom: 1.5rem; }
+    .cta-group { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #0c0c0d !important;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      border-bottom: none;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text) !important;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border2);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal) !important; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": "Mneme Benchmark Methodology Philosophy",
+        "description": "Why the Mneme governance benchmark is deterministic, why recall@1 is reported but not optimized, what the benchmark proves, and what it explicitly does not prove. Layer 1 freeze framing.",
+        "url": "https://mnemehq.com/docs/benchmark-methodology/",
+        "mainEntityOfPage": "https://mnemehq.com/docs/benchmark-methodology/",
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-10",
+        "inLanguage": "en",
+        "author": {
+          "@type": "Person",
+          "name": "Theo Valmis",
+          "url": "https://github.com/TheoV823"
+        },
+        "publisher": { "@id": "https://mnemehq.com/#organization" },
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Mneme HQ",
+          "url": "https://mnemehq.com/"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://mnemehq.com/#organization",
+        "name": "Mneme HQ",
+        "url": "https://mnemehq.com/",
+        "logo": "https://mnemehq.com/logo-v2.png"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://mnemehq.com/docs/" },
+          { "@type": "ListItem", "position": 3, "name": "Benchmark Methodology Philosophy", "item": "https://mnemehq.com/docs/benchmark-methodology/" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg></button>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/">Insights</a>
+    <a href="/standards/">Standards</a>
+    <a href="/roadmap/">Roadmap</a>
+    <a href="/demo/">Demo</a>
+    <a href="/#benchmarks">Benchmarks</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main>
+
+<div class="answer-capsule">
+  <strong>Mneme's benchmark methodology</strong> is deterministic by design. It uses canned LLM responses, fixed retrieval, and rule-text matching so that every PASS is reproducible and every regression is visible. The benchmark is a regression and integrity instrument, not a generalization claim. recall@1 is reported but never optimized. Methodology and shipped suite are anchored to the Layer 1 freeze at commit <em>e73ff7d</em>.
+</div>
+
+<header class="doc-hero">
+  <div class="doc-eyebrow">Docs &middot; Methodology Philosophy</div>
+  <h1>Why the benchmark is intentionally constrained.</h1>
+  <div class="doc-meta byline">
+    <span><strong>Published</strong> <time datetime="2026-05-10">May 10, 2026</time></span>
+    <span><strong>Updated</strong> <time datetime="2026-05-10">May 10, 2026</time></span>
+    <span><strong>Phase</strong> Layer 1 — validation</span>
+    <span><strong>Anchor</strong> e73ff7d</span>
+  </div>
+  <p class="doc-lede">
+    Most AI infrastructure benchmarks compete on score inflation. This page exists to be honest about what Mneme's benchmark is and is not. The discipline is the differentiator.
+  </p>
+</header>
+
+<article class="doc-body">
+
+  <h2 id="philosophy">Philosophy</h2>
+  <p>
+    LLMs are nondeterministic. A benchmark whose numbers vary between runs cannot detect a regression in the part of the system that Mneme actually owns: retrieval and enforcement against governed decisions. So Mneme's benchmark deliberately collapses the nondeterminism. Canned responses replace live model calls. Retrieval is bag-of-tokens with stable sort and explicit tiebreak. Enforcement is rule-text matching against retrieved decisions. The same memory and the same query produce byte-identical retrieval order on every run.
+  </p>
+  <p>
+    The job of the benchmark is not to prove that Mneme is smart. It is to prove that every change to retrieval or enforcement is <em>visible</em> and <em>reproducible</em> — that a regression cannot land silently, that a PASS cannot be coincidence, and that the numbers reported externally cannot drift away from what the code actually does.
+  </p>
+
+  <h2 id="deterministic-governance">Deterministic governance</h2>
+  <p>
+    Determinism is not a stylistic choice. It is the contract.
+  </p>
+  <ul>
+    <li><strong>Same inputs, same outputs.</strong> Memory plus query produce identical retrieval order, byte-for-byte, on every run.</li>
+    <li><strong>No vector magic.</strong> The retriever is keyword-overlap with documented field weights. There are no embeddings in Layer 1.</li>
+    <li><strong>No auto-learning.</strong> Mneme does not adjust weights or update its own configuration based on what it observes.</li>
+    <li><strong>No passive ingestion.</strong> Memory is edited deliberately and reviewed under the <em>[memory]</em> PR convention. Mneme does not watch the repo or learn from commits.</li>
+    <li><strong>Explicit recorded decisions only.</strong> Every enforced rule is a Decision in <em>project_memory.json</em> with an explicit <em>id</em>. No implicit policy.</li>
+  </ul>
+  <p>
+    These principles compound. Deterministic retrieval makes regressions visible. Visible regressions make benchmark integrity possible. Benchmark integrity makes governance claims defensible. Take any of them out and the chain breaks.
+  </p>
+
+  <h2 id="what-it-proves">What the benchmark proves</h2>
+  <p>
+    Three things, narrowly:
+  </p>
+  <ul>
+    <li><strong>Deterministic retrieval.</strong> Given a fixed memory and a fixed query, the same decisions surface in the same order every run, and the same decisions reach the enforcer.</li>
+    <li><strong>Governance enforcement.</strong> When a recorded decision is retrieved into the top-K, the enforcer detects violations of that decision in candidate output. Every PASS records which rule fired, which term triggered it, and which decision was responsible.</li>
+    <li><strong>Reproducible decision continuity.</strong> A reviewer can re-run the suite locally and reconstruct any verdict from the recorded artifacts.</li>
+  </ul>
+
+  <h2 id="what-it-does-not-prove">What it does not prove</h2>
+  <p>
+    Equally important. The benchmark deliberately does not claim:
+  </p>
+  <ul>
+    <li><strong>General intelligence.</strong> Mneme is not a reasoning system. The benchmark does not measure model quality, it measures whether recorded decisions are honored.</li>
+    <li><strong>Autonomous reasoning.</strong> No agent loops, no tool-use orchestration, no multi-step planning. Out of scope.</li>
+    <li><strong>Production readiness at enterprise scale.</strong> The shipped suite is small (seven scenarios at the Layer 1 freeze), and the decision pool is deliberately constrained. The benchmark is a regression instrument, not a distribution claim.</li>
+    <li><strong>Enterprise governance.</strong> Multi-team, multi-repo, org-wide policy distribution are Layer 2 territory. Not measured here.</li>
+    <li><strong>Generalization to arbitrary codebases.</strong> Real-world coverage is the work of design-partner validation, not the benchmark.</li>
+  </ul>
+
+  <h2 id="why-deterministic">Why the benchmark is deterministic</h2>
+  <p>
+    Three concrete mechanisms:
+  </p>
+  <ul>
+    <li><strong>Canned responses.</strong> Each scenario ships a <em>with_mneme</em> and <em>without_mneme</em> output (text and structured JSON). The benchmark does not call a live model. Run-to-run model variance cannot leak into verdicts.</li>
+    <li><strong>Stable retrieval.</strong> The retriever uses Python's stable sort with insertion-order tiebreak, pinned by regression test. Tied scores resolve identically every run.</li>
+    <li><strong>Reproducible enforcement.</strong> The enforcer matches anti-pattern terms against output by word boundary. Severity (FAIL vs. WARN) is a pure function of the rule text and the input. No probabilistic scoring.</li>
+  </ul>
+  <p class="muted">
+    Together, these make the benchmark a true regression instrument. If a number changes between runs, the cause is in the code, not the model.
+  </p>
+
+  <h2 id="recall-discipline">Why recall@1 is reported but not optimized</h2>
+  <div class="callout">
+    <p>
+      <strong>This is the part that matters.</strong> recall@1 is the sharpest tuning dial under fixed methodology. Promoting it into the suite headline would make tuning weights to move recall@1 a continuous temptation. With seven scenarios and an eleven-decision pool, any further tuning would fit the suite, not the world.
+    </p>
+    <p>
+      So recall@1 is tracked and reported transparently — and explicitly excluded from pass/fail and any external scorecard. It is anti-overfitting discipline made visible.
+    </p>
+  </div>
+  <p>
+    Most benchmark cultures pull in the opposite direction. A score is published; the score is optimized; over time the methodology bends toward whatever moves the score. Mneme's freeze refuses that gravity by writing the refusal into the methodology itself: recall@1 is a diagnostic, not a target.
+  </p>
+  <p>
+    The same logic applies to precision@K and the irrelevant-injection rate. In the current shipped suite both are structurally pinned by the small expected-decision sets and the empty <em>acceptable_decision_ids</em> arrays. The freeze records that openly rather than letting the numbers float as if they were quality signals. They are placeholder telemetry for a future methodology, not evidence of governance quality today.
+  </p>
+
+  <h2 id="not-solved">What Mneme intentionally does not solve</h2>
+  <p>
+    A wedge is only meaningful if its boundary is explicit. The following are not on Mneme's roadmap. They are not "later" — they are <em>not Mneme</em>:
+  </p>
+  <ul>
+    <li><strong>Generalized agent memory.</strong> Mneme is not a vector store, not a conversational memory, not an "AI memory" product.</li>
+    <li><strong>Autonomous planning.</strong> No multi-step agent loops, no tool-use orchestration.</li>
+    <li><strong>Prompt optimization.</strong> Mneme does not rewrite prompts to be "better"; it blocks ones that violate governance.</li>
+    <li><strong>Long-term conversational memory.</strong> Not a chat history system.</li>
+    <li><strong>Enterprise workflow orchestration.</strong> Not a workflow engine.</li>
+    <li><strong>Deployment governance, runtime observability.</strong> Not an APM, not a release-pipeline policy tool.</li>
+    <li><strong>Code-generation quality scoring.</strong> Mneme does not rate the quality of generated code; it checks whether generation violated a recorded decision.</li>
+    <li><strong>Auto-fixing code.</strong> Mneme does not edit code. It blocks. The human or the model fixes.</li>
+  </ul>
+  <p>
+    If a feature request maps onto this list, the answer is no — not "later," not "out of scope for now," but <em>not Mneme</em>.
+  </p>
+
+  <h2 id="layer-1">Layer 1 framing</h2>
+  <p>
+    Mneme is currently in Layer 1 — local-repo, single-developer, project-scoped architectural governance. The mechanism is frozen at <em>e73ff7d</em>. The validation phase tests the mechanism in real repos with real users; it does not extend the mechanism. Layer 2 territory (multi-repo, team sync, org policy distribution) opens only after Layer 1 exit criteria are met.
+  </p>
+  <p>
+    This page is a public summary of the philosophy. The full architectural freeze artifact lives in the repo at <a href="https://github.com/TheoV823/mneme/blob/main/docs/architecture/layer1-freeze-e73ff7d.md">docs/architecture/layer1-freeze-e73ff7d.md</a>. The full methodology specification with metric definitions, suite composition, verdict thresholds, and reproducibility protocol lives at <a href="/benchmark/">/benchmark/</a>.
+  </p>
+
+  <h2 id="differentiation">What this means for evaluators</h2>
+  <p>
+    If you are evaluating Mneme as a design partner, technical buyer, or contributor, the artifacts to look at are:
+  </p>
+  <ul>
+    <li>The <strong>discipline</strong> shown by the freeze — refusing to promote recall@1, pinning the tie-order, splitting symmetry into its own PR.</li>
+    <li>The <strong>auditability</strong> of every PASS — which decision matched, which rule triggered, which term in the input fired it.</li>
+    <li>The <strong>reproducibility</strong> of the suite — same memory plus same query yields byte-identical retrieval order.</li>
+  </ul>
+  <p>
+    Mneme is not competing on eval-score inflation, model-performance leaderboards, or coding-benchmark culture. The competition is architectural continuity, governance reliability, reproducibility, and deterministic enforcement. The benchmark methodology exists to make those claims falsifiable.
+  </p>
+
+</article>
+
+<section class="doc-cta">
+  <h2>Read the full freeze artifact.</h2>
+  <p>The repo-level freeze captures shipped capabilities, charter discipline, deferred work, and the bright line between "deferred" and "not Mneme."</p>
+  <div class="cta-group">
+    <a href="https://github.com/TheoV823/mneme/blob/main/docs/architecture/layer1-freeze-e73ff7d.md" class="btn-primary">Layer 1 freeze artifact</a>
+    <a href="/benchmark/" class="btn-ghost">Full methodology spec</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <a href="/use-cases/">Use cases</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/insights/">Insights</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/standards/">Standards</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/compare/">Compare</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/integrations/">Integrations</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/founder/">Founder</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/about/">About</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/contact/">Contact</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/privacy/">Privacy</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a>
+    &nbsp;&middot;&nbsp;
+    Open source
+    &nbsp;&middot;&nbsp;
+    MIT License
+  </p>
+</footer>
+
+<script>
+  (function() {
+    var ham = document.querySelector('.nav-hamburger');
+    var links = document.querySelector('.nav-links');
+    if (!ham || !links) return;
+    ham.addEventListener('click', function() {
+      var open = links.classList.toggle('open');
+      ham.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>
+
+</body>
+</html>
