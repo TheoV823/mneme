@@ -502,6 +502,51 @@ def rule_llms_entry(html: str, ctx: PageContext) -> RuleResult:
     return PASS, ""
 
 
+# Class names that are universally OK to leave undefined: framework hooks,
+# JS-toggled state classes, screen-reader/utility classes that may be styled
+# only via attribute selectors or live in shared CSS we don't see here.
+_CSS_CLASS_ALLOWLIST = {
+    "active", "open", "hidden", "visible", "selected", "current",
+    "sr-only", "noscript", "no-js",
+}
+
+
+def rule_css_class_hygiene(html: str, ctx: PageContext) -> RuleResult:
+    """Flag HTML class names that are not defined in any inline <style> block.
+
+    Catches typos like class="section" when only .section-wrap is defined —
+    invisible to other SEO rules but breaks layout silently.
+    """
+    # Collect class selectors defined in inline <style> blocks.
+    styles = re.findall(r"<style\b[^>]*>(.*?)</style>", html, flags=re.S | re.I)
+    if not styles:
+        return PASS, ""  # no inline CSS -> can't make claims
+    style_text = "\n".join(styles)
+    # Strip CSS comments to avoid false positives.
+    style_text = re.sub(r"/\*.*?\*/", " ", style_text, flags=re.S)
+    defined = set(re.findall(r"\.([A-Za-z_][\w-]*)", style_text))
+    if not defined:
+        return PASS, ""
+
+    # Collect class names actually used on elements in <body>.
+    body = ctx.body or html
+    used: set[str] = set()
+    for m in re.finditer(r'\bclass\s*=\s*"([^"]+)"', body):
+        for cls in m.group(1).split():
+            used.add(cls)
+    for m in re.finditer(r"\bclass\s*=\s*'([^']+)'", body):
+        for cls in m.group(1).split():
+            used.add(cls)
+
+    missing = sorted(used - defined - _CSS_CLASS_ALLOWLIST)
+    if not missing:
+        return PASS, ""
+    # Trim to keep the report readable.
+    shown = ", ".join(missing[:6])
+    more = "" if len(missing) <= 6 else f" (+{len(missing) - 6} more)"
+    return WARN, f"undefined CSS classes: {shown}{more}"
+
+
 def _node_type(n: dict) -> str:
     t = n.get("@type")
     if isinstance(t, list) and t:
@@ -530,13 +575,14 @@ RULES: list[tuple[str, RuleFn]] = [
     ("jsonld.faq",          rule_faq_consistency),
     ("authority.byline",    rule_byline),
     ("geo.llms",            rule_llms_entry),
+    ("style.classes",       rule_css_class_hygiene),
 ]
 
 
 # ── Audit ────────────────────────────────────────────────────────────────────
 
 def audit_page(html_path: Path, llms: set[str]) -> PageReport:
-    rel = str(html_path.relative_to(SITE))
+    rel = html_path.relative_to(SITE).as_posix()
     html = html_path.read_text(encoding="utf-8", errors="ignore")
     body = body_inner(html)
     main = main_inner(html)
@@ -562,7 +608,7 @@ def collect_pages(only: list[str] | None, include_low: bool) -> list[Path]:
     for p in sorted(SITE.rglob("*.html")):
         if is_og_template(p):
             continue
-        rel = str(p.relative_to(SITE))
+        rel = p.relative_to(SITE).as_posix()
         if "_snippets/" in rel:
             continue
         if only and not any(rel.startswith(o) for o in only):
