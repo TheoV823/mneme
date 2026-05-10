@@ -1237,25 +1237,26 @@ response = LLMAdapter().complete(
   <!-- BEFORE / AFTER DEMO -->
   <div class="section-wrap" id="benchmarks">
     <div class="section-eyebrow">Benchmark</div>
-    <h2 class="section-title">Governance Benchmark v1.1 published.</h2>
+    <h2 class="section-title">Methodology before metrics.</h2>
 
     <p style="max-width:640px;margin-bottom:2rem;color:var(--muted);font-size:1.05rem;line-height:1.6;">
-      We have published the methodology for Mneme's deterministic governance benchmark, measuring architectural drift prevention, false positive rate, and retrieval quality across real-world coding scenarios.
+      Mneme's governance benchmark is a deterministic, reproducible regression instrument — not an eval-score leaderboard play. Methodology, deterministic retrieval, and rule-text enforcement are pinned at the Layer 1 freeze (commit <code style="font-family:'DM Mono',monospace;color:var(--teal);font-size:0.95em;">e73ff7d</code>) so every change is visible and every PASS is reconstructible.
     </p>
 
     <div style="display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:1.75rem;">
-      <span class="bench-cat">violation prevention rate</span>
-      <span class="bench-cat">false positive rate</span>
-      <span class="bench-cat">retrieval recall and precision</span>
-      <span class="bench-cat">oracle vs end-to-end gap</span>
+      <span class="bench-cat">deterministic retrieval</span>
+      <span class="bench-cat">two-layer scoring</span>
+      <span class="bench-cat">structured-fixture verification</span>
+      <span class="bench-cat">recall@1 reported, never optimized</span>
     </div>
 
     <p style="max-width:640px;margin-bottom:1rem;color:var(--text);font-size:0.95rem;line-height:1.6;">
-      Deterministic, reproducible, and fully auditable. No subjective scoring. Full results publish after scenario suite validation.
+      Same memory and same query produce byte-identical retrieval order on every run. Verdicts are observable facts. We are explicit about what the benchmark proves and what it does not.
     </p>
 
-    <div style="margin-bottom:3rem;">
-      <a href="/benchmark/" style="color:var(--teal);font-family:'DM Mono',monospace;font-size:0.88rem;text-decoration:none;border-bottom:1px solid var(--teal);padding-bottom:1px;">Read benchmark methodology &rarr;</a>
+    <div style="margin-bottom:3rem;display:flex;flex-wrap:wrap;gap:1.25rem;">
+      <a href="/docs/benchmark-methodology/" style="color:var(--accent);font-family:'DM Mono',monospace;font-size:0.88rem;text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px;">Why the benchmark is intentionally constrained &rarr;</a>
+      <a href="/benchmark/" style="color:var(--teal);font-family:'DM Mono',monospace;font-size:0.88rem;text-decoration:none;border-bottom:1px solid var(--teal);padding-bottom:1px;">Full methodology spec &rarr;</a>
     </div>
 
     <div style="font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Illustrative example</div>
