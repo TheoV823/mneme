@@ -1180,6 +1180,11 @@
         <pre><span class="cp">$</span> mneme benchmark examples/benchmarks/ --memory examples/project_memory.json</pre>
       </div>
       <div class="code-block">
+        <div class="code-block-label">governance gate (CI)</div>
+        <pre><span class="cp">$</span> mneme check --memory .mneme/project_memory.json \
+    --input pr.diff --query <span class="cs">"$PR_TITLE"</span> --mode strict</pre>
+      </div>
+      <div class="code-block">
         <div class="code-block-label">usage example</div>
         <pre><span class="ck">from</span> mneme.memory_store <span class="ck">import</span> MemoryStore
 <span class="ck">from</span> mneme.retriever <span class="ck">import</span> Retriever
@@ -1195,6 +1200,9 @@ response = LLMAdapter().complete(
 <span class="ck">print</span>(response.content)</pre>
       </div>
     </div>
+    <p style="margin-top:1.5rem;font-size:0.86rem;color:var(--muted);">
+      <a href="/docs/cli/" style="color:var(--accent);text-decoration:none;">Full CLI reference &mdash; commands, flags, exit codes &rarr;</a>
+    </p>
   </div>
 
   <!-- ROADMAP TEASER -->
