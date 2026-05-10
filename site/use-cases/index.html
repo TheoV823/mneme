@@ -247,6 +247,81 @@
       }
       .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
     }
+/* === Nav upgrade (injected, overrides existing) === */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--text);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.nav-hamburger:hover { border-color: var(--accent); }
+.nav-hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.18s ease;
+  transform-origin: center;
+}
+.nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 900px) {
+  html, body { overflow-x: hidden; }
+  body.menu-open { overflow: hidden; }
+  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  .nav-hamburger { display: flex; }
+  .nav-links {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    gap: 0;
+    background: rgba(12,12,13,0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.25rem;
+    z-index: 99;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.28s ease, opacity 0.2s ease, padding 0.28s ease, visibility 0s linear 0.28s;
+  }
+  .nav-links.open {
+    max-height: 80vh;
+    opacity: 1;
+    visibility: visible;
+    padding: 0.5rem 1.25rem 1.25rem;
+    transition: max-height 0.32s ease, opacity 0.25s ease, padding 0.32s ease, visibility 0s;
+    overflow-y: auto;
+  }
+  .nav-links a:not(.btn-nav-cta) {
+    display: block;
+    color: var(--text);
+    font-size: 0.92rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-links a:not(.btn-nav-cta):last-of-type { border-bottom: none; }
+  .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
+}
   </style>
 </head>
 <body>
@@ -255,7 +330,7 @@
 
 <nav>
   <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
-  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg></button>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
     <a href="/use-cases/">Use cases</a>
@@ -603,9 +678,28 @@
   var btn = document.querySelector('.nav-hamburger');
   var links = document.querySelector('.nav-links');
   if (!btn || !links) return;
-  btn.addEventListener('click', function(){
-    var open = links.classList.toggle('open');
+  function setOpen(open){
+    links.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('menu-open', open);
+  }
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(!links.classList.contains('open'));
+  });
+  document.addEventListener('click', function(e){
+    if (!links.classList.contains('open')) return;
+    if (links.contains(e.target) || btn.contains(e.target)) return;
+    setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && links.classList.contains('open')) setOpen(false);
+  });
+  links.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') setOpen(false);
+  });
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 900 && links.classList.contains('open')) setOpen(false);
   });
 })();
 </script>
