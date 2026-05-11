@@ -431,7 +431,7 @@
     <a href="/insights/">Insights</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
-    <a href="/#benchmarks">Benchmarks</a>
+    <a href="/benchmark/">Benchmark</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
     <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
   </div>
@@ -671,5 +671,16 @@
   })();
 </script>
 
+<script><!-- nav-active -->
+(function(){
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var href = a.getAttribute('href');
+    if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
+      a.classList.add('active');
+    }
+  });
+})();
+</script>
 </body>
 </html>
