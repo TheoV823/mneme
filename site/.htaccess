@@ -8,6 +8,9 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # URL hygiene: /demo.html (legacy) -> /demo/ (canonical)
 RewriteRule ^demo\.html$ /demo/ [R=301,L]
 
+# Branded 404 page
+ErrorDocument 404 /404.html
+
 # Brotli compression (falls back to gzip if unavailable)
 <IfModule mod_brotli.c>
     AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript application/javascript text/xml application/xml image/svg+xml

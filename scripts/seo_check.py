@@ -80,6 +80,7 @@ LLMS   = SITE / "llms.txt"
 LOW_VALUE_PAGES = {
     "privacy/index.html",
     "contact/index.html",
+    "404.html",
 }
 
 # OG-template files (rendered into PNGs via generate_og_images.py)
@@ -547,6 +548,78 @@ def rule_css_class_hygiene(html: str, ctx: PageContext) -> RuleResult:
     return WARN, f"undefined CSS classes: {shown}{more}"
 
 
+_VALID_PATHS_CACHE: set[str] | None = None
+
+
+def _valid_internal_paths() -> set[str]:
+    """All URL paths the deployed site serves. Computed once.
+
+    A path is valid if it maps to a real file under site/, including the
+    pretty-URL convention where /foo/ resolves to site/foo/index.html.
+    """
+    global _VALID_PATHS_CACHE
+    if _VALID_PATHS_CACHE is not None:
+        return _VALID_PATHS_CACHE
+    paths: set[str] = {"/"}
+    for f in SITE.rglob("*"):
+        if not f.is_file():
+            continue
+        rel = f.relative_to(SITE).as_posix()
+        # Skip dotfiles like .htaccess and snippet partials.
+        if rel.startswith("_snippets/") or rel.startswith("."):
+            continue
+        paths.add("/" + rel)
+        if rel.endswith("/index.html"):
+            paths.add("/" + rel.removesuffix("index.html"))
+    _VALID_PATHS_CACHE = paths
+    return paths
+
+
+# Internal href prefixes that resolve to runtime endpoints, not files
+# (so existence on disk is the wrong check). Extend as needed.
+_INTERNAL_DYNAMIC_PREFIXES: tuple[str, ...] = ()
+
+
+def rule_link_targets(html: str, ctx: PageContext) -> RuleResult:
+    """Every internal href must resolve to an existing site file.
+
+    Catches links to pages that never shipped (the /docs/ 404 class of bug).
+    Strips fragments and query strings. Pretty URLs /foo/ resolve to
+    site/foo/index.html.
+    """
+    valid = _valid_internal_paths()
+    hrefs = re.findall(
+        r'<a\b[^>]*\bhref\s*=\s*["\'](/[^"\']*)["\']',
+        html,
+    )
+    broken: list[str] = []
+    for raw in hrefs:
+        # Same-page anchor only (rare on this codebase; covered for safety)
+        if raw.startswith("#"):
+            continue
+        target = raw.split("#", 1)[0].split("?", 1)[0]
+        if not target:
+            continue
+        if target.startswith(_INTERNAL_DYNAMIC_PREFIXES):
+            continue
+        if target in valid:
+            continue
+        broken.append(raw)
+    if not broken:
+        return PASS, ""
+    # Deduplicate while preserving order, trim to keep the report readable.
+    seen: set[str] = set()
+    unique: list[str] = []
+    for h in broken:
+        if h in seen:
+            continue
+        seen.add(h)
+        unique.append(h)
+    shown = ", ".join(unique[:6])
+    more = "" if len(unique) <= 6 else f" (+{len(unique) - 6} more)"
+    return FAIL, f"internal links to nonexistent targets: {shown}{more}"
+
+
 def _node_type(n: dict) -> str:
     t = n.get("@type")
     if isinstance(t, list) and t:
@@ -567,6 +640,7 @@ RULES: list[tuple[str, RuleFn]] = [
     ("structure.h2",        rule_h2),
     ("structure.words",     rule_word_count),
     ("structure.links",     rule_internal_links),
+    ("links.targets",       rule_link_targets),
     ("links.pattern",       rule_linking_pattern),
     ("jsonld.breadcrumb",   rule_jsonld_breadcrumb),
     ("jsonld.main",         rule_jsonld_main),
