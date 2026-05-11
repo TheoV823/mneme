@@ -272,6 +272,9 @@ def rule_canonical(html: str, ctx: PageContext) -> RuleResult:
     href = has_link(html, "canonical")
     if not href:
         return FAIL, "missing rel=canonical"
+    count = len(re.findall(r'<link\b[^>]*\brel\s*=\s*["\']canonical["\']', html, flags=re.I))
+    if count > 1:
+        return FAIL, f"{count} canonical tags (must be exactly 1)"
     return PASS, ""
 
 
