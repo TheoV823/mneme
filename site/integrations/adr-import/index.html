@@ -215,6 +215,10 @@
     .ps-hint { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); line-height: 1.45; margin-top: 0.1rem; }
     .ps-arrow { color: var(--border2); font-size: 0.9rem; padding: 0 0.35rem; align-self: flex-start; padding-top: 0.45rem; flex-shrink: 0; }
 
+    .pre-comment { color: var(--muted) !important; font-style: italic; }
+    .pre-hl { color: var(--accent) !important; font-weight: 500; }
+    .safety-note { color: var(--text); font-size: 0.97rem; font-weight: 500; margin-bottom: 1.25rem; padding: 0.7rem 1rem; background: rgba(200,240,96,0.04); border-left: 2px solid rgba(200,240,96,0.25); border-radius: 0 6px 6px 0; }
+
     h2#related-reading { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: none; color: var(--muted); font-weight: 400; margin-top: 3.5rem; margin-bottom: 0.75rem; }
     h2#related-reading + ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden; }
     h2#related-reading + ul li { margin: 0; }
@@ -298,7 +302,7 @@
       <span class="eyebrow-meta">4 min read &nbsp;&middot;&nbsp; May 2026</span>
     </div>
     <h1>Import Existing ADRs</h1>
-    <p class="article-lede">Your ADRs are already written. This makes them enforceable. Add a <code>## Constraints</code> section, run one command to preview, one to apply &mdash; and the decisions are live in the enforcement pipeline.</p>
+    <p class="article-lede">Your ADRs are already written. This makes them enforceable. Add a <code>## Constraints</code> section, run one command to preview, one to apply &mdash; and Mneme catches violations before they land in review.</p>
     <p class="byline">
       By <a href="/founder/">Theo Valmis</a>
       <span class="sep">&middot;</span>
@@ -336,6 +340,9 @@
   </div>
 
   <div class="article-body">
+
+    <p style="font-size:0.97rem;color:var(--text);font-weight:500;line-height:1.75;margin-bottom:0.75rem;">Most teams already document architectural decisions. The problem is that AI coding agents do not enforce them.</p>
+    <p style="font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:2.75rem;"><code>mneme adr import</code> works with YAML-frontmatter ADRs and explicit <code>## Constraints</code> sections &mdash; no rewriting required.</p>
 
     <h2>The problem this solves</h2>
 
@@ -403,9 +410,10 @@ These must never be conflated in code-bearing surfaces.
 
     <h2>Step 2: preview the import</h2>
 
-    <p>The default mode is dry-run. Nothing is written.</p>
+    <p class="safety-note">Nothing is written during preview &mdash; safe to run on any codebase.</p>
 
-    <pre><code>mneme adr import docs/adr --memory .mneme/project_memory.json</code></pre>
+    <pre><code><span class="pre-comment"># dry-run: read-only preview</span>
+mneme adr import docs/adr --memory .mneme/project_memory.json</code></pre>
 
     <p>Output shows the active decision set and each parsed constraint:</p>
 
@@ -423,7 +431,7 @@ Active set (4 ADRs):
 
     <h2>Step 3: apply the import</h2>
 
-    <pre><code>mneme adr import docs/adr --memory .mneme/project_memory.json --apply</code></pre>
+    <pre><code>mneme adr import docs/adr --memory .mneme/project_memory.json <span class="pre-hl">--apply</span></code></pre>
 
     <p>The import writes atomically: the updated memory is serialized to a sibling temp file, then swapped in with <code>os.replace()</code>. A failed write leaves the original file intact. No backup files are created &mdash; the original is always recoverable from git history.</p>
 
