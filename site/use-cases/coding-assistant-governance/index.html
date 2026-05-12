@@ -1,10 +1,10 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coding Assistant Governance â€” Mneme HQ</title>
-  <meta name="description" content="How Mneme HQ enforces architectural decisions when using Cursor, Claude Code, or Copilot â€” preventing drift, repeated violations, and wasted review cycles." />
+  <title>Coding Assistant Governance — Mneme HQ</title>
+  <meta name="description" content="How Mneme HQ enforces architectural decisions when using Cursor, Claude Code, or Copilot — preventing drift, repeated violations, and wasted review cycles." />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0c0c0d" />
   <link rel="canonical" href="https://mnemehq.com/use-cases/coding-assistant-governance/" />
@@ -96,7 +96,7 @@
     summary { padding: 1rem 1.25rem; cursor: pointer; font-size: 0.88rem; color: var(--text); background: var(--surface); list-style: none; }
     summary::-webkit-details-marker { display: none; }
     summary::before { content: '+ '; color: var(--accent); }
-    details[open] summary::before { content: 'âˆ’ '; }
+    details[open] summary::before { content: '- '; }
     details[open] summary { border-bottom: 1px solid var(--border); }
     .faq-body { padding: 1.25rem; font-size: 0.84rem; color: var(--muted); line-height: 1.8; }
     .cta-footer { border-top: 1px solid var(--border); text-align: center; padding: 5rem 2rem; }
@@ -238,12 +238,12 @@
         {
           "@type": "Question",
           "name": "Does Mneme HQ work with Cursor, Claude Code, and Copilot?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ works at the workflow level â€” it's not an IDE plugin. mneme check runs before you prompt, and mneme cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. mneme check runs before you prompt, and mneme cursor generate writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via CLAUDE.md." }
         },
         {
           "@type": "Question",
           "name": "What's the difference between Mneme HQ and just writing better system prompts?",
-          "acceptedAnswer": { "@type": "Answer", "text": "System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme HQ uses semantic retrieval â€” only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves." }
+          "acceptedAnswer": { "@type": "Answer", "text": "System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme HQ uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves." }
         },
         {
           "@type": "Question",
@@ -282,7 +282,7 @@
 
 <!-- GEO / LLM answer capsule -->
 <div class="answer-capsule">
-  <strong>Mneme HQ</strong> enforces architectural decisions for AI coding assistants like Cursor, Claude Code, and Copilot by surfacing relevant decisions at query time. When a coding assistant proposes code that violates a decision â€” using the wrong abstraction, bypassing a service layer, or ignoring an ADR â€” Mneme HQ flags the violation before the code reaches review. This reference architecture shows how to set it up. Rules files document standards. Mneme enforces them.
+  <strong>Mneme HQ</strong> enforces architectural decisions for AI coding assistants like Cursor, Claude Code, and Copilot by surfacing relevant decisions at query time. When a coding assistant proposes code that violates a decision — using the wrong abstraction, bypassing a service layer, or ignoring an ADR — Mneme HQ flags the violation before the code reaches review. This reference architecture shows how to set it up. Rules files document standards. Mneme enforces them.
 </div>
 
 <main>
@@ -292,9 +292,9 @@
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-tag">Reference Architecture Â· Simulated Scenario</div>
+    <div class="hero-tag">Reference Architecture · Simulated Scenario</div>
     <h1>How Mneme HQ Prevents Coding Assistants from Violating Architecture Rules</h1>
-    <p class="hero-sub">Stop Cursor, Claude Code, and Copilot from ignoring your ADRs, service boundaries, and team conventions â€” session after session.</p>
+    <p class="hero-sub">Stop Cursor, Claude Code, and Copilot from ignoring your ADRs, service boundaries, and team conventions — session after session.</p>
     <div class="cta-group">
       <a href="https://github.com/TheoV823/mneme" class="btn-primary">Install Mneme HQ</a>
       <a href="https://github.com/TheoV823/mneme" class="btn-ghost">View GitHub</a>
@@ -308,7 +308,7 @@
       <rect x="20" y="30" width="165" height="56" rx="8" fill="#141416" stroke="#2e2e34" stroke-width="1.5"/>
       <text x="102" y="52" font-family="monospace" font-size="9.5" fill="#88889a" text-anchor="middle">developer</text>
       <text x="102" y="72" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Prompt</text>
-      <!-- Arrow Aâ†’Mneme HQ -->
+      <!-- Arrow A?Mneme HQ -->
       <line x1="185" y1="58" x2="218" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="214,54 225,58 214,62" fill="#2e2e34"/>
       <!-- Mneme HQ node -->
@@ -316,7 +316,7 @@
       <text x="332" y="42" font-family="monospace" font-size="9" fill="#c8f060" text-anchor="middle" letter-spacing="4">Mneme HQ</text>
       <text x="332" y="64" font-family="monospace" font-size="13" fill="#e8e8ec" text-anchor="middle">Pre-flight Check</text>
       <text x="332" y="82" font-family="monospace" font-size="9" fill="#88889a" text-anchor="middle">mneme check --mode strict</text>
-      <!-- Arrow Mneme HQâ†’B -->
+      <!-- Arrow Mneme HQ?B -->
       <line x1="440" y1="58" x2="473" y2="58" stroke="#2e2e34" stroke-width="1.5"/>
       <polygon points="469,54 480,58 469,62" fill="#2e2e34"/>
       <!-- Node B -->
@@ -353,7 +353,7 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div>
-          <span class="panel-label bad">Without Mneme HQ â€” Cursor suggests:</span>
+          <span class="panel-label bad">Without Mneme HQ — Cursor suggests:</span>
         </div>
         <div class="panel-body">
           <div class="panel-prompt">Prompt: "Add a search endpoint to the API"</div>
@@ -363,14 +363,14 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div>
-          <span class="panel-label good">With Mneme HQ â€” pre-flight check:</span>
+          <span class="panel-label good">With Mneme HQ — pre-flight check:</span>
         </div>
         <div class="panel-body good-response">
           <div class="panel-prompt">mneme check --mode strict</div>
-          <span style="color:#ff7070">âœ— FAIL</span> decision/no-direct-db-queries<br>
+          <span style="color:#ff7070">? FAIL</span> decision/no-direct-db-queries<br>
           Rule: All database access must go through the repository layer.<br>
           Context: Direct queries in route handlers bypass transaction management and were banned in ADR-004.<br><br>
-          <span style="color:var(--accent)">â†’ Surfaced 1 violation before code generation.</span>
+          <span style="color:var(--accent)">? Surfaced 1 violation before code generation.</span>
         </div>
       </div>
     </div>
@@ -393,7 +393,7 @@
           <tr>
             <td>System prompt</td>
             <td>Truncated at context limit; can't cover full decision history; manually maintained</td>
-            <td>Decisions retrieved at query time â€” only relevant decisions are surfaced</td>
+            <td>Decisions retrieved at query time — only relevant decisions are surfaced</td>
           </tr>
           <tr>
             <td>RAG over docs</td>
@@ -438,7 +438,7 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Generate assistant-specific rules files</h4>
-          <p><code>mneme cursor generate</code> outputs <code>.cursor/rules/mneme.mdc</code> â€” a distilled ruleset the assistant sees in every session.</p>
+          <p><code>mneme cursor generate</code> outputs <code>.cursor/rules/mneme.mdc</code> — a distilled ruleset the assistant sees in every session.</p>
         </div>
       </div>
       <div class="step">
@@ -469,14 +469,14 @@
     </div>
 
     <div class="code-block">
-      <div class="code-block-label">Terminal â€” mneme check output</div>
+      <div class="code-block-label">Terminal — mneme check output</div>
       <pre><span class="cc">$ </span><span class="ck">mneme check</span> <span class="cs">"add a search endpoint that filters by tag"</span> --mode strict
 
 <span class="cc">Retrieving relevant decisions... (3 matched)</span>
 
-<span class="cs">âœ“ PASS</span> decision/use-repository-pattern
-<span class="cs">âœ“ PASS</span> decision/tag-filtering-via-indexed-column
-<span style="color:#ff7070">âœ— FAIL</span> decision/no-direct-db-queries
+<span class="cs">? PASS</span> decision/use-repository-pattern
+<span class="cs">? PASS</span> decision/tag-filtering-via-indexed-column
+<span style="color:#ff7070">? FAIL</span> decision/no-direct-db-queries
   <span class="cc">Reason: Prompt implies direct query construction in handler layer.</span>
   <span class="cc">See: decisions/adr-004-no-direct-db.yml</span>
 
@@ -484,7 +484,7 @@
     </div>
 
     <div class="code-block">
-      <div class="code-block-label">CI â€” .github/workflows/mneme.yml</div>
+      <div class="code-block-label">CI — .github/workflows/mneme.yml</div>
       <pre><span class="ck">- name</span>: Check decision compliance
   <span class="ck">run</span>: mneme check --mode strict --ci</pre>
     </div>
@@ -508,7 +508,7 @@
         <div class="metric-label">to add a new decision to the enforcement layer</div>
       </div>
     </div>
-    <div class="simulated-note">âš  These figures are based on Mneme HQ's internal benchmark harness across 18 simulated violation scenarios â€” not live customer data.</div>
+    <div class="simulated-note">? These figures are based on Mneme HQ's internal benchmark harness across 18 simulated violation scenarios — not live customer data.</div>
   </div>
 
   <!-- FAQ -->
@@ -518,12 +518,12 @@
 
     <details>
       <summary>Does Mneme HQ work with Cursor, Claude Code, and Copilot?</summary>
-      <div class="faq-body">Yes. Mneme HQ works at the workflow level â€” it's not an IDE plugin. <code>mneme check</code> runs before you prompt, and <code>mneme cursor generate</code> writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via <code>CLAUDE.md</code>.</div>
+      <div class="faq-body">Yes. Mneme HQ works at the workflow level — it's not an IDE plugin. <code>mneme check</code> runs before you prompt, and <code>mneme cursor generate</code> writes a rules file that Cursor picks up automatically. Claude Code users can source the generated rules file via <code>CLAUDE.md</code>.</div>
     </details>
 
     <details>
       <summary>What's the difference between Mneme HQ and just writing better system prompts?</summary>
-      <div class="faq-body">System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme HQ uses semantic retrieval â€” only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves.</div>
+      <div class="faq-body">System prompts are static and have a context limit. As your decision history grows, a system prompt can't hold it. Mneme HQ uses semantic retrieval — only the decisions relevant to the current query are surfaced, so context stays focused and accurate as the project evolves.</div>
     </details>
 
     <details>
@@ -541,9 +541,9 @@
   <div class="related-wrap">
     <div class="section-eyebrow">Related Use Cases</div>
     <div class="related-links">
-    <a href="/use-cases/legacy-codebase-memory/">Legacy Codebase Memory â†’</a>
-    <a href="/use-cases/security-compliance-guardrails/">Security &amp; Compliance Guardrails â†’</a>
-    <a href="/use-cases/multi-agent-workflow-governance/">Multi-Agent Workflow Governance â†’</a>
+    <a href="/use-cases/legacy-codebase-memory/">Legacy Codebase Memory ?</a>
+    <a href="/use-cases/security-compliance-guardrails/">Security &amp; Compliance Guardrails ?</a>
+    <a href="/use-cases/multi-agent-workflow-governance/">Multi-Agent Workflow Governance ?</a>
     </div>
   </div>
   <div class="cta-footer">
@@ -555,7 +555,7 @@
   </div>
 </main>
 
-<footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: left;">
+<footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: center;">
   <div style="max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2.5rem 2rem;">
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Product</div>

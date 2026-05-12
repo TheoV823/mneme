@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mneme HQ — Architectural Governance Demo</title>
-  <meta name="description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model — compliant output when the governance layer is active." />
+  <title>Mneme HQ � Architectural Governance Demo</title>
+  <meta name="description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model � compliant output when the governance layer is active." />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0c0c0d" />
   <link rel="canonical" href="https://mnemehq.com/demo/" />
@@ -14,14 +14,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Mneme HQ" />
-  <meta property="og:title" content="Mneme HQ — Architectural Governance Demo" />
-  <meta property="og:description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model — compliant output when the governance layer is active." />
+  <meta property="og:title" content="Mneme HQ � Architectural Governance Demo" />
+  <meta property="og:description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model � compliant output when the governance layer is active." />
   <meta property="og:url" content="https://mnemehq.com/demo/" />
   <meta property="og:image" content="https://mnemehq.com/demo/og.png" />
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Mneme HQ — Architectural Governance Demo" />
-  <meta name="twitter:description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model — compliant output when the governance layer is active." />
+  <meta name="twitter:title" content="Mneme HQ � Architectural Governance Demo" />
+  <meta name="twitter:description" content="Watch Mneme HQ enforce architectural decisions in real time. Same prompt, same model � compliant output when the governance layer is active." />
   <meta name="twitter:image" content="https://mnemehq.com/demo/og.png" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
@@ -42,7 +42,7 @@
       },
       {
         "@type": "WebPage",
-        "name": "Mneme HQ — Architectural Governance Demo",
+        "name": "Mneme HQ � Architectural Governance Demo",
         "description": "Interactive demonstration of pre-generation architectural governance for AI coding agents. The same prompt to the same model yields compliant output when project decisions are injected, and mneme check validates the generated code against the decision corpus.",
         "url": "https://mnemehq.com/demo/",
         "datePublished": "2026-04-01",
@@ -70,7 +70,7 @@
         "@type": "FAQPage",
         "mainEntity": [
           {"@type": "Question", "name": "What does this demo show?", "acceptedAnswer": {"@type": "Answer", "text": "The same prompt sent to the same model produces architecturally compliant output when Mneme injects the project's decision records before generation. A third panel demonstrates mneme check, which validates generated code against those decisions and produces a structured PASS / WARN / FAIL report."}},
-          {"@type": "Question", "name": "What is mneme check?", "acceptedAnswer": {"@type": "Answer", "text": "A CLI command that validates a code change against the project's decision corpus. It runs as a pre-commit hook, in CI, or interactively. Output is structured — PASS, WARN, or FAIL with decision IDs — so it can gate pull requests or feed dashboards."}},
+          {"@type": "Question", "name": "What is mneme check?", "acceptedAnswer": {"@type": "Answer", "text": "A CLI command that validates a code change against the project's decision corpus. It runs as a pre-commit hook, in CI, or interactively. Output is structured � PASS, WARN, or FAIL with decision IDs � so it can gate pull requests or feed dashboards."}},
           {"@type": "Question", "name": "Does this work with Claude Code, Cursor, and GitHub Copilot?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Mneme is tool-agnostic. Hooks for Claude Code intercept Edit, Write, and MultiEdit calls; Cursor reads the same decision corpus through standard rules export; Copilot and other agents are governed via the post-generation enforcement step. See the integrations pages for each tool."}},
           {"@type": "Question", "name": "How is this different from CLAUDE.md or .cursor/rules?", "acceptedAnswer": {"@type": "Answer", "text": "CLAUDE.md and .cursor/rules are static text files the model is asked to respect. Mneme is a structured decision store with a precedence engine and hook-level enforcement, so compliance is not probabilistic. See the heterogeneous-agents article for the full argument and the cursor-rules comparison page for the head-to-head."}}
         ]
@@ -109,7 +109,7 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
+    /* -- NAV -- */
     nav {
       display: flex;
       justify-content: space-between;
@@ -155,7 +155,7 @@
     }
     .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
 
-    /* ── MAIN LAYOUT ── */
+    /* -- MAIN LAYOUT -- */
     main {
       max-width: 1060px;
       margin: 0 auto;
@@ -199,7 +199,7 @@
     .demo-meta a:hover { color: var(--text); }
     .demo-meta .sep { color: var(--border2); margin: 0 0.5rem; }
 
-    /* ── STEP INDICATOR ── */
+    /* -- STEP INDICATOR -- */
     .step-indicator {
       display: flex;
       gap: 0.5rem;
@@ -216,7 +216,7 @@
     .step-dot.active { background: var(--accent); }
     .step-dot.done { background: var(--teal); }
 
-    /* ── TERMINAL PANELS ── */
+    /* -- TERMINAL PANELS -- */
     .demo-wrap {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -275,7 +275,7 @@
       overflow: hidden;
     }
 
-    /* ── BADGES ── */
+    /* -- BADGES -- */
     .label-badge {
       display: inline-block;
       font-size: 0.63rem;
@@ -291,12 +291,12 @@
     .badge-warn { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
     .badge-fail { background: rgba(239,68,68,0.12); color: var(--fail); border: 1px solid rgba(239,68,68,0.25); }
 
-    /* ── ANIMATIONS ── */
+    /* -- ANIMATIONS -- */
     .hidden { display: none; }
     .fade-in { animation: fadeIn 0.35s ease forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 
-    /* ── REPLAY BUTTON ── */
+    /* -- REPLAY BUTTON -- */
     .replay-btn {
       margin-top: 1.75rem;
       background: transparent;
@@ -312,7 +312,7 @@
     }
     .replay-btn:hover { color: var(--text); border-color: var(--muted); }
 
-    /* ── CTA SECTION ── */
+    /* -- CTA SECTION -- */
     .cta-section {
       width: 100%;
       margin-top: 2rem;
@@ -402,7 +402,7 @@
       margin-top: 0.5rem;
     }
 
-    /* ── STATIC PROSE SECTIONS ── */
+    /* -- STATIC PROSE SECTIONS -- */
     .demo-prose {
       width: 100%;
       max-width: 720px;
@@ -567,7 +567,7 @@
       line-height: 1.8;
     }
 
-    /* ── FOOTER ── */
+    /* -- FOOTER -- */
     footer {
       border-top: 1px solid var(--border);
       text-align: center;
@@ -579,7 +579,7 @@
     footer a:hover { color: var(--text); }
 
     
-    /* ── HAMBURGER ── */
+    /* -- HAMBURGER -- */
     .nav-hamburger {
       display: none;
       background: none;
@@ -781,7 +781,7 @@
       </div>
     </div>
 
-    <button class="replay-btn" id="replay-btn" onclick="startDemo()">↩ Replay</button>
+    <button class="replay-btn" id="replay-btn" onclick="startDemo()">? Replay</button>
 
     <div class="cta-section" id="cta-section" style="display:none;">
       <!-- CLI install snippet -->
@@ -793,7 +793,7 @@
         </div>
         <p class="snippet-note">
           Full docs and source on
-          <a href="https://github.com/TheoV823/mneme" target="_blank" rel="noopener">GitHub →</a>
+          <a href="https://github.com/TheoV823/mneme" target="_blank" rel="noopener">GitHub ?</a>
         </p>
       </div>
 
@@ -932,7 +932,7 @@
     </section>
   </main>
 
-  <footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: left;">
+  <footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: center;">
   <div style="max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2.5rem 2rem;">
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Product</div>
@@ -1008,21 +1008,21 @@ const WITHOUT_LINES = [
 
 const WITH_LINES = [
   { t: 800,  html: '<div class="out-muted">Injecting project decisions...</div>' },
-  { t: 1400, html: '<div class="out-muted" style="font-size:0.72rem;color:#3a3a4a;">↳ ADR-001: JSON storage only — no external DB<br>↳ ADR-003: No ORM in v1<br>↳ ADR-005: Extend before rebuild</div>' },
+  { t: 1400, html: '<div class="out-muted" style="font-size:0.72rem;color:#3a3a4a;">? ADR-001: JSON storage only � no external DB<br>? ADR-003: No ORM in v1<br>? ADR-005: Extend before rebuild</div>' },
   { t: 2000, html: '<br>' },
   { t: 2100, html: '<div class="out-good">Storage decision enforced. Per ADR-001,</div>' },
-  { t: 2500, html: '<div class="out-good">JSON storage is locked — no Postgres,</div>' },
+  { t: 2500, html: '<div class="out-good">JSON storage is locked � no Postgres,</div>' },
   { t: 2900, html: '<div class="out-good">no Redis, no ORM in v1. Extend the</div>' },
   { t: 3300, html: '<div class="out-good">current storage module instead.</div>' },
 ];
 
 const CHECK_LINES = [
   { t: 400,  html: '<div class="out-muted">Checking decisions against current context...</div><br>' },
-  { t: 900,  html: '<div><span class="label-badge badge-pass">PASS</span> <span style="color:var(--text)">Storage decision enforced</span> <span class="out-muted">— JSON only, no new DBs</span></div>' },
-  { t: 1300, html: '<div><span class="label-badge badge-pass">PASS</span> <span style="color:var(--text)">Auth pattern respected</span> <span class="out-muted">— JWT middleware unchanged</span></div>' },
-  { t: 1700, html: '<div><span class="label-badge badge-warn">WARN</span> <span style="color:var(--text)">New dependency introduced</span> <span class="out-muted">— prisma not in approved list</span></div>' },
-  { t: 2100, html: '<div><span class="label-badge badge-fail">FAIL</span> <span style="color:var(--text)">Violates ADR-004</span> <span class="out-muted">— Repository pattern bypassed in user.service.ts</span></div>' },
-  { t: 2600, html: '<br><div class="out-muted">2 passed · 1 warning · 1 failure</div>' },
+  { t: 900,  html: '<div><span class="label-badge badge-pass">PASS</span> <span style="color:var(--text)">Storage decision enforced</span> <span class="out-muted">� JSON only, no new DBs</span></div>' },
+  { t: 1300, html: '<div><span class="label-badge badge-pass">PASS</span> <span style="color:var(--text)">Auth pattern respected</span> <span class="out-muted">� JWT middleware unchanged</span></div>' },
+  { t: 1700, html: '<div><span class="label-badge badge-warn">WARN</span> <span style="color:var(--text)">New dependency introduced</span> <span class="out-muted">� prisma not in approved list</span></div>' },
+  { t: 2100, html: '<div><span class="label-badge badge-fail">FAIL</span> <span style="color:var(--text)">Violates ADR-004</span> <span class="out-muted">� Repository pattern bypassed in user.service.ts</span></div>' },
+  { t: 2600, html: '<br><div class="out-muted">2 passed � 1 warning � 1 failure</div>' },
 ];
 
 let timers = [];
