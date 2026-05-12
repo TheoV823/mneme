@@ -44,7 +44,8 @@
           {"@type": "WebPage", "name": "CLI reference", "url": "https://mnemehq.com/docs/cli/"},
           {"@type": "WebPage", "name": "Governance violations", "url": "https://mnemehq.com/docs/governance-violations/"},
           {"@type": "WebPage", "name": "Supported languages", "url": "https://mnemehq.com/docs/supported-languages/"},
-          {"@type": "WebPage", "name": "Benchmark methodology", "url": "https://mnemehq.com/docs/benchmark-methodology/"}
+          {"@type": "WebPage", "name": "Benchmark methodology", "url": "https://mnemehq.com/docs/benchmark-methodology/"},
+          {"@type": "WebPage", "name": "How enforcement works", "url": "https://mnemehq.com/docs/how-enforcement-works/"}
         ]
       }
     ]
@@ -169,12 +170,18 @@
       <p>How the v1.1 governance benchmark is measured: layered retrieval and enforcement scoring, structured-output verification, pre-registered thresholds, anti-gaming protocol.</p>
       <span class="read">Benchmark methodology &rarr;</span>
     </a>
+    <a class="doc-card" href="/docs/how-enforcement-works/">
+      <div class="dh"><span class="dname">How enforcement works</span><span class="dtag">Concept</span></div>
+      <p>How Mneme turns human-authored decisions into deterministic enforcement rules. The four-step flow from authoring to pre-generation verdict, with a concrete worked example.</p>
+      <span class="read">How enforcement works &rarr;</span>
+    </a>
   </div>
 
   <h2 style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:3.5rem 0 1.25rem;">How to read these docs</h2>
   <p style="font-size:0.9rem;color:var(--muted);line-height:1.85;max-width:780px;margin:0 0 1.25rem;">The CLI reference is the operational entrypoint: every governance action — listing decisions, adding them, running a check, generating Cursor rules, executing the benchmark — flows through one of the documented commands. Pair it with the governance violations doc to understand <em>what</em> the <code style="font-family:'DM Mono',monospace;font-size:0.85em;background:var(--surface2);padding:0.05rem 0.4rem;border-radius:4px;border:1px solid var(--border);">check</code> command is actually surfacing in practice.</p>
   <p style="font-size:0.9rem;color:var(--muted);line-height:1.85;max-width:780px;margin:0 0 1.25rem;">The supported languages page is the canonical coverage matrix — Tier 1 (Python, TypeScript, JavaScript) gets native depth; Tier 2 (Go, Java, C#, Rust) gets repository-level governance through architectural and dependency rules. Mneme is language-agnostic by design; that page documents where the depth lives today and what is on the roadmap.</p>
-  <p style="font-size:0.9rem;color:var(--muted);line-height:1.85;max-width:780px;margin:0;">The benchmark methodology page is the methodology specification, not a results dashboard. It describes layered retrieval and enforcement scoring, structured-output verification, pre-registered thresholds, and the anti-gaming protocol — methodology before metrics. Cross-link: see the <a href="/insights/" style="color:var(--accent);text-decoration:none;">Insights</a> hub for essays on the underlying architectural-governance category, and the <a href="https://github.com/TheoV823/mneme" style="color:var(--accent);text-decoration:none;">source repository</a> for everything the docs do not cover.</p>
+  <p style="font-size:0.9rem;color:var(--muted);line-height:1.85;max-width:780px;margin:0 0 1.25rem;">The benchmark methodology page is the methodology specification, not a results dashboard. It describes layered retrieval and enforcement scoring, structured-output verification, pre-registered thresholds, and the anti-gaming protocol — methodology before metrics. Cross-link: see the <a href="/insights/" style="color:var(--accent);text-decoration:none;">Insights</a> hub for essays on the underlying architectural-governance category, and the <a href="https://github.com/TheoV823/mneme" style="color:var(--accent);text-decoration:none;">source repository</a> for everything the docs do not cover.</p>
+  <p style="font-size:0.9rem;color:var(--muted);line-height:1.85;max-width:780px;margin:0;">The how enforcement works page is the conceptual starting point if you want to understand the mechanism before reading the CLI or benchmark docs. It covers the four-step flow — authoring, retrieval, pre-generation check, auditable verdict — and includes a concrete worked example. Start here if you are evaluating whether Mneme fits your workflow.</p>
 </div>
 
 </main>
@@ -201,6 +208,7 @@
         <li><a href="/docs/">Docs</a></li>
         <li><a href="/docs/cli/">CLI reference</a></li>
         <li><a href="/docs/governance-violations/">Governance violations</a></li>
+        <li><a href="/docs/how-enforcement-works/">How enforcement works</a></li>
         <li><a href="/supported-languages/">Supported languages</a></li>
       </ul>
     </div>

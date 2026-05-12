@@ -61,6 +61,7 @@ Items 1 and 2 are mechanical. Items 3, 4, and 5 are the work of this validation 
 ## Links
 
 - **Freeze artifact** — [layer1-freeze-e73ff7d.md](./layer1-freeze-e73ff7d.md)
+- **Governance representation** — [governance-representation.md](./governance-representation.md) — how ADRs become deterministic enforcement rules
 - **Benchmark methodology (public)** — [/benchmark/](https://mnemehq.com/benchmark/) and [/docs/benchmark-methodology/](https://mnemehq.com/docs/benchmark-methodology/)
 - **Roadmap** — [docs/roadmap/](../roadmap/)
 - **ADRs** — [docs/adr/](../adr/)
