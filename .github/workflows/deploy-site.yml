@@ -7,6 +7,8 @@ on:
       - 'site/**'
       - 'scripts/deploy_site.py'
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'  # 06:00 UTC daily — catches any commits that skipped the push trigger
 
 permissions:
   contents: write
