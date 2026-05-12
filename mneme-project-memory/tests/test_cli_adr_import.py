@@ -40,7 +40,7 @@ def test_adr_import_dry_run_prints_preview_and_does_not_write(tmp_path, capsys):
     assert target.read_text(encoding="utf-8") == before
 
 
-def test_adr_import_default_is_dry_run(tmp_path, capsys):
+def test_adr_import_default_is_dry_run(tmp_path):
     """Without --apply or --dry-run, behavior must match --dry-run."""
     target = tmp_path / "project_memory.json"
     _seed_empty_memory(target)

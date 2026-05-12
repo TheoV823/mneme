@@ -227,12 +227,12 @@ def _cmd_adr_import(args: argparse.Namespace) -> int:
 
     adr_dir = Path(args.adr_dir)
     if not adr_dir.is_dir():
-        print(f"ERROR: {adr_dir} is not a directory", file=sys.stderr)
+        print(f"ERROR: {adr_dir} is not a directory", file=sys.stderr, flush=True)
         return 2
 
     target_path = Path(args.memory)
     if not target_path.exists():
-        print(f"ERROR: memory file {target_path} does not exist", file=sys.stderr)
+        print(f"ERROR: memory file {target_path} does not exist", file=sys.stderr, flush=True)
         return 2
 
     report = compile_for_import(adr_dir)
@@ -250,7 +250,7 @@ def _cmd_adr_import(args: argparse.Namespace) -> int:
                 approve_conflicts=args.approve_conflicts,
             )
         except RuntimeError as exc:
-            print(f"ERROR: {exc}", file=sys.stderr)
+            print(f"ERROR: {exc}", file=sys.stderr, flush=True)
             return 2
         print(f"Wrote {len(written)} decisions to {target_path}")
         return 0
