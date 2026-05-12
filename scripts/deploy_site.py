@@ -68,12 +68,15 @@ def purge_cf_cache(urls=None):
         headers={'Authorization': f'Bearer {CF_TOKEN}', 'Content-Type': 'application/json'},
         method='POST',
     )
-    with urllib.request.urlopen(req) as r:
-        result = json.loads(r.read())
-    if result.get('success'):
-        print(f'[OK] Cloudflare cache purged ({desc})')
-    else:
-        print(f'[WARN] Cloudflare purge failed: {result.get("errors")}')
+    try:
+        with urllib.request.urlopen(req) as r:
+            result = json.loads(r.read())
+        if result.get('success'):
+            print(f'[OK] Cloudflare cache purged ({desc})')
+        else:
+            print(f'[WARN] Cloudflare purge failed: {result.get("errors")}')
+    except Exception as e:
+        print(f'[WARN] Cloudflare purge error (deploy succeeded): {e}')
 
 # ── cPanel credentials ────────────────────────────────────────────────────────
 HOST  = os.environ.get('CPANEL_HOST',  '152.89.79.37')
