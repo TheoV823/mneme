@@ -402,7 +402,7 @@
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
-    <a href="/pilot/" class="btn-nav-cta">Request pilot</a>
+    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
   </div>
 </nav>
 
@@ -627,6 +627,17 @@
       btn.textContent = 'Submit pilot request';
       error.style.display = 'block';
     });
+  });
+})();
+</script>
+<script><!-- nav-active -->
+(function(){
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var href = a.getAttribute('href');
+    if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
+      a.classList.add('active');
+    }
   });
 })();
 </script>
