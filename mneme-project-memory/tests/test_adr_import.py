@@ -166,7 +166,6 @@ def test_format_preview_shows_active_active_contradiction_block():
 
 def test_apply_import_appends_decisions_to_target_memory(tmp_path):
     """Persistence path: clean corpus + clean target -> appended decisions[]."""
-    import json
     from mneme.adr_import import apply_import, compile_for_import
 
     # Set up an empty target
@@ -190,7 +189,6 @@ def test_apply_import_appends_decisions_to_target_memory(tmp_path):
 
 def test_apply_import_refuses_overwrite_without_allow_update(tmp_path):
     """Same-id collision must block apply unless allow_update=True."""
-    import json
     from mneme.adr_import import apply_import, compile_for_import
 
     target = tmp_path / "project_memory.json"
@@ -204,7 +202,6 @@ def test_apply_import_refuses_overwrite_without_allow_update(tmp_path):
 
 def test_apply_import_overwrites_with_allow_update(tmp_path):
     """allow_update=True overwrites the colliding decisions[] entry in place."""
-    import json
     from mneme.adr_import import apply_import, compile_for_import
 
     target = tmp_path / "project_memory.json"
@@ -224,7 +221,6 @@ def test_apply_import_overwrites_with_allow_update(tmp_path):
 
 def test_apply_import_refuses_when_unresolved_active_active(tmp_path):
     """If the corpus has an active-active contradiction, apply must refuse."""
-    import json
     from mneme.adr_import import apply_import, compile_for_import
 
     target = tmp_path / "project_memory.json"

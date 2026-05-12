@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
-from mneme.adr_schema import ADR, ADRPrecedenceError, ADRValidationError
+from mneme.adr_schema import ADR, ADRPrecedenceError
 from mneme.adr_compiler import (
     adrs_to_decisions,
     resolve_precedence,
@@ -347,8 +347,12 @@ def apply_import(
         os.replace(tmp, str(target_path))
     except Exception:
         try:
+            os.close(fd)
+        except OSError:
+            pass  # already closed by os.fdopen's context manager
+        try:
             os.unlink(tmp)
-        except FileNotFoundError:
+        except OSError:
             pass
         raise
 
