@@ -160,9 +160,9 @@ These are deliberate exclusions, not gaps:
    from existing code patterns. The import flow is its foundation, not its
    replacement.
 
-6. **Modifying `.mneme/project_memory.json` in this PR.** Per the repo's
-   governance rules, editing the canonical memory file is a `[memory]`-tagged
-   PR, separate from this feature PR.
+6. **Modifying `.mneme/project_memory.json` as part of this feature.** Per the
+   repo's governance rules, editing the canonical memory file requires a
+   separate `[memory]`-tagged PR.
 
 ---
 
