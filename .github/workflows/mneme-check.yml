@@ -76,6 +76,7 @@ jobs:
             case "$f" in
               *.lock|*.png|*.jpg|*.jpeg|*.gif|*.ico|*.svg|*.webp|*.woff|*.woff2|*.ttf|*.eot|*.docx|*.xlsx|*.pdf|*.zip|*.tar|*.gz) continue ;;
               package-lock.json|yarn.lock|pnpm-lock.yaml|poetry.lock|Pipfile.lock|uv.lock) continue ;;
+              site/llms.txt|site/llms-full.txt) continue ;;
             esac
             [ -f "$f" ] || continue
             echo "$f" >> /tmp/mneme/files.txt
