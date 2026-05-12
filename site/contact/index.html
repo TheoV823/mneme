@@ -269,6 +269,87 @@
       line-height: 1.55;
     }
 
+    /* ── WHO IT'S FOR (ICP) ── */
+    .icp-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 2rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .icp-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .icp-heading {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .icp-lead {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      max-width: 580px;
+    }
+    .icp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .icp-col-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .icp-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .icp-list li {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.55;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .icp-list li::before {
+      content: '\00b7';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .icp-notfit {
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .icp-list-muted li { color: var(--muted); }
+    .icp-list-muted li::before { color: var(--border2); }
+    .icp-conversion {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      padding: 1rem 1.25rem;
+      border-left: 2px solid var(--accent);
+      background: rgba(200,240,96,0.04);
+      border-radius: 0 6px 6px 0;
+    }
+
     /* ── NOTE ── */
     .note {
       font-size: 0.8rem;
@@ -297,6 +378,7 @@
       nav { padding: 1rem 1.25rem; }
       .page-wrap { padding: 3rem 1.25rem 5rem; }
       .topic-grid { grid-template-columns: 1fr; }
+      .icp-grid { grid-template-columns: 1fr; }
     }
 
     
@@ -457,6 +539,45 @@
   <div class="page-tag">Contact</div>
   <h1>Get in touch</h1>
   <p class="page-sub">Questions about integration, enterprise adoption, OSS contributions, or anything else — reach out via the channels below.</p>
+
+  <!-- WHO IT'S FOR -->
+  <section class="icp-section" aria-labelledby="icp-heading">
+    <div class="icp-eyebrow">Who this is for</div>
+    <h2 class="icp-heading" id="icp-heading">Who Mneme is built for</h2>
+    <p class="icp-lead">Mneme is built for engineering teams where AI-assisted development is moving faster than traditional architectural review.</p>
+
+    <div class="icp-grid">
+      <div>
+        <div class="icp-col-label">Strong fit</div>
+        <ul class="icp-list">
+          <li>Platform engineering and internal developer platform teams</li>
+          <li>Backend, data platform, and infrastructure teams</li>
+          <li>AI-native product teams using Cursor, Claude Code, Copilot, or agentic workflows</li>
+          <li>Architecture guilds and engineering enablement teams responsible for ADRs and standards</li>
+        </ul>
+      </div>
+      <div>
+        <div class="icp-col-label">Typical use cases</div>
+        <ul class="icp-list">
+          <li>Enforcing architectural decisions across AI-generated code</li>
+          <li>Preventing agents from bypassing approved patterns</li>
+          <li>Keeping legacy modernization work aligned with existing boundaries</li>
+          <li>Turning ADRs and repo rules into deterministic governance checks</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="icp-notfit">
+      <div class="icp-col-label">Less ideal</div>
+      <ul class="icp-list icp-list-muted">
+        <li>Solo projects without architectural complexity</li>
+        <li>Teams only looking for generic code review</li>
+        <li>Runtime AI safety or chatbot governance use cases</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="icp-conversion">Request a pilot if your team is already using AI coding tools and architectural review is becoming harder to scale.</p>
 
   <!-- CONTACT CHANNELS -->
   <div class="contact-grid">
