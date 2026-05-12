@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request a Mneme Pilot | Mneme HQ</title>
+  <meta name="description" content="Request a Mneme pilot. Mneme is working with engineering teams using AI coding tools who need deterministic architectural governance across repositories, ADRs, and agent workflows." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <link rel="canonical" href="https://mnemehq.com/pilot/" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mneme HQ" />
+  <meta property="og:title" content="Request a Mneme Pilot | Mneme HQ" />
+  <meta property="og:description" content="Request a Mneme pilot. Mneme is working with engineering teams using AI coding tools who need deterministic architectural governance." />
+  <meta property="og:url" content="https://mnemehq.com/pilot/" />
+  <meta property="og:image" content="https://mnemehq.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Request a Mneme Pilot | Mneme HQ" />
+  <meta name="twitter:description" content="Request a Mneme pilot. Mneme is working with engineering teams using AI coding tools who need deterministic architectural governance." />
+  <meta name="twitter:image" content="https://mnemehq.com/og.png" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.png" type="image/png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://mnemehq.com/pilot/",
+        "url": "https://mnemehq.com/pilot/",
+        "name": "Request a Mneme Pilot",
+        "description": "Request a Mneme pilot for your engineering team.",
+        "isPartOf": { "@type": "WebSite", "name": "Mneme HQ", "url": "https://mnemehq.com/" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mnemehq.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Pilot", "item": "https://mnemehq.com/pilot/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0d;
+      --surface: #141416;
+      --surface2: #1a1a1d;
+      --border: #222226;
+      --border2: #2e2e34;
+      --text: #e8e8ec;
+      --muted: #88889a;
+      --accent: #c8f060;
+      --accent-dim: #a8d040;
+      --teal: #8be0c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(12,12,13,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-family: 'Inter', sans-serif;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #0c0c0d;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 5rem 2rem 7rem;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb .sep { color: var(--border2); }
+
+    /* ── HEADER ── */
+    .page-tag {
+      display: inline-block;
+      background: rgba(200,240,96,0.07);
+      border: 1px solid rgba(200,240,96,0.22);
+      color: var(--accent);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .page-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      max-width: 540px;
+    }
+
+    /* ── FIT LIST ── */
+    .fit-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .fit-section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+    .fit-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .fit-list li {
+      font-size: 0.84rem;
+      color: var(--text);
+      line-height: 1.55;
+      padding-left: 1.1rem;
+      position: relative;
+    }
+    .fit-list li::before {
+      content: '\00b7';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── FORM ── */
+    .pilot-form-wrap {
+      border-top: 1px solid var(--border);
+      padding-top: 2.5rem;
+    }
+    .form-heading {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.75rem;
+      letter-spacing: -0.01em;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .field label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      padding: 0.6rem 0.85rem;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+    }
+    .field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2388889a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2.25rem;
+    }
+    .field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--border2); }
+    .field-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .submit-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .btn-submit {
+      background: var(--accent);
+      color: #0c0c0d;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.75rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-submit:hover { background: var(--accent-dim); }
+    .submit-note {
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 5rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ── NAV HAMBURGER ── */
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .nav-hamburger:hover { border-color: var(--accent); }
+    .nav-hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .nav-hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      transition: transform 0.25s ease, opacity 0.18s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    @media (max-width: 900px) {
+      html, body { overflow-x: hidden; }
+      body.menu-open { overflow: hidden; }
+      nav { position: relative; padding: 1rem 1.25rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: flex !important;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        gap: 0;
+        background: rgba(12,12,13,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 1.25rem;
+        z-index: 99;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transition: max-height 0.28s ease, opacity 0.2s ease, padding 0.28s ease, visibility 0s linear 0.28s;
+      }
+      .nav-links.open {
+        max-height: 80vh;
+        opacity: 1;
+        visibility: visible;
+        padding: 0.5rem 1.25rem 1.25rem;
+        transition: max-height 0.32s ease, opacity 0.25s ease, padding 0.32s ease, visibility 0s;
+        overflow-y: auto;
+      }
+      .nav-links a:not(.btn-nav-cta) {
+        display: block;
+        color: var(--text);
+        font-size: 0.92rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links a:not(.btn-nav-cta):last-of-type { border-bottom: none; }
+      .nav-links .btn-nav-cta { margin-top: 1rem; text-align: center; display: block; }
+    }
+
+    @media (max-width: 600px) {
+      .page-wrap { padding: 3rem 1.25rem 5rem; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<nav>
+  <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/use-cases/">Use cases</a>
+    <a href="/insights/">Insights</a>
+    <a href="/roadmap/">Roadmap</a>
+    <a href="/demo/">Demo</a>
+    <a href="/benchmark/">Benchmark</a>
+    <a href="https://github.com/TheoV823/mneme">GitHub</a>
+    <a href="/pilot/" class="btn-nav-cta">Request pilot</a>
+  </div>
+</nav>
+
+<main>
+<div class="page-wrap">
+
+  <div class="breadcrumb">
+    <a href="/">Mneme HQ</a>
+    <span class="sep">/</span>
+    <span>Pilot</span>
+  </div>
+
+  <div class="page-tag">Early access</div>
+  <h1>Request a Mneme Pilot</h1>
+  <p class="page-sub">Mneme is currently working with engineering teams using AI coding tools who need deterministic architectural governance across repositories, ADRs, and agent workflows.</p>
+
+  <div class="fit-section">
+    <div class="fit-section-label">Good-fit pilots usually involve</div>
+    <ul class="fit-list">
+      <li>Cursor, Claude Code, GitHub Copilot, or agentic coding workflows in active use</li>
+      <li>Existing ADRs, repo rules, or engineering standards to enforce</li>
+      <li>Architectural drift, review bottlenecks, or consistency issues appearing in AI-generated code</li>
+      <li>Platform, backend, infrastructure, or data-heavy systems with non-trivial architectural constraints</li>
+    </ul>
+  </div>
+
+  <div class="pilot-form-wrap">
+    <div class="form-heading">Tell us about your team</div>
+
+    <!-- Replace action with your form endpoint (Formspree, HubSpot, etc.) -->
+    <form class="field-group" method="POST" action="mailto:hi@theovalmis.com" enctype="text/plain">
+
+      <div class="field-row">
+        <div class="field">
+          <label for="pilot-name">Name</label>
+          <input type="text" id="pilot-name" name="name" placeholder="Your name" required />
+        </div>
+        <div class="field">
+          <label for="pilot-email">Work email</label>
+          <input type="email" id="pilot-email" name="email" placeholder="you@company.com" required />
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="pilot-company">Company or team</label>
+          <input type="text" id="pilot-company" name="company" placeholder="Company or org name" required />
+        </div>
+        <div class="field">
+          <label for="pilot-team-type">Team type</label>
+          <select id="pilot-team-type" name="team_type" required>
+            <option value="" disabled selected>Select…</option>
+            <option value="platform">Platform engineering / IDP</option>
+            <option value="data">Backend / data platform / infrastructure</option>
+            <option value="ai-native">AI-native product engineering</option>
+            <option value="architecture">Architecture guild / enablement</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="pilot-tools">AI coding tools your team uses</label>
+        <input type="text" id="pilot-tools" name="tools" placeholder="e.g. Cursor, Claude Code, Copilot, custom agents…" />
+      </div>
+
+      <div class="field">
+        <label for="pilot-challenge">What governance challenge are you trying to solve?</label>
+        <textarea id="pilot-challenge" name="challenge" placeholder="Describe the architectural drift, review bottleneck, or consistency problem you're dealing with…"></textarea>
+        <span class="field-hint">No minimum length — a sentence is fine.</span>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit">Submit pilot request</button>
+        <span class="submit-note">We respond within 1–2 business days.<br>Not sure if you fit? <a href="/for/" style="color: var(--muted); text-decoration: underline; text-decoration-color: var(--border2);">See who Mneme is for →</a></span>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: left;">
+  <div style="max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2.5rem 2rem;">
+    <div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Product</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
+        <li><a href="/use-cases/">Use cases</a></li>
+        <li><a href="/works-with/">Works with</a></li>
+        <li><a href="/platforms/">Platforms</a></li>
+        <li><a href="/integrations/">Integrations</a></li>
+        <li><a href="/compare/">Compare</a></li>
+        <li><a href="/demo/">Demo</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Learn</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
+        <li><a href="/insights/">Insights</a></li>
+        <li><a href="/standards/">Standards</a></li>
+        <li><a href="/benchmark/">Benchmark</a></li>
+        <li><a href="/docs/">Docs</a></li>
+        <li><a href="/docs/cli/">CLI reference</a></li>
+        <li><a href="/docs/governance-violations/">Governance violations</a></li>
+        <li><a href="/supported-languages/">Supported languages</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Company</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
+        <li><a href="/for/">Who it's for</a></li>
+        <li><a href="/pilot/">Request pilot</a></li>
+        <li><a href="/founder/">Founder</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/roadmap/">Roadmap</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Code</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
+        <li><a href="https://github.com/TheoV823/mneme">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width: 1080px; margin: 2.5rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.76rem; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.03em;">
+    <span>Mneme HQ&trade; &middot; Open source &middot; MIT License</span>
+    <nav aria-label="Social media" style="display: flex; align-items: center; gap: 1rem;">
+      <a href="https://github.com/TheoV823/mneme" target="_blank" rel="noopener" aria-label="GitHub" style="color: var(--muted); display: inline-flex;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.69-1.27-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.12 3.04.73.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.35.78 1.05.78 2.12v3.15c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener" aria-label="LinkedIn" style="color: var(--muted); display: inline-flex;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@MnemeHQ" target="_blank" rel="noopener" aria-label="YouTube" style="color: var(--muted); display: inline-flex;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.12C19.55 3.5 12 3.5 12 3.5s-7.55 0-9.4.58A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.12c1.85.58 9.4.58 9.4.58s7.55 0 9.4-.58a3 3 0 0 0 2.1-2.12A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg>
+      </a>
+    </nav>
+    <span>&copy; 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var href = a.getAttribute('href');
+    if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
+      a.classList.add('active');
+    }
+  });
+})();
+</script>
+<script>
+(function(){
+  var btn = document.querySelector('.nav-hamburger');
+  var links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+  function setOpen(open){
+    links.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('menu-open', open);
+  }
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(!links.classList.contains('open'));
+  });
+  document.addEventListener('click', function(e){
+    if (!links.classList.contains('open')) return;
+    if (links.contains(e.target) || btn.contains(e.target)) return;
+    setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && links.classList.contains('open')) setOpen(false);
+  });
+  links.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') setOpen(false);
+  });
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 900 && links.classList.contains('open')) setOpen(false);
+  });
+})();
+</script>
+</body>
+</html>

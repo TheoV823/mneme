@@ -269,6 +269,34 @@
       line-height: 1.55;
     }
 
+    /* ── PILOT CARD ── */
+    .pilot-card {
+      background: rgba(200,240,96,0.04);
+      border: 1px solid rgba(200,240,96,0.18);
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .pilot-card-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .pilot-card-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.9rem;
+    }
+    .pilot-card-link {
+      font-size: 0.85rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .pilot-card-link:hover { color: var(--accent-dim); }
+
     /* ── NOTE ── */
     .note {
       font-size: 0.8rem;
@@ -458,6 +486,13 @@
   <h1>Get in touch</h1>
   <p class="page-sub">Questions about integration, enterprise adoption, OSS contributions, or anything else — reach out via the channels below.</p>
 
+  <!-- PILOT CARD -->
+  <div class="pilot-card">
+    <div class="pilot-card-label">Pilot programme</div>
+    <p class="pilot-card-text">Mneme is working with engineering teams using AI coding tools who need deterministic architectural governance. If that's your team, request a pilot before reaching out with general questions.</p>
+    <a href="/pilot/" class="pilot-card-link">Request a Mneme pilot →</a>
+  </div>
+
   <!-- CONTACT CHANNELS -->
   <div class="contact-grid">
 
@@ -576,7 +611,8 @@
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Company</div>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
-        <li><a href="/for/">For teams</a></li>
+        <li><a href="/for/">Who it's for</a></li>
+        <li><a href="/pilot/">Request pilot</a></li>
         <li><a href="/founder/">Founder</a></li>
         <li><a href="/about/">About</a></li>
         <li><a href="/roadmap/">Roadmap</a></li>
