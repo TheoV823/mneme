@@ -2,6 +2,7 @@
 """Tests for the ADR import flow (graph projection, conflicts, persistence)."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -52,3 +53,64 @@ def test_project_decision_graph_proposed_status_marked_inactive():
     # exactly {active, superseded, deprecated, inactive}. The user's spec
     # named three; "inactive" carries the proposed/draft case.
     assert by_id["ADR-013"].status == "inactive"
+
+
+def test_detect_collisions_same_id_in_decisions():
+    from mneme.adr_import import detect_collisions, DecisionNode
+
+    target_memory = json.loads(
+        (FIXTURES / "memory_for_import_collision.json").read_text(encoding="utf-8")
+    )
+    incoming = [DecisionNode(id="ADR-101", status="active")]
+
+    collisions = detect_collisions(incoming, target_memory)
+    assert len(collisions) == 1
+    assert collisions[0].kind == "same_id"
+    assert collisions[0].adr_id == "ADR-101"
+    assert collisions[0].existing_in == "decisions"
+
+
+def test_detect_collisions_same_id_in_items():
+    from mneme.adr_import import detect_collisions, DecisionNode
+
+    target_memory = {
+        "meta": {"name": "x", "description": "x", "version": "1.0.0", "owner": "x", "created": "2026-01-01"},
+        "items": [{"id": "ADR-555", "type": "rule", "title": "manual rule", "content": "x", "tags": [], "priority": "medium"}],
+        "examples": [],
+        "decisions": [],
+    }
+    incoming = [DecisionNode(id="ADR-555", status="active")]
+
+    collisions = detect_collisions(incoming, target_memory)
+    assert collisions[0].existing_in == "items"
+
+
+def test_detect_collisions_returns_empty_when_no_overlap():
+    from mneme.adr_import import detect_collisions, DecisionNode
+
+    target_memory = json.loads(
+        (FIXTURES / "memory_for_import_collision.json").read_text(encoding="utf-8")
+    )
+    incoming = [DecisionNode(id="ADR-999", status="active")]
+    assert detect_collisions(incoming, target_memory) == []
+
+
+def test_compile_for_import_surfaces_precedence_ambiguity_as_diagnostic():
+    """Active-active scope tie should be a loud diagnostic, not a raise."""
+    from mneme.adr_import import compile_for_import
+
+    report = compile_for_import(FIXTURES / "adrs_import_with_conflicts")
+    # The compile completes (no raise), but a diagnostic is recorded.
+    assert any(d.kind == "active_active_contradiction" for d in report.diagnostics)
+    # Active-set should be empty because precedence couldn't pick — we don't
+    # silently pick a winner.
+    assert report.active_nodes == []
+
+
+def test_compile_for_import_clean_corpus_has_no_diagnostics():
+    from mneme.adr_import import compile_for_import
+
+    report = compile_for_import(FIXTURES / "adrs_import_basic")
+    assert report.diagnostics == []
+    active_ids = {n.id for n in report.active_nodes}
+    assert active_ids == {"ADR-101", "ADR-102"}
