@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -96,8 +96,8 @@
     .hub-intro { font-size: 0.88rem; color: var(--muted); line-height: 1.8; max-width: 660px; margin: 0 auto 3rem; }
     .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
 
-    .insight-card-link { display: block; text-decoration: none; color: inherit; }
-    .insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 0.65rem; transition: border-color 0.15s, transform 0.18s ease, background 0.15s; }
+    .insight-card-link { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+    .insight-card { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 0.65rem; transition: border-color 0.15s, transform 0.18s ease, background 0.15s; }
     .insight-card-link:hover .insight-card { border-color: var(--border2); transform: translateY(-2px); background: rgba(200, 240, 96, 0.025); }
     .insight-card.coming-soon { opacity: 0.55; }
     .card-meta { display: flex; align-items: center; gap: 0.6rem; }
@@ -653,6 +653,7 @@
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
         <li><a href="https://github.com/TheoV823/mneme">GitHub</a></li>
         <li><a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://dev.to/mnemehq" target="_blank" rel="noopener">Dev.to</a></li>
         <li><a href="/privacy/">Privacy</a></li>
       </ul>
     </div>
