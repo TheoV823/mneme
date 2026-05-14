@@ -176,6 +176,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://mnemehq.com/integrations/vscode/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://mnemehq.com/integrations/github-actions/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -184,6 +189,11 @@
     <loc>https://mnemehq.com/integrations/adr-import/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mnemehq.com/integrations/copilot/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mnemehq.com/integrations/perplexity/</loc>
