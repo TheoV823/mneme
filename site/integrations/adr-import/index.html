@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -206,20 +206,7 @@
       .article-wrap { padding: 3rem 1.25rem 5rem; }
     }
 
-    .pipeline-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 2.5rem 0 3rem; }
-    .pipeline-badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; }
-    .pipeline-steps { display: flex; align-items: flex-start; overflow-x: auto; padding-bottom: 0.25rem; -webkit-overflow-scrolling: touch; }
-    .ps { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex: 1; min-width: 118px; text-align: center; padding: 0 0.25rem; }
-    .ps-num { width: 26px; height: 26px; border-radius: 50%; background: rgba(200,240,96,0.08); border: 1px solid rgba(200,240,96,0.25); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.72rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .ps-label { font-size: 0.82rem; font-weight: 600; color: var(--text); line-height: 1.3; }
-    .ps-hint { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); line-height: 1.45; margin-top: 0.1rem; }
-    .ps-arrow { color: var(--border2); font-size: 0.9rem; padding: 0 0.35rem; align-self: flex-start; padding-top: 0.45rem; flex-shrink: 0; }
-
-    .pre-comment { color: var(--muted) !important; font-style: italic; }
-    .pre-hl { color: var(--accent) !important; font-weight: 500; }
-    .safety-note { color: var(--text); font-size: 0.97rem; font-weight: 500; margin-bottom: 1.25rem; padding: 0.7rem 1rem; background: rgba(200,240,96,0.04); border-left: 2px solid rgba(200,240,96,0.25); border-radius: 0 6px 6px 0; }
-
-    h2#related-reading { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: none; color: var(--muted); font-weight: 400; margin-top: 3.5rem; margin-bottom: 0.75rem; }
+    h2#related-reading { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; margin-top: 3.5rem; margin-bottom: 0.75rem; }
     h2#related-reading + ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden; }
     h2#related-reading + ul li { margin: 0; }
     h2#related-reading + ul li a { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; background: var(--surface); color: var(--text); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: background 0.15s, color 0.15s; }
@@ -302,7 +289,7 @@
       <span class="eyebrow-meta">4 min read &nbsp;&middot;&nbsp; May 2026</span>
     </div>
     <h1>Import Existing ADRs</h1>
-    <p class="article-lede">Your ADRs are already written. This makes them enforceable. Add a <code>## Constraints</code> section, run one command to preview, one to apply &mdash; and Mneme catches violations before they land in review.</p>
+    <p class="article-lede">Your ADRs are already written. This makes them enforceable. Add a <code>## Constraints</code> section, run one command to preview, one to apply &mdash; and the decisions are live in the enforcement pipeline.</p>
     <p class="byline">
       By <a href="/founder/">Theo Valmis</a>
       <span class="sep">&middot;</span>
@@ -310,39 +297,7 @@
     </p>
   </header>
 
-  <div class="pipeline-wrap" role="img" aria-label="Four-step import pipeline: add constraints, preview, apply, verify">
-    <div class="pipeline-badge">2 commands &middot; zero rewriting &middot; atomic writes</div>
-    <div class="pipeline-steps">
-      <div class="ps">
-        <div class="ps-num">1</div>
-        <div class="ps-label">Add constraints</div>
-        <div class="ps-hint">FORBID_DEPENDENCY:<br>per ADR file</div>
-      </div>
-      <div class="ps-arrow">&rarr;</div>
-      <div class="ps">
-        <div class="ps-num">2</div>
-        <div class="ps-label">Preview</div>
-        <div class="ps-hint">--dry-run<br>nothing writes</div>
-      </div>
-      <div class="ps-arrow">&rarr;</div>
-      <div class="ps">
-        <div class="ps-num">3</div>
-        <div class="ps-label">Apply</div>
-        <div class="ps-hint">--apply<br>atomic write</div>
-      </div>
-      <div class="ps-arrow">&rarr;</div>
-      <div class="ps">
-        <div class="ps-num">4</div>
-        <div class="ps-label">Verify</div>
-        <div class="ps-hint">mneme check<br>WARN fires</div>
-      </div>
-    </div>
-  </div>
-
   <div class="article-body">
-
-    <p style="font-size:0.97rem;color:var(--text);font-weight:500;line-height:1.75;margin-bottom:0.75rem;">Most teams already document architectural decisions. The problem is that AI coding agents do not enforce them.</p>
-    <p style="font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:2.75rem;"><code>mneme adr import</code> works with YAML-frontmatter ADRs and explicit <code>## Constraints</code> sections &mdash; no rewriting required.</p>
 
     <h2>The problem this solves</h2>
 
@@ -410,10 +365,9 @@ These must never be conflated in code-bearing surfaces.
 
     <h2>Step 2: preview the import</h2>
 
-    <p class="safety-note">Nothing is written during preview &mdash; safe to run on any codebase.</p>
+    <p>The default mode is dry-run. Nothing is written.</p>
 
-    <pre><code><span class="pre-comment"># dry-run: read-only preview</span>
-mneme adr import docs/adr --memory .mneme/project_memory.json</code></pre>
+    <pre><code>mneme adr import docs/adr --memory .mneme/project_memory.json</code></pre>
 
     <p>Output shows the active decision set and each parsed constraint:</p>
 
@@ -431,7 +385,7 @@ Active set (4 ADRs):
 
     <h2>Step 3: apply the import</h2>
 
-    <pre><code>mneme adr import docs/adr --memory .mneme/project_memory.json <span class="pre-hl">--apply</span></code></pre>
+    <pre><code>mneme adr import docs/adr --memory .mneme/project_memory.json --apply</code></pre>
 
     <p>The import writes atomically: the updated memory is serialized to a sibling temp file, then swapped in with <code>os.replace()</code>. A failed write leaves the original file intact. No backup files are created &mdash; the original is always recoverable from git history.</p>
 
@@ -474,11 +428,11 @@ Result: WARN</code></pre>
 
   </div>
 
-  <h2 id="related-reading">Related Reading</h2>
+  <h2 id="related-reading">Related reading</h2>
   <ul>
-    <li><a href="/integrations/claude-code/">Governing Claude Code workflows with the PreToolUse hook</a></li>
-    <li><a href="/integrations/github-actions/">Architectural governance in GitHub Actions</a></li>
-    <li><a href="/docs/governance-violations/">Governance violation reference</a></li>
+    <li><a href="/integrations/claude-code/">governing Claude Code workflows with the PreToolUse hook</a></li>
+    <li><a href="/integrations/github-actions/">architectural governance in GitHub Actions</a></li>
+    <li><a href="/docs/governance-violations/">governance violation reference</a></li>
   </ul>
 
   <footer class="article-footer">
@@ -488,12 +442,13 @@ Result: WARN</code></pre>
       <h3>Turn your existing ADRs into enforceable guardrails</h3>
       <p>Open source, self-hosted. The runnable demo requires no API key.</p>
       <a href="https://github.com/TheoV823/mneme" class="btn-primary">View on GitHub &rarr;</a>
+      <a href="/integrations/claude-code/" class="cta-secondary">Read: governing Claude Code workflows &rarr;</a>
     </div>
   </footer>
 </article>
 </main>
 
-<footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: center;">
+<footer style="border-top: 1px solid var(--border); padding: 3rem 2rem 1.5rem; text-align: left;">
   <div style="max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2.5rem 2rem;">
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Product</div>
@@ -536,7 +491,7 @@ Result: WARN</code></pre>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
         <li><a href="https://github.com/TheoV823/mneme">GitHub</a></li>
         <li><a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="https://dev.to/mnemehq" target="_blank" rel="noopener">Dev.to</a></li>
+        <li><a href="https://dev.to/mnemehq" target="_blank" rel="noopener">DEV.to</a></li>
         <li><a href="/privacy/">Privacy</a></li>
       </ul>
     </div>
@@ -552,6 +507,9 @@ Result: WARN</code></pre>
       </a>
       <a href="https://www.youtube.com/@MnemeHQ" target="_blank" rel="noopener" aria-label="YouTube" style="color: var(--muted); display: inline-flex;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.12C19.55 3.5 12 3.5 12 3.5s-7.55 0-9.4.58A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.12c1.85.58 9.4.58 9.4.58s7.55 0 9.4-.58a3 3 0 0 0 2.1-2.12A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg>
+      </a>
+      <a href="https://dev.to/mnemehq" target="_blank" rel="noopener" aria-label="DEV.to" style="color: var(--muted); display: inline-flex;">
+        <svg width="16" height="16" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M120.12 208.29c-3.88-2.9-7.77-4.35-11.65-4.35H91.03v104.47h17.45c3.88 0 7.77-1.45 11.65-4.35 3.88-2.9 5.82-7.25 5.82-13.06v-69.65c-.01-5.8-1.96-10.16-5.83-13.06zM404.1 32H43.9C19.7 32 .06 51.59 0 75.8v360.4C.06 460.41 19.7 480 43.9 480h360.2c24.21 0 43.84-19.59 43.9-43.8V75.8c-.06-24.21-19.7-43.8-43.9-43.8zM154.2 291.19c0 18.81-11.61 47.31-48.36 47.25h-46.4V172.98h47.38c35.44 0 47.36 28.46 47.36 47.28l.02 70.93zm100.68-88.66H201.6v38.42h32.57v29.57H201.6v38.41h53.29v29.57h-62.18c-11.16.29-20.44-8.53-20.72-19.69V193.7c-.27-11.15 8.56-20.41 19.71-20.69h63.19l-.01 29.52zm103.64 115.29c-13.2 30.75-36.85 24.63-47.44 0l-38.53-144.8h32.57l29.71 113.72 29.57-113.72h32.58l-38.46 144.8z"/></svg>
       </a>
     </nav>
     <span>&copy; 2026</span>
@@ -596,17 +554,6 @@ Result: WARN</code></pre>
   });
   window.addEventListener('resize', function(){
     if (window.innerWidth > 900 && links.classList.contains('open')) setOpen(false);
-  });
-})();
-</script>
-<script><!-- nav-active -->
-(function(){
-  var path = window.location.pathname;
-  document.querySelectorAll('.nav-links a').forEach(function(a){
-    var href = a.getAttribute('href');
-    if (href && href.startsWith('/') && href !== '/' && path.startsWith(href)) {
-      a.classList.add('active');
-    }
   });
 })();
 </script>

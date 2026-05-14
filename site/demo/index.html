@@ -115,13 +115,15 @@
     nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0c0c0d; backdrop-filter: blur(8px); z-index: 100; }
     .logo { font-family: 'Instrument Serif', serif; font-size: 1.4rem; font-weight: 400; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
     .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }    .nav-links a:hover { color: var(--text); }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
     .nav-links a.active { color: var(--accent); }
     .btn-nav-cta { background: var(--accent); color: #0c0c0d; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
     .btn-nav-cta:hover { background: var(--accent-dim); color: #0c0c0d; }
 
     /* ── LAYOUT ── */
     main { max-width: 1080px; margin: 0 auto; padding: 4.5rem 2rem 6rem; }
+
     .hero { text-align: center; margin-bottom: 5rem; }
     .hero-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1rem; font-family: 'DM Mono', monospace; }
     .hero h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2.1rem, 4.5vw, 3.3rem); font-weight: 400; line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 1.25rem; max-width: 880px; margin-left: auto; margin-right: auto; }
@@ -146,6 +148,7 @@
     .problem-card .pc-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fail); margin-bottom: 0.65rem; }
     .problem-card h3 { font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600; color: var(--text); margin: 0 0 0.55rem; line-height: 1.35; }
     .problem-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
     /* ── FLAGSHIP CARDS ── */
     .flagship-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
     .flagship-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem 1.85rem; text-decoration: none; color: inherit; display: block; transition: border-color 0.15s, transform 0.15s, background 0.2s; position: relative; overflow: hidden; }
@@ -196,11 +199,13 @@
     .cta-snippet h3 { font-family: 'Instrument Serif', serif; font-size: 1.3rem; font-weight: 400; color: var(--text); margin-bottom: 0.5rem; }
     .cta-snippet p { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.25rem; }
     .snippet-wrap { display: inline-flex; align-items: center; gap: 0.75rem; background: var(--term-bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--text); }
-    .copy-btn { background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: 4px; padding: 0.2rem 0.55rem; font-size: 0.68rem; font-family: 'DM Mono', monospace; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; }    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .copy-btn { background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: 4px; padding: 0.2rem 0.55rem; font-size: 0.68rem; font-family: 'DM Mono', monospace; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
     .copy-btn.copied { color: var(--teal); border-color: var(--teal); }
 
     /* ── FAQ ── */
-    .faq-list { margin-top: 1.5rem; max-width: 760px; }    .faq-item { border-top: 1px solid var(--border); padding: 1.05rem 0; }
+    .faq-list { margin-top: 1.5rem; max-width: 760px; }
+    .faq-item { border-top: 1px solid var(--border); padding: 1.05rem 0; }
     .faq-item:last-child { border-bottom: 1px solid var(--border); }
     .faq-item summary { cursor: pointer; font-size: 0.92rem; color: var(--text); font-weight: 500; list-style: none; position: relative; padding-right: 2rem; }
     .faq-item summary::-webkit-details-marker { display: none; }
@@ -222,6 +227,7 @@
     .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
     .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
     @media (max-width: 900px) {
       html, body { overflow-x: hidden; }
       body.menu-open { overflow: hidden; }
@@ -312,7 +318,8 @@
           <div class="flagship-meta">
             <span class="flagship-num">Flagship 01 &middot; Centerpiece</span>
             <span class="flagship-tag centerpiece">Runnable</span>
-            <span class="flagship-tag runnable">Mneme dogfoods this</span>          </div>
+            <span class="flagship-tag runnable">Mneme dogfoods this</span>
+          </div>
           <h3>The ADR compiler &mdash; turn architectural decisions into infrastructure</h3>
           <p class="fc-lede">Most teams already have ADRs. They sit in <code style="font-family:'DM Mono',monospace;font-size:0.85em;background:var(--surface2);border-radius:3px;padding:0.05em 0.35em;">docs/adr/</code>, get referenced in onboarding, and are quietly ignored by every AI coding agent that touches the codebase. The ADR compiler reads those same files, parses an optional <code style="font-family:'DM Mono',monospace;font-size:0.85em;background:var(--surface2);border-radius:3px;padding:0.05em 0.35em;">## Constraints</code> section, and emits enforceable, precedence-aware decisions that govern generation and CI. No rewrite. Same prompt, same model, different answer once the decisions are live.</p>
           <div class="fc-evidence">
@@ -512,7 +519,8 @@
           <li><a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;">LinkedIn</a></li>
           <li><a href="/privacy/" style="color:var(--muted);text-decoration:none;">Privacy</a></li>
         </ul>
-      </div>    </div>
+      </div>
+    </div>
     <div style="max-width: 1080px; margin: 2.5rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.76rem; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.03em;">
       <span style="display:inline-flex;align-items:center;gap:0.75rem;"><a href="/" aria-label="Mneme HQ home" style="display:inline-flex;opacity:0.75;"><img src="/favicon.png" alt="Mneme HQ" height="22" style="display:block;"></a><span>Mneme HQ&trade; &middot; Open source &middot; MIT License</span></span>
       <nav aria-label="Social media" style="display: flex; align-items: center; gap: 1rem;">
@@ -537,7 +545,8 @@
         const btn = document.getElementById('copy-btn');
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);      });
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
     }
   </script>
   <script>
