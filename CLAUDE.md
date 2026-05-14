@@ -1,5 +1,9 @@
 # Mneme Repo Instructions
 
+## Branch Naming
+
+Use conventional prefixes: `feat/`, `fix/`, `site/`, `ci/`, `docs/`, `refactor/`. Never use `claude/` as a prefix. Keep slugs short, kebab-case, no random suffixes unless required for uniqueness.
+
 - Use `.mneme/project_memory.json` as the governance source.
 - Validate changes against ADRs in `docs/adr/`.
 - Do not modify `.mneme/project_memory.json` unless this is a `[memory]` task.
