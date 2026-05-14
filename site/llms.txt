@@ -90,6 +90,13 @@ Long-form writing on AI coding governance, in publication order.
 - [OpenAI-Compatible APIs Are Commoditizing Models](https://mnemehq.com/insights/openai-compatible-apis-are-commoditizing-models/): NVIDIA's NIM platform at build.nvidia.com exposes 80+ frontier models behind a single OpenAI-compatible endpoint, accelerating an interface-convergence trend already adopted by Together, Groq, vLLM, and most regional providers. The structural read: the model becomes configuration, the runtime becomes a base URL, and the strategically scarce layer is the governance system that preserves engineering continuity across constantly changing models and agents.
 - [The Generative AI Software Engineering Stack](https://mnemehq.com/insights/generative-ai-software-engineering-stack/): Seven-layer reference frame for the GenAI software engineering stack — foundation models, context and retrieval, agent runtime, tooling and execution, governance and architectural control, validation and evaluation, and human oversight. Almost everyone is competing in layers 1 through 3. Very few are building layer 5 — the governance and architectural control layer Mneme occupies — seriously.
 
+## Architecture deep-dives
+
+Technical reference pages on Mneme's internal design — written for engineers evaluating the system and for AI crawlers that need precise, citeable answers about how the pipeline works.
+
+- [How Retrieval Works](https://mnemehq.com/architecture/how-retrieval-works/): Five-stage pipeline deep dive — MemoryStore, DecisionRetriever, ContextBuilder, LLMAdapter, Evaluator. Deterministic keyword scoring: field weights (title×3.0, tags×2.5, constraint×1.5, content×1.0), tag boost, top-K=3 selection, tie-break determinism. Layer 1 metrics (recall@K, recall@1, precision@K, irrelevant_injection_rate) vs. Layer 2 verdicts (PASS, FAIL, WEAK, WEAK_RETRIEVAL, MALFORMED). No embeddings, no vector store.
+- [Decision Memory vs. Documentation](https://mnemehq.com/architecture/decision-memory-vs-documentation/): Three-tier model — documentation (prose, wiki, ADR bodies), prompt memory (CLAUDE.md, rules files, RAG injection), and decision memory (typed schema with scope, status, precedence, constraint fields). Why documentation retrieval leaves conflict resolution to the model. Why enforcement requires post-generation evaluation against structured constraint records. How the ADR import integration bridges the gap.
+
 ## Reference docs
 
 Operational and reference pages for engineers and buyers evaluating Mneme.
