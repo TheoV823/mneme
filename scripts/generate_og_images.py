@@ -64,6 +64,7 @@ TEMPLATE_MAP = {
     "og-integration-gitlab.html": "integrations/gitlab/og.png",
     "og-integration-adr-import.html": "integrations/adr-import/og.png",
     "og-integration-copilot.html": "integrations/copilot/og.png",
+    "og-integration-jetbrains.html": "integrations/jetbrains/og.png",
 }
 
 PORT = 8765
