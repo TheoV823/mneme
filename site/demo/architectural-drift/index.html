@@ -197,8 +197,46 @@
       main { padding: 2rem 1.25rem 4rem; }
       .breadcrumb-nav { padding: 0 1.25rem; }
     }
-  
+
     @media (max-width: 768px) { nav, .mobile-menu { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } }
+
+    /* ── TERMINAL DEMO ── */
+    .demo-terminal-wrapper { margin: 0 0 3rem; border: 1px solid var(--border2); border-radius: 10px; overflow: hidden; background: var(--term-bg); }
+    .demo-terminal-chrome { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem; background: #1a1a1e; border-bottom: 1px solid var(--border2); }
+    .dtc-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .dtc-red    { background: #ff5f57; }
+    .dtc-yellow { background: #febc2e; }
+    .dtc-green  { background: #28c840; }
+    .dtc-title { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.04em; margin: 0 auto; }
+    .dtc-controls { display: flex; gap: 0.5rem; align-items: center; margin-left: auto; }
+    .dtc-btn { background: transparent; border: 1px solid var(--border2); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.65rem; padding: 0.2rem 0.55rem; border-radius: 4px; cursor: pointer; transition: border-color 0.15s, color 0.15s; letter-spacing: 0.04em; }
+    .dtc-btn:hover { border-color: var(--accent); color: var(--text); }
+    .dtc-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .demo-terminal-sim { padding: 1.1rem 1.4rem 1.4rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; line-height: 1.75; min-height: 14rem; overflow-x: auto; }
+    .term-line { white-space: pre-wrap; word-break: break-word; }
+    .term-prompt { color: var(--accent); }
+    .term-cmd { color: var(--text); }
+    .term-cursor { display: inline-block; width: 0.52em; height: 1em; background: var(--text); vertical-align: text-bottom; animation: term-blink 1s step-end infinite; }
+    .term-cursor.hidden { display: none; }
+    @keyframes term-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .term-output-line { white-space: pre-wrap; word-break: break-word; }
+    .term-blank { height: 1.75em; }
+    .term-muted   { color: var(--muted); }
+    .term-header  { color: var(--term-bad); font-weight: 600; }
+    .term-key     { color: var(--teal); }
+    .term-value   { color: var(--text); }
+    .term-blocked { color: var(--fail); font-weight: 600; letter-spacing: 0.06em; }
+    .term-end     { color: var(--accent); }
+
+    .term-transcript { margin: -2rem 0 2rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .term-transcript summary { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); padding: 0.55rem 1rem; cursor: pointer; letter-spacing: 0.04em; background: var(--surface); }
+    .term-transcript summary:hover { color: var(--text); }
+    .term-transcript pre { background: var(--term-bg); padding: 1rem 1.25rem; overflow-x: auto; }
+    .term-transcript pre code { font-family: 'DM Mono', monospace; font-size: 0.76rem; line-height: 1.7; color: var(--muted); background: transparent; border: none; padding: 0; }
+
+    .term-sim-note { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.03em; margin: -1.5rem 0 2.5rem; opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -256,6 +294,57 @@
         </div>
         <p class="primer-what">The demo shows how three agents accidentally violate these decisions over a week &mdash; and how <strong>Mneme blocks the first divergence</strong> before it propagates.</p>
       </div>
+
+      <!-- ── TERMINAL DEMO ── swap .demo-terminal-sim for <video> when VHS recording is ready -->
+      <div class="demo-terminal-wrapper" id="terminal-demo" aria-label="Live terminal demo">
+        <div class="demo-terminal-chrome">
+          <span class="dtc-dot dtc-red"></span>
+          <span class="dtc-dot dtc-yellow"></span>
+          <span class="dtc-dot dtc-green"></span>
+          <span class="dtc-title">mneme-demo — bash</span>
+          <div class="dtc-controls">
+            <button class="dtc-btn" id="term-pause-btn" aria-label="Pause animation" aria-pressed="false">
+              <span class="dtc-pause-icon" aria-hidden="true">⏸</span>
+            </button>
+            <button class="dtc-btn" id="term-replay-btn" aria-label="Replay animation">
+              <span aria-hidden="true">↺</span> Replay
+            </button>
+          </div>
+        </div>
+        <div class="demo-terminal-sim" id="term-output" aria-live="polite" aria-atomic="false" role="log">
+          <div class="term-line" id="term-prompt-line">
+            <span class="term-prompt">$&nbsp;</span><span class="term-cmd" id="term-cmd"></span><span class="term-cursor" id="term-cursor" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <!-- Accessible static transcript -->
+      <details class="term-transcript">
+        <summary>Full terminal transcript</summary>
+        <pre aria-label="Terminal transcript"><code>$ claude "Simplify the check command by loading .mneme/project_memory.json directly inside check.py"
+
+↳ Mneme evaluating proposed change...
+
+[MNEME] Architectural violation detected
+
+Decision:  ADR-001 — Retrieval architecture
+
+Rule:
+  CLI commands must use the MemoryStore and Retriever pipeline.
+
+Violation:
+  check.py would load governance decisions directly from JSON.
+
+Action:
+  BLOCKED
+
+Reason:
+  Direct file access breaks provenance, freshness checks,
+  and centralized enforcement.
+
+No files changed.
+Agent halted before architectural drift.</code></pre>
+      </details>
+      <p class="term-sim-note">Simulated demo based on Mneme&rsquo;s governance check flow.</p>
 
       <h2>The scenario</h2>
 
@@ -535,5 +624,117 @@ python run.py</code></pre>
   });
 })();
 </script>
+  <script>
+  (function(){
+    /* ── Terminal demo animation ── */
+    var CMD = 'claude "Simplify the check command by loading .mneme/project_memory.json directly inside check.py"';
+
+    var LINES = [
+      [600,  '',                                                          'term-blank'],
+      [0,    '↳ Mneme evaluating proposed change...',               'term-muted'],
+      [1100, '',                                                          'term-blank'],
+      [0,    '[MNEME] Architectural violation detected',                  'term-header'],
+      [500,  '',                                                          'term-blank'],
+      [0,    'Decision:  ADR-001 — Retrieval architecture',         'term-key'],
+      [500,  '',                                                          'term-blank'],
+      [0,    'Rule:',                                                     'term-key'],
+      [180,  '  CLI commands must use the MemoryStore',                  'term-value'],
+      [120,  '  and Retriever pipeline.',                                 'term-value'],
+      [500,  '',                                                          'term-blank'],
+      [0,    'Violation:',                                                'term-key'],
+      [180,  '  check.py would load governance decisions',               'term-value'],
+      [120,  '  directly from JSON.',                                     'term-value'],
+      [500,  '',                                                          'term-blank'],
+      [0,    'Action:',                                                   'term-key'],
+      [180,  '  BLOCKED',                                                 'term-blocked'],
+      [500,  '',                                                          'term-blank'],
+      [0,    'Reason:',                                                   'term-key'],
+      [180,  '  Direct file access breaks provenance,',                  'term-value'],
+      [120,  '  freshness checks, and centralized enforcement.',          'term-value'],
+      [700,  '',                                                          'term-blank'],
+      [0,    'No files changed.',                                         'term-end'],
+      [220,  'Agent halted before architectural drift.',                  'term-end']
+    ];
+
+    var cmdEl    = document.getElementById('term-cmd');
+    var cursor   = document.getElementById('term-cursor');
+    var output   = document.getElementById('term-output');
+    var pauseBtn = document.getElementById('term-pause-btn');
+    var replayBtn= document.getElementById('term-replay-btn');
+
+    if (!cmdEl || !output) return;
+
+    var timers   = [];
+    var paused   = false;
+    var done     = false;
+    var remaining = [];
+
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; remaining = []; }
+
+    function schedule(fn, delay) { var id = setTimeout(fn, delay); timers.push(id); return id; }
+
+    function appendLine(text, cls) {
+      if (!text && cls === 'term-blank') {
+        var b = document.createElement('div'); b.className = 'term-blank'; output.appendChild(b); return;
+      }
+      var d = document.createElement('div');
+      d.className = 'term-output-line ' + (cls || '');
+      d.textContent = text;
+      output.appendChild(d);
+    }
+
+    function typeCmd(str, idx, cb) {
+      if (paused) { remaining.unshift({fn: function(){ typeCmd(str, idx, cb); }, delay: 0}); return; }
+      if (idx >= str.length) { cb(); return; }
+      cmdEl.textContent += str[idx];
+      schedule(function(){ typeCmd(str, idx + 1, cb); }, 28 + Math.random() * 22);
+    }
+
+    function runLines(index) {
+      if (index >= LINES.length) { done = true; cursor.classList.add('hidden'); return; }
+      var entry = LINES[index];
+      schedule(function(){
+        if (paused) { remaining.unshift({fn: function(){ runLines(index); }, delay: 0}); return; }
+        appendLine(entry[1], entry[2]);
+        runLines(index + 1);
+      }, entry[0]);
+    }
+
+    function start() {
+      clearTimers();
+      done = false; paused = false;
+      pauseBtn.setAttribute('aria-pressed', 'false');
+      pauseBtn.querySelector('.dtc-pause-icon').textContent = '⏸';
+      cmdEl.textContent = '';
+      cursor.classList.remove('hidden');
+      var promptLine = document.getElementById('term-prompt-line');
+      while (output.lastChild !== promptLine) output.removeChild(output.lastChild);
+      typeCmd(CMD, 0, function(){
+        cursor.classList.add('hidden');
+        runLines(0);
+      });
+    }
+
+    pauseBtn.addEventListener('click', function(){
+      if (done) return;
+      paused = !paused;
+      pauseBtn.setAttribute('aria-pressed', String(paused));
+      pauseBtn.querySelector('.dtc-pause-icon').textContent = paused ? '▶' : '⏸';
+      if (!paused && remaining.length) { var next = remaining.shift(); schedule(next.fn, next.delay); }
+    });
+
+    replayBtn.addEventListener('click', function(){ start(); });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) { io.disconnect(); start(); }
+      }, { threshold: 0.25 });
+      io.observe(document.getElementById('terminal-demo'));
+    } else {
+      start();
+    }
+  })();
+  </script>
+
 </body>
 </html>
