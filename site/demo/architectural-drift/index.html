@@ -257,6 +257,57 @@
         <p class="primer-what">The demo shows how three agents accidentally violate these decisions over a week &mdash; and how <strong>Mneme blocks the first divergence</strong> before it propagates.</p>
       </div>
 
+      <!-- ── TERMINAL DEMO ── swap .demo-terminal-sim for <video> when VHS recording is ready -->
+      <div class="demo-terminal-wrapper" id="terminal-demo" aria-label="Live terminal demo">
+        <div class="demo-terminal-chrome">
+          <span class="dtc-dot dtc-red"></span>
+          <span class="dtc-dot dtc-yellow"></span>
+          <span class="dtc-dot dtc-green"></span>
+          <span class="dtc-title">mneme-demo — bash</span>
+          <div class="dtc-controls">
+            <button class="dtc-btn" id="term-pause-btn" aria-label="Pause animation" aria-pressed="false">
+              <span class="dtc-pause-icon" aria-hidden="true">⏸</span>
+            </button>
+            <button class="dtc-btn" id="term-replay-btn" aria-label="Replay animation">
+              <span aria-hidden="true">↺</span> Replay
+            </button>
+          </div>
+        </div>
+        <div class="demo-terminal-sim" id="term-output" aria-live="polite" aria-atomic="false" role="log">
+          <div class="term-line" id="term-prompt-line">
+            <span class="term-prompt">$&nbsp;</span><span class="term-cmd" id="term-cmd"></span><span class="term-cursor" id="term-cursor" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <!-- Accessible static transcript -->
+      <details class="term-transcript">
+        <summary>Full terminal transcript</summary>
+        <pre aria-label="Terminal transcript"><code>$ claude "Simplify the check command by loading .mneme/project_memory.json directly inside check.py"
+
+↳ Mneme evaluating proposed change...
+
+[MNEME] Architectural violation detected
+
+Decision:  ADR-001 — Retrieval architecture
+
+Rule:
+  CLI commands must use the MemoryStore and Retriever pipeline.
+
+Violation:
+  check.py would load governance decisions directly from JSON.
+
+Action:
+  BLOCKED
+
+Reason:
+  Direct file access breaks provenance, freshness checks,
+  and centralized enforcement.
+
+No files changed.
+Agent halted before architectural drift.</code></pre>
+      </details>
+      <p class="term-sim-note">Simulated demo based on Mneme&rsquo;s governance check flow.</p>
+
       <h2>The scenario</h2>
 
       <p>A small platform team maintains a single-binary Python service. The architectural truth is documented:</p>
