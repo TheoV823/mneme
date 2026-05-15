@@ -149,6 +149,26 @@
     .arch-card-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
     .arch-card-desc { font-size: 0.79rem; color: var(--muted); line-height: 1.65; }
 
+    /* Concept-architecture diagram */
+    .concept-map { margin: 1.5rem 0 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem 1.75rem 1.5rem; overflow: hidden; }
+    .concept-map svg { display: block; width: 100%; height: auto; max-width: 100%; }
+    .concept-map-caption { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-top: 1.1rem; padding-top: 0.9rem; border-top: 1px solid var(--border); line-height: 1.7; }
+    .concept-map-caption strong { color: var(--accent); font-weight: 500; }
+    .cmap-tier { fill: #88889a; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; }
+    .cmap-tier-meta { fill: #88889a; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.04em; }
+    .cmap-title { fill: #c8f060; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; }
+    .cmap-card { fill: #141416; stroke: #2e2e34; transition: fill 0.15s, stroke 0.15s; }
+    .cmap-card-outcome { fill: rgba(200,240,96,0.05); stroke: #c8f060; stroke-width: 1.5; transition: fill 0.15s; }
+    .cmap-card-primitive { fill: rgba(139,224,200,0.05); stroke: #8be0c8; stroke-width: 1.2; transition: fill 0.15s; }
+    .cmap-card-fail { fill: #141416; stroke: #e87c7c; stroke-width: 1.2; stroke-dasharray: 4 3; opacity: 0.85; transition: opacity 0.15s; }
+    .cmap-label { fill: #e8e8ec; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: -0.005em; pointer-events: none; }
+    .cmap-link:hover .cmap-card { fill: #1a1a1d; stroke: #c8f060; }
+    .cmap-link:hover .cmap-card-outcome { fill: rgba(200,240,96,0.12); }
+    .cmap-link:hover .cmap-card-primitive { fill: rgba(139,224,200,0.12); }
+    .cmap-link:hover .cmap-card-fail { opacity: 1; }
+    .cmap-flow { stroke: #2e2e34; stroke-width: 1; fill: none; }
+    .cmap-divider { stroke: #222226; stroke-width: 1; }
+
     /* CTA block */
     .cta-block { margin-top: 4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem 2.5rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
     .cta-text h2 { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.6rem; }
@@ -246,6 +266,136 @@
     <p>Each concept page explains not just what the term means, but <strong>why the structural problem it names exists</strong> in AI-native software delivery — and why the solutions that feel intuitive (documentation, prompt engineering, code review) don't actually solve it.</p>
     <p>If you're evaluating architectural governance tooling, these concepts are the vocabulary for comparing approaches. If you're building in this space, they're the framework for understanding where different systems sit in the stack.</p>
   </div>
+
+  <figure class="concept-map" aria-labelledby="cmap-title">
+    <svg viewBox="0 0 1000 580" role="img" aria-labelledby="cmap-title cmap-desc" xmlns="http://www.w3.org/2000/svg">
+      <title id="cmap-title">Mneme HQ concept architecture</title>
+      <desc id="cmap-desc">A three-tier composition diagram. At the bottom, three primitives — architectural compiler, verification contracts, precedence semantics — compose into five system properties in the middle, which together produce two outcomes at the top: architectural governance and governance infrastructure. A failure-mode rail at the bottom shows what accumulates in the absence of these layers: AI agent drift and architectural drift.</desc>
+
+      <text x="20" y="26" class="cmap-title">CONCEPT ARCHITECTURE · primitives → properties → outcomes</text>
+      <text x="980" y="26" text-anchor="end" class="cmap-tier-meta">every node links to its definition</text>
+
+      <!-- TIER: Outcomes -->
+      <text x="20" y="80" class="cmap-tier">OUTCOMES</text>
+      <text x="20" y="95" class="cmap-tier-meta">what governance achieves</text>
+
+      <a href="/concepts/architectural-governance/" class="cmap-link" aria-label="Architectural Governance">
+        <rect x="240" y="62" width="240" height="56" rx="10" class="cmap-card-outcome"/>
+        <text x="360" y="84" text-anchor="middle" class="cmap-label">Architectural Governance</text>
+        <text x="360" y="104" text-anchor="middle" class="cmap-tier-meta">the discipline</text>
+      </a>
+
+      <a href="/concepts/governance-infrastructure/" class="cmap-link" aria-label="Governance Infrastructure">
+        <rect x="520" y="62" width="240" height="56" rx="10" class="cmap-card-outcome"/>
+        <text x="640" y="84" text-anchor="middle" class="cmap-label">Governance Infrastructure</text>
+        <text x="640" y="104" text-anchor="middle" class="cmap-tier-meta">the platform layer</text>
+      </a>
+
+      <!-- Flow lines from properties up to outcomes (subtle) -->
+      <line x1="125" y1="200" x2="360" y2="118" class="cmap-flow"/>
+      <line x1="320" y1="200" x2="360" y2="118" class="cmap-flow"/>
+      <line x1="510" y1="200" x2="500" y2="118" class="cmap-flow"/>
+      <line x1="700" y1="200" x2="640" y2="118" class="cmap-flow"/>
+      <line x1="890" y1="200" x2="640" y2="118" class="cmap-flow"/>
+
+      <!-- TIER: Properties -->
+      <text x="20" y="200" class="cmap-tier">PROPERTIES</text>
+      <text x="20" y="215" class="cmap-tier-meta">what governance does</text>
+
+      <a href="/concepts/governance-before-generation/" class="cmap-link" aria-label="Governance Before Generation">
+        <rect x="40" y="200" width="170" height="62" rx="10" class="cmap-card"/>
+        <text x="125" y="224" text-anchor="middle" class="cmap-label">Governance</text>
+        <text x="125" y="240" text-anchor="middle" class="cmap-label">Before Generation</text>
+        <text x="125" y="256" text-anchor="middle" class="cmap-tier-meta">pre-generation hook</text>
+      </a>
+
+      <a href="/concepts/deterministic-enforcement/" class="cmap-link" aria-label="Deterministic Enforcement">
+        <rect x="235" y="200" width="170" height="62" rx="10" class="cmap-card"/>
+        <text x="320" y="224" text-anchor="middle" class="cmap-label">Deterministic</text>
+        <text x="320" y="240" text-anchor="middle" class="cmap-label">Enforcement</text>
+        <text x="320" y="256" text-anchor="middle" class="cmap-tier-meta">same input · same verdict</text>
+      </a>
+
+      <a href="/concepts/governance-propagation/" class="cmap-link" aria-label="Governance Propagation">
+        <rect x="425" y="200" width="170" height="62" rx="10" class="cmap-card"/>
+        <text x="510" y="224" text-anchor="middle" class="cmap-label">Governance</text>
+        <text x="510" y="240" text-anchor="middle" class="cmap-label">Propagation</text>
+        <text x="510" y="256" text-anchor="middle" class="cmap-tier-meta">one corpus · every agent</text>
+      </a>
+
+      <a href="/concepts/multi-agent-continuity/" class="cmap-link" aria-label="Multi-Agent Continuity">
+        <rect x="615" y="200" width="170" height="62" rx="10" class="cmap-card"/>
+        <text x="700" y="224" text-anchor="middle" class="cmap-label">Multi-Agent</text>
+        <text x="700" y="240" text-anchor="middle" class="cmap-label">Continuity</text>
+        <text x="700" y="256" text-anchor="middle" class="cmap-tier-meta">across sessions · time</text>
+      </a>
+
+      <a href="/concepts/enforcement-provenance/" class="cmap-link" aria-label="Enforcement Provenance">
+        <rect x="805" y="200" width="170" height="62" rx="10" class="cmap-card"/>
+        <text x="890" y="224" text-anchor="middle" class="cmap-label">Enforcement</text>
+        <text x="890" y="240" text-anchor="middle" class="cmap-label">Provenance</text>
+        <text x="890" y="256" text-anchor="middle" class="cmap-tier-meta">citable verdicts</text>
+      </a>
+
+      <!-- Flow lines from primitives up to properties (subtle) -->
+      <line x1="240" y1="362" x2="125" y2="262" class="cmap-flow"/>
+      <line x1="240" y1="362" x2="320" y2="262" class="cmap-flow"/>
+      <line x1="500" y1="362" x2="320" y2="262" class="cmap-flow"/>
+      <line x1="500" y1="362" x2="510" y2="262" class="cmap-flow"/>
+      <line x1="500" y1="362" x2="890" y2="262" class="cmap-flow"/>
+      <line x1="760" y1="362" x2="510" y2="262" class="cmap-flow"/>
+      <line x1="760" y1="362" x2="700" y2="262" class="cmap-flow"/>
+
+      <!-- TIER: Primitives -->
+      <text x="20" y="362" class="cmap-tier">PRIMITIVES</text>
+      <text x="20" y="377" class="cmap-tier-meta">what it's built from</text>
+
+      <a href="/concepts/architectural-compiler/" class="cmap-link" aria-label="Architectural Compiler">
+        <rect x="120" y="362" width="240" height="56" rx="10" class="cmap-card-primitive"/>
+        <text x="240" y="385" text-anchor="middle" class="cmap-label">Architectural Compiler</text>
+        <text x="240" y="404" text-anchor="middle" class="cmap-tier-meta">ADR → typed corpus</text>
+      </a>
+
+      <a href="/concepts/verification-contracts/" class="cmap-link" aria-label="Verification Contracts">
+        <rect x="380" y="362" width="240" height="56" rx="10" class="cmap-card-primitive"/>
+        <text x="500" y="385" text-anchor="middle" class="cmap-label">Verification Contracts</text>
+        <text x="500" y="404" text-anchor="middle" class="cmap-tier-meta">pre-registered verdicts</text>
+      </a>
+
+      <a href="/concepts/precedence-semantics/" class="cmap-link" aria-label="Precedence Semantics">
+        <rect x="640" y="362" width="240" height="56" rx="10" class="cmap-card-primitive"/>
+        <text x="760" y="385" text-anchor="middle" class="cmap-label">Precedence Semantics</text>
+        <text x="760" y="404" text-anchor="middle" class="cmap-tier-meta">supersession · scope · time</text>
+
+      </a>
+
+      <!-- Divider before failure rail -->
+      <line x1="20" y1="455" x2="980" y2="455" class="cmap-divider"/>
+
+      <!-- Failure rail -->
+      <text x="20" y="485" fill="#e87c7c" font-family="DM Mono, monospace" font-size="11" letter-spacing="0.06em">WITHOUT THIS LAYER</text>
+      <text x="20" y="500" class="cmap-tier-meta">what accumulates</text>
+
+      <a href="/concepts/ai-agent-drift/" class="cmap-link" aria-label="AI Agent Drift">
+        <rect x="240" y="478" width="240" height="56" rx="10" class="cmap-card-fail"/>
+        <text x="360" y="500" text-anchor="middle" class="cmap-label">AI Agent Drift</text>
+        <text x="360" y="520" text-anchor="middle" class="cmap-tier-meta">the agent-side phenomenon</text>
+      </a>
+
+      <a href="/concepts/architectural-drift/" class="cmap-link" aria-label="Architectural Drift">
+        <rect x="520" y="478" width="240" height="56" rx="10" class="cmap-card-fail"/>
+        <text x="640" y="500" text-anchor="middle" class="cmap-label">Architectural Drift</text>
+        <text x="640" y="520" text-anchor="middle" class="cmap-tier-meta">the codebase-side consequence</text>
+      </a>
+
+      <text x="980" y="500" text-anchor="end" fill="#e87c7c" font-family="DM Mono, monospace" font-size="10" letter-spacing="0.04em">↑ what governance prevents</text>
+
+      <!-- Right edge: flow direction annotation -->
+      <text x="980" y="265" text-anchor="end" class="cmap-tier-meta">↑ properties produce outcomes</text>
+      <text x="980" y="425" text-anchor="end" class="cmap-tier-meta">↑ primitives compose into properties</text>
+    </svg>
+    <figcaption class="concept-map-caption"><strong>How the concepts compose.</strong> Three primitives — compiled records, verification contracts, precedence rules — produce five system properties, which together produce the two outcomes that distinguish governed AI-native development. Absent these layers, the failure rail accumulates: agent-side drift, codebase-side drift.</figcaption>
+  </figure>
 
   <div class="section-label">Core concepts</div>
 
