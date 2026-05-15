@@ -201,6 +201,19 @@
     h2#related-reading + ul li a::after { content: '\2192'; opacity: 0.35; transition: opacity 0.15s, transform 0.15s; display: inline-block; margin-left: 0.5rem; }
     h2#related-reading + ul li a:hover { background: var(--surface2); color: var(--accent); }
     h2#related-reading + ul li a:hover::after { opacity: 1; transform: translateX(3px); }
+    /* Cross-reference panel (Related operational essays / Related governance concepts) */
+    .related-panel { margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related-panel-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+    .related-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .related-list li { margin: 0; }
+    .related-list a { display: block; padding: 1.15rem 1.35rem; background: var(--surface); text-decoration: none; transition: background 0.15s; }
+    .related-list a:hover { background: var(--surface2); }
+    .related-list .rel-title { color: var(--text); font-size: 0.92rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; letter-spacing: -0.005em; transition: color 0.15s; }
+    .related-list .rel-title::after { content: '\2192'; color: var(--accent); opacity: 0.4; transition: opacity 0.15s, transform 0.15s; flex-shrink: 0; }
+    .related-list a:hover .rel-title { color: var(--accent); }
+    .related-list a:hover .rel-title::after { opacity: 1; transform: translateX(3px); }
+    .related-list .rel-desc { color: var(--muted); font-size: 0.82rem; line-height: 1.65; margin: 0; }
+
 
     /* Diagrams */
     .diagram-figure { margin: 2.25rem 0 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem 1.5rem 1.25rem; overflow: hidden; }
@@ -624,12 +637,15 @@
     </details>
   </section>
 
-  <h2 id="related-reading">Related reading</h2>
-  <ul>
-    <li><a href="/concepts/agentic-development/">Agentic Development</a></li>
-    <li><a href="/concepts/ai-native-sdlc/">AI-Native SDLC</a></li>
-    <li><a href="/insights/generative-ai-software-engineering-stack/">The Generative AI Software Engineering Stack</a></li>
-  </ul>
+  <aside class="related-panel" aria-labelledby="related-panel-label">
+    <div class="related-panel-label" id="related-panel-label">Related operational essays</div>
+    <ul class="related-list">
+      <li><a href="/insights/why-observability-is-not-governance/"><div class="rel-title">Why Observability Is Not Governance</div><p class="rel-desc">Visibility explains drift after it occurs. Governance constrains drift before generation.</p></a></li>
+      <li><a href="/insights/review-is-not-governance/"><div class="rel-title">Review Is Not Governance</div><p class="rel-desc">Human review systems do not scale linearly with AI output velocity. Review samples; governance shapes.</p></a></li>
+      <li><a href="/insights/memory-is-not-governance/"><div class="rel-title">Memory Is Not Governance</div><p class="rel-desc">Context persistence cannot enforce architectural invariants. Recall is not constraint.</p></a></li>
+      <li><a href="/insights/why-claude-md-stops-scaling/"><div class="rel-title">Why CLAUDE.md Stops Scaling</div><p class="rel-desc">Prompt files document standards but cannot deterministically enforce them across sessions and agents.</p></a></li>
+    </ul>
+  </aside>
 
   <footer class="article-footer">
     <a href="/concepts/" class="back-link">← Back to Concepts</a>
