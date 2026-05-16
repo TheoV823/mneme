@@ -44,6 +44,7 @@
         "url": "https://mnemehq.com/insights/",
         "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/", "logo": {"@type": "ImageObject", "url": "https://mnemehq.com/logo-v2.png"}},
         "hasPart": [
+          {"@type": "Article", "name": "Harness Engineering Still Needs Governance", "url": "https://mnemehq.com/insights/harness-engineering-still-needs-governance/"},
           {"@type": "Article", "name": "Datadog's State of AI Engineering Report Quietly Confirms the Governance Crisis", "url": "https://mnemehq.com/insights/datadog-state-of-ai-engineering-governance-crisis/"},
           {"@type": "Article", "name": "Why CLAUDE.md Stops Scaling", "url": "https://mnemehq.com/insights/why-claude-md-stops-scaling/"},
           {"@type": "Article", "name": "What Is the AI SDLC?", "url": "https://mnemehq.com/insights/what-is-the-ai-sdlc/"},
@@ -281,12 +282,25 @@
 
 <div class="cards-wrap">
   <h2 style="font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; margin: 0 auto 1rem; max-width: 660px;">Research, analysis, and implementation notes on architectural governance for AI-assisted software development.</h2>
-  <p class="hub-intro">These articles explore architectural drift, constraint enforcement, governance systems, and the operational realities of AI-assisted development.</p>
+  <p class="hub-intro">The agent stack is settling: models, harnesses, execution systems, governance, verification. These articles cover the layer that sits between execution and verification &mdash; what governance is, why long-running agents and harness-engineered workflows still need it, how it propagates across every surface autonomous workflows touch, and what deterministic enforcement looks like in practice.</p>
 
   <!-- Group 1 -->
   <div class="cards-section">
     <div class="section-divider"><span class="section-label">The governance problem</span></div>
     <div class="cards-grid">
+
+      <div class="insight-card">
+        <div class="card-meta">
+          <span class="card-tag">Thought Leadership</span>
+          <span class="card-dot"></span>
+          <span class="card-read-time">11 min read</span>
+        </div>
+        <h3>Harness Engineering Still Needs Governance</h3>
+        <p>The industry moved from prompt engineering to harness engineering: execution systems that coordinate tools, memory, and retries. Harnesses solve how agents act. They do not enforce architectural intent &mdash; and that is the missing layer.</p>
+        <div class="card-footer">
+          <a href="/insights/harness-engineering-still-needs-governance/" class="read-link">Read &rarr;</a>
+        </div>
+      </div>
 
       <div class="insight-card">
         <div class="card-meta">
