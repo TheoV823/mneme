@@ -323,6 +323,8 @@
 
     <p>These layers are complementary. A team with strong generation tooling and strong review tooling but no governance layer will ship fast and review often — and still accumulate architectural drift at AI velocity. A team that adds the governance layer stops correcting and starts directing.</p>
 
+    <p>When intent only enters the workflow at PR review, the organization has already allowed the wrong work to be generated. That is the core failure mode of <a href="/insights/ai-native-engineering-intent-debt/" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted rgba(200,240,96,0.4);">intent debt</a> in AI-native engineering: decisions that exist but are not enforced at the moment agents produce code.</p>
+
     <h2>Why governance is infrastructure, not a feature</h2>
 
     <p>Security engineering went through this same evolution. Code security was once a review concern: scan the output, flag the vulnerabilities, ask for fixes. Shift-left security moved those checks earlier — into the IDE, into the CI pipeline, into the generation process itself. The industry now treats security tooling as infrastructure, not an optional review enhancement.</p>

@@ -465,6 +465,10 @@
 
     <h2>Why this problem exists in AI-native development</h2>
 
+    <div class="callout-teal">
+      <p><strong>Intent debt is why governance infrastructure becomes necessary.</strong> As AI agents become part of the execution layer, teams accumulate <a href="/insights/ai-native-engineering-intent-debt/" style="color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(139,224,200,0.4);">intent debt</a>: architectural decisions, constraints, and operating rules that exist in docs or human memory but are not enforced during generation. Governance infrastructure exists to close that gap — to make intent explicit, versioned, and enforceable at the moment agents produce code.</p>
+    </div>
+
     <p>The problem is not that teams lack governance intentions. Most teams that have adopted AI coding agents have written ADRs, updated CLAUDE.md files, discussed constraints in team meetings, and built PR review checklists. They have governance intentions. What they are missing is <strong>governance infrastructure</strong> — the engineering layer that converts those intentions into mechanical enforcement.</p>
 
     <p>The structural gap: <strong>process-based governance was designed for human-speed development</strong>. At human speed, the review model is the enforcement mechanism — reviewers catch violations before they merge, apply institutional knowledge, and enforce team conventions. The process works because the rate of generation matches the rate of review.</p>

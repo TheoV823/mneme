@@ -129,7 +129,7 @@
     .badge-pass { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.25); }
     .badge-warn { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
     .badge-fail { background: rgba(239,68,68,0.12); color: var(--fail); border: 1px solid rgba(239,68,68,0.25); }
-    .hidden { display: none; }
+    .hidden { visibility: hidden; }
     .fade-in { animation: fadeIn 0.35s ease forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
     .replay-btn { margin: 1rem 0 0; background: transparent; color: var(--muted); border: 1px solid var(--border2); padding: 0.5rem 1.2rem; border-radius: 6px; font-size: 0.78rem; font-family: 'DM Mono', monospace; cursor: pointer; display: none; transition: color 0.15s, border-color 0.15s; }
@@ -286,7 +286,7 @@
             <span class="dot d-r"></span><span class="dot d-y"></span><span class="dot d-g"></span>
             Corrected output &mdash; agent retry
           </div>
-          <div class="panel-body" id="correct-out" style="min-height:auto;"></div>
+          <div class="panel-body" id="correct-out"></div>
         </div>
       </div>
       <button class="replay-btn" type="button" id="replay-btn" onclick="startDemo(true)">&larr; Replay</button>
@@ -478,7 +478,12 @@ Result: WARN</code></pre>
         });
       }, 150));
     }
-    startDemo();
+    if ('IntersectionObserver' in window) {
+      var _agentIo = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) { _agentIo.disconnect(); startDemo(); }
+      }, { threshold: 0.15 });
+      _agentIo.observe(document.querySelector('.demo-wrap'));
+    } else { startDemo(); }
 
   });
   </script>
