@@ -138,7 +138,7 @@ def build_report(site_root: Path) -> dict:
     graph: dict[str, set[str]] = {}
     for f in files:
         url = page_url(f, site_root)
-        graph[url] = extract_links(f.read_text())
+        graph[url] = extract_links(f.read_text(encoding="utf-8"))
 
     inbound: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     for source, links in graph.items():
