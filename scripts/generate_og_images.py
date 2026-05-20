@@ -101,6 +101,9 @@ TEMPLATE_MAP = {
     "og-concepts-multi-agent-continuity.html": "concepts/multi-agent-continuity/og.png",
     "og-concepts-precedence-semantics.html": "concepts/precedence-semantics/og.png",
     "og-concepts-verification-contracts.html": "concepts/verification-contracts/og.png",
+    "og-concepts-agent-verification.html": "concepts/agent-verification/og.png",
+    "og-concepts-governance-provenance.html": "concepts/governance-provenance/og.png",
+    "og-concepts-execution-surfaces.html": "concepts/execution-surfaces/og.png",
     # Docs
     "og-docs.html": "docs/og.png",
     # Architecture
