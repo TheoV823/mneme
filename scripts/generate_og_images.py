@@ -82,6 +82,7 @@ TEMPLATE_MAP = {
     "og-insights-copilot-space.html": "insights/github-copilot-space-framework/og.png",
     "og-insights-harness-governance.html": "insights/harness-engineering-still-needs-governance/og.png",
     "og-insights-observability-governance.html": "insights/why-observability-is-not-governance/og.png",
+    "og-insights-agent-infrastructure-stack.html": "insights/emerging-ai-agent-infrastructure-stack/og.png",
     # Concepts
     "og-concepts-index.html": "concepts/og.png",
     "og-concepts-agentic-development.html": "concepts/agentic-development/og.png",
