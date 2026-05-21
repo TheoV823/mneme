@@ -83,6 +83,8 @@ TEMPLATE_MAP = {
     "og-insights-harness-governance.html": "insights/harness-engineering-still-needs-governance/og.png",
     "og-insights-observability-governance.html": "insights/why-observability-is-not-governance/og.png",
     "og-insights-agent-infrastructure-stack.html": "insights/emerging-ai-agent-infrastructure-stack/og.png",
+    "og-insights-context-drift.html": "insights/why-context-alone-doesnt-prevent-architectural-drift/og.png",
+    "og-insights-agent-skills.html": "insights/agent-skills-vs-architectural-governance/og.png",
     # Concepts
     "og-concepts-index.html": "concepts/og.png",
     "og-concepts-agentic-development.html": "concepts/agentic-development/og.png",
@@ -104,6 +106,7 @@ TEMPLATE_MAP = {
     "og-concepts-agent-verification.html": "concepts/agent-verification/og.png",
     "og-concepts-governance-provenance.html": "concepts/governance-provenance/og.png",
     "og-concepts-execution-surfaces.html": "concepts/execution-surfaces/og.png",
+    "og-concepts-reliable-delegation.html": "concepts/reliable-delegation/og.png",
     # Docs
     "og-docs.html": "docs/og.png",
     # Architecture
