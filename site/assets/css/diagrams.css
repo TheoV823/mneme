@@ -333,8 +333,145 @@
 
 /* ============================================================
  * Primitive 3: Provenance chain
- * (filled in Task 25)
+ * Six numbered links from authoring ADR to enforcement event,
+ * plus a citable-chain summary trailer.
  * ============================================================ */
+
+.mneme-diagram--chain {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.mneme-diagram--chain .chain {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mneme-diagram--chain .link {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 0.7rem 0.55rem;
+  position: relative;
+}
+
+.mneme-diagram--chain .link--source {
+  background: rgba(139, 224, 200, 0.05);
+  border-color: var(--teal);
+}
+
+.mneme-diagram--chain .link--active {
+  background: rgba(200, 240, 96, 0.05);
+  border-color: var(--accent);
+  border-width: 1.5px;
+}
+
+.mneme-diagram--chain .link + .link::before {
+  content: '\2192';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.mneme-diagram--chain .l-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.mneme-diagram--chain .l-type {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+
+.mneme-diagram--chain .link--source .l-type {
+  color: var(--teal);
+}
+
+.mneme-diagram--chain .l-id {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  line-height: 1.35;
+}
+
+.mneme-diagram--chain .l-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.mneme-diagram--chain .citation {
+  margin-top: 1.1rem;
+  padding: 0.85rem 1rem;
+  background: rgba(139, 224, 200, 0.05);
+  border: 1px solid var(--teal);
+  border-radius: 6px;
+}
+
+.mneme-diagram--chain .citation-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+
+.mneme-diagram--chain .citation-line {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.mneme-diagram--chain .citation-summary {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  .mneme-diagram--chain .chain {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .mneme-diagram--chain .link + .link::before {
+    content: '\2193';
+    left: 50%;
+    top: -10px;
+    transform: translateX(-50%);
+  }
+  .mneme-diagram--chain .citation-line {
+    font-size: 0.66rem;
+  }
+}
 
 /* ============================================================
  * Primitive 4: Architectural drift cascade
