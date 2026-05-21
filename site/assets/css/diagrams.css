@@ -1,0 +1,63 @@
+/*
+ * Mneme HQ — Canonical Diagram Primitives
+ *
+ * Four self-contained HTML+CSS diagram primitives, all scoped under
+ * .mneme-diagram. See docs/contributing/diagram-conventions.md for the visual
+ * language spec and the no-invented-capabilities rule.
+ *
+ * Theme tokens (--accent, --teal, --surface, etc.) are defined in each
+ * page's inline <style> block. This file relies on them but does not
+ * redefine them.
+ */
+
+/* ============================================================
+ * Base wrapper
+ * ============================================================ */
+
+.mneme-diagram {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+}
+
+.mneme-diagram__title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 400;
+  margin: 0 0 1.1rem 0;
+}
+
+.mneme-diagram__sr-desc {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+ * Primitive 1: Governance propagation
+ * (filled in Task 11)
+ * ============================================================ */
+
+/* ============================================================
+ * Primitive 2: Enforcement checkpoints
+ * (filled in Task 18)
+ * ============================================================ */
+
+/* ============================================================
+ * Primitive 3: Provenance chain
+ * (filled in Task 25)
+ * ============================================================ */
+
+/* ============================================================
+ * Primitive 4: Architectural drift cascade
+ * (filled in Task 32)
+ * ============================================================ */
