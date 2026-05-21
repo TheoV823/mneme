@@ -21,10 +21,10 @@ Canonical homes are documented in the Phase 3 design doc (private repo).
 Every primitive uses this wrapper:
 
 ```html
-<figure class="diagram-figure" aria-labelledby="X-diag-title">
+<figure class="diagram-figure">
   <div class="mneme-diagram mneme-diagram--<kind>" role="img"
        aria-labelledby="X-diag-title X-diag-desc">
-    <h3 id="X-diag-title" class="mneme-diagram__title">Visible title</h3>
+    <p id="X-diag-title" class="mneme-diagram__title">Visible title</p>
     <p id="X-diag-desc" class="mneme-diagram__sr-desc">Long description for AT</p>
     <!-- primitive-specific markup -->
   </div>
@@ -32,8 +32,16 @@ Every primitive uses this wrapper:
 </figure>
 ```
 
-- The heading level matches the surrounding document outline. Class and ARIA
-  wiring stay constant; only the `h*` level varies per page.
+- The visible title can be any element (`<h2>`, `<h3>`, `<h4>`, or `<p>` / `<div>`).
+  Pick whatever fits the page's document outline. Use a heading element only when
+  the diagram occupies a heading slot in the page hierarchy; use `<p>` when it sits
+  inside a section as an illustration. The class and ARIA wiring stay constant
+  regardless.
+- **ARIA labelling:** the inner `<div role="img">` carries `aria-labelledby`
+  pointing at both the visible title id and the sr-only description id. The outer
+  `<figure>` does NOT use `aria-labelledby` — it derives its accessible name
+  natively from `<figcaption>`. This avoids duplicate announcements in screen
+  readers.
 - `.mneme-diagram__sr-desc` is screen-reader-only.
 - `.diagram-figure` and `.diagram-caption` chrome is shared with the legacy
   SVG diagrams and must not be modified.
