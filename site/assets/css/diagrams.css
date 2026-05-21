@@ -185,14 +185,27 @@
 }
 
 @media (max-width: 640px) {
+  /* Pipeline collapses to a single vertical stack. */
   .mneme-diagram--propagation .pipeline {
     grid-template-columns: 1fr;
   }
+  /* Consumers also collapse to a single vertical stack. The 2-column
+   * layout with a span-2 gate cell left empty grid slots and orphaned
+   * connector stubs whose horizontal bar lived only above row 1. The
+   * fan-out argument is communicated by the figcaption and structural
+   * flow (3 pipeline cells -> bus -> 5 consumer cells stacked); the
+   * horizontal bar and per-cell stubs are decorative and hidden. */
   .mneme-diagram--propagation .consumers {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-top: 0;
   }
-  .mneme-diagram--propagation .consumer--gate {
-    grid-column: span 2;
+  .mneme-diagram--propagation .consumers::before,
+  .mneme-diagram--propagation .consumer::before {
+    display: none;
+  }
+  .mneme-diagram--propagation .consumer {
+    padding-top: 0;
   }
 }
 
