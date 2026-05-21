@@ -482,5 +482,88 @@
 
 /* ============================================================
  * Primitive 4: Architectural drift cascade
- * (filled in Task 32)
+ * Five schematic tier rows showing compounding drift across
+ * sessions. Bar widths are illustrative (20/40/60/80/100%); no
+ * specific violation counts or benchmark figures appear in the
+ * markup. See /benchmark/ for measured rates.
+ *
+ * Note on rgba values: the rgba(168, 168, 184, X) tier shades
+ * derive from #a8a8b8, the --muted token. CSS does not natively
+ * interpolate var() into rgba() without color-mix(), and we are
+ * not pinning evergreen-only browser support yet. These rgba
+ * literals are intentional theme-token derivatives, not stray hex.
  * ============================================================ */
+
+.mneme-diagram--cascade {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.mneme-diagram--cascade .tier {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mneme-diagram--cascade .tier:last-child {
+  margin-bottom: 0;
+}
+
+.mneme-diagram--cascade .t-session {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.mneme-diagram--cascade .t-body {
+  position: relative;
+  height: 44px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.mneme-diagram--cascade .t-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(168, 168, 184, 0.1);
+  border-right: 1px solid var(--border2);
+}
+
+/* Schematic widths increase across tiers; no measured units. */
+.mneme-diagram--cascade .t-bar--w1 { width: 20%; }
+.mneme-diagram--cascade .t-bar--w2 { width: 40%; background: rgba(168, 168, 184, 0.15); }
+.mneme-diagram--cascade .t-bar--w3 { width: 60%; background: rgba(168, 168, 184, 0.2); }
+.mneme-diagram--cascade .t-bar--w4 { width: 80%; background: rgba(168, 168, 184, 0.25); border-right-style: dashed; }
+.mneme-diagram--cascade .t-bar--w5 { width: 100%; background: rgba(168, 168, 184, 0.3); border-right-style: dashed; }
+
+.mneme-diagram--cascade .t-label {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .mneme-diagram--cascade .tier {
+    grid-template-columns: 44px 1fr;
+    gap: 8px;
+  }
+  .mneme-diagram--cascade .t-label {
+    font-size: 0.74rem;
+  }
+}
