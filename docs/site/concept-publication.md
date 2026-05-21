@@ -11,7 +11,8 @@ Create `site/concepts/{slug}/index.html`.
 
 - Slug is lowercase kebab-case matching the concept's canonical URL segment.
 - Include all required `<head>` metadata: `<title>`, `<meta name="description">`,
-  `<link rel="canonical">`, `og:*` and `twitter:*` tags, `article:published_time`.
+  `<link rel="canonical">`, `og:*` and `twitter:*` tags,
+  `article:published_time` (ISO 8601, e.g. `2026-05-21T00:00:00Z`).
 - Include the Schema.org `DefinedTerm` JSON-LD block.
 - Link back to the hub: breadcrumb `Concepts → {Concept Name}`.
 - Add at least one related-concept link in the body (see step 5).
@@ -63,8 +64,8 @@ the `CollectionPage` block (around line 202). Add one entry:
 ```
 
 - `name` must match the `<title>` on the concept page (before the ` — Mneme HQ` suffix).
-- Maintain alphabetical order within the array, or append — either is acceptable,
-  but be consistent within a session.
+- Append the new entry at the end of the array. The existing array is not
+  alphabetical; do not attempt to re-sort it.
 - Do not add a trailing comma to the last entry.
 
 ---
@@ -87,7 +88,8 @@ If you add a node:
   (red dashed).
 - Add flow lines (`<line class="cmap-flow">`) connecting the new node to its
   tier neighbors.
-- Update the `<desc>` element to describe the new node.
+- Update the diagram-level `<desc id="cmap-desc">` to mention the new node
+  in the overall description.
 - Update the `<figcaption>` if the overall diagram narrative changes.
 - Refer to `docs/contributing/diagram-conventions.md` for color roles and
   accessibility requirements.
