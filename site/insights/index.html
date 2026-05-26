@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -75,12 +75,27 @@
           {"@type": "Article", "name": "Agents of Chaos and the Governance Gap", "url": "https://mnemehq.com/insights/agents-of-chaos-and-the-governance-gap/"},
           {"@type": "Article", "name": "OpenClaw and the Limits of Autonomous Coding", "url": "https://mnemehq.com/insights/openclaw-and-the-limits-of-autonomous-coding/"},
           {"@type": "Article", "name": "Why Context Alone Doesn't Prevent Architectural Drift", "url": "https://mnemehq.com/insights/why-context-alone-doesnt-prevent-architectural-drift/"},
-          {"@type": "Article", "name": "Agent Skills vs Architectural Governance", "url": "https://mnemehq.com/insights/agent-skills-vs-architectural-governance/"}
+          {"@type": "Article", "name": "Agent Skills vs Architectural Governance", "url": "https://mnemehq.com/insights/agent-skills-vs-architectural-governance/"},
+          {"@type": "Article", "name": "Goal-Driven Agents Need Architectural Governance", "url": "https://mnemehq.com/insights/goal-driven-agents-architectural-governance/"},
+          {"@type": "Article", "name": "The Governance Perimeter Is Moving to the Endpoint", "url": "https://mnemehq.com/insights/governance-perimeter-is-moving-to-the-endpoint/"},
+          {"@type": "Article", "name": "HTML Is Not the Point. Structure Is.", "url": "https://mnemehq.com/insights/html-is-not-the-point-structure-is/"},
+          {"@type": "Article", "name": "Runtime Verification Is Not Architectural Verification", "url": "https://mnemehq.com/insights/runtime-verification-is-not-architectural-verification/"},
+          {"@type": "Article", "name": "The AI ROI Problem Is Not About Models. It Is About Systems.", "url": "https://mnemehq.com/insights/ai-roi-problem-is-about-systems-not-models/"},
+          {"@type": "Article", "name": "Anthropic's Research System Reveals the Next Layer of AI Infrastructure", "url": "https://mnemehq.com/insights/anthropic-research-system-coordination-infrastructure/"},
+          {"@type": "Article", "name": "PR Review Is Becoming an Incident Response Layer for AI Development", "url": "https://mnemehq.com/insights/pr-review-is-becoming-incident-response/"},
+          {"@type": "Article", "name": "Your LLM Wiki Is a Library, Not a Law", "url": "https://mnemehq.com/insights/llm-wiki-library-not-law/"},
+          {"@type": "Article", "name": "AI Is Becoming the Operating Layer for Software Execution", "url": "https://mnemehq.com/insights/ai-is-becoming-the-operating-layer-for-software-execution/"},
+          {"@type": "Article", "name": "Models Are Temporary. Architectural Intent Is Not.", "url": "https://mnemehq.com/insights/models-are-temporary-architectural-intent-is-not/"},
+          {"@type": "Article", "name": "The Acceleration Whiplash and the Governance Gap", "url": "https://mnemehq.com/insights/acceleration-whiplash-governance-gap/"},
+          {"@type": "Article", "name": "Autonomous Code Remediation Requires Architectural Governance", "url": "https://mnemehq.com/insights/autonomous-code-remediation-requires-architectural-governance/"},
+          {"@type": "Article", "name": "Long-Running Agents Need More Than Memory", "url": "https://mnemehq.com/insights/long-running-agents-need-governance/"},
+          {"@type": "Article", "name": "The New Attack Surface Is Agentic Infrastructure", "url": "https://mnemehq.com/insights/agentic-infrastructure-attack-surface/"},
+          {"@type": "Article", "name": "RAG Is Not Memory", "url": "https://mnemehq.com/insights/rag-is-not-memory/"}
         ]
       }
     ]
   }
-  </script>
+</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -155,7 +170,6 @@
     @media (max-width: 640px) {
       nav { padding: 1rem 1.25rem; }
       .nav-hamburger { display: flex; }
-      nav { position: relative; }
       .nav-links {
         display: none;
         position: absolute;
@@ -214,9 +228,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -257,6 +271,50 @@
 }
   
     @media (max-width: 768px) { nav, .mobile-menu { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } }
+
+    /* Sticky in-page section nav (sits under the top site nav) */
+    .section-nav {
+      position: sticky;
+      top: 76px;
+      z-index: 90;
+      background: rgba(12,12,13,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .section-nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1.75rem;
+      padding: 0.85rem 2rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .section-nav-inner::-webkit-scrollbar { display: none; }
+    .section-nav-inner a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .section-nav-inner a:hover { color: var(--text); }
+    .section-nav-inner a.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .cards-section { scroll-margin-top: 140px; }
+    @media (max-width: 900px) {
+      .section-nav { top: 68px; }
+      .section-nav-inner { padding: 0.7rem 1.25rem; gap: 1.25rem; }
+      .cards-section { scroll-margin-top: 124px; }
+    }
   </style>
 </head>
 <body>
@@ -269,8 +327,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -278,6 +338,16 @@
     <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
   </div>
 </nav>
+
+<div class="section-nav" aria-label="Insights sections">
+  <div class="section-nav-inner">
+    <a href="#ai-native">Intent</a>
+    <a href="#governance-problem">Governance</a>
+    <a href="#market-context">Market</a>
+    <a href="#mneme-in-practice">Mneme</a>
+    <a href="#reference">Reference</a>
+  </div>
+</div>
 
 <main>
 <div class="answer-capsule">
@@ -294,8 +364,8 @@
   <h2 style="font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; margin: 0 auto 1rem; max-width: 660px;">Research, analysis, and implementation notes on architectural governance for AI-assisted software development.</h2>
   <p class="hub-intro">The agent stack is settling: models, harnesses, execution systems, governance, verification. These articles cover the layer that sits between execution and verification &mdash; what governance is, why long-running agents and harness-engineered workflows still need it, how it propagates across every surface autonomous workflows touch, and what deterministic enforcement looks like in practice.</p>
 
-  <!-- Group 0: AI-native engineering cluster -->
-  <div class="cards-section">
+  <!-- Section: AI-native engineering & intent governance -->
+  <div class="cards-section" id="ai-native">
     <div class="section-divider"><span class="section-label">AI-native engineering &amp; intent governance</span></div>
     <div class="cards-grid">
 
@@ -362,130 +432,100 @@
     </div>
   </div>
 
-  <!-- Group 0: AI-native engineering cluster -->
-  <div class="cards-section">
-    <div class="section-divider"><span class="section-label">AI-native engineering &amp; intent governance</span></div>
-    <div class="cards-grid">
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Thought Leadership</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">8 min read</span>
-        </div>
-        <h3>AI-Native Engineering Has an Intent Debt Problem</h3>
-        <p>As agents write more code, the real risk is not just technical debt. It is stale, implicit, unenforced intent. The next bottleneck in AI-native engineering is intent enforcement.</p>
-        <div class="card-footer">
-          <a href="/insights/ai-native-engineering-intent-debt/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Thought Leadership</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">3 min read</span>
-        </div>
-        <h3>Review Is Not Governance</h3>
-        <p>CodeRabbit helps review AI-generated code. Mneme helps govern what the AI generates in the first place. Two different layers of the same problem.</p>
-        <div class="card-footer">
-          <a href="/insights/review-is-not-governance/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Thought Leadership</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">9 min read</span>
-        </div>
-        <h3>Memory Is Not Governance</h3>
-        <p>The category conflates memory, context, retrieval, and governance into one word. Memory systems optimize recall. Governance systems optimize constraint enforcement. Different jobs, different math, different failure modes.</p>
-        <div class="card-footer">
-          <a href="/insights/memory-is-not-governance/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Category Education</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">6 min read</span>
-        </div>
-        <h3>Prompt Engineering Is Not Governance</h3>
-        <p>Prompt templates can nudge an LLM toward better output. They cannot enforce architectural invariants, resolve decision conflicts, or prevent drift across a multi-engineer codebase.</p>
-        <div class="card-footer">
-          <a href="/insights/prompt-engineering-is-not-governance/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Group 0: AI-native engineering cluster -->
-  <div class="cards-section">
-    <div class="section-divider"><span class="section-label">AI-native engineering &amp; intent governance</span></div>
-    <div class="cards-grid">
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Thought Leadership</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">8 min read</span>
-        </div>
-        <h3>AI-Native Engineering Has an Intent Debt Problem</h3>
-        <p>As agents write more code, the real risk is not just technical debt. It is stale, implicit, unenforced intent. The next bottleneck in AI-native engineering is intent enforcement.</p>
-        <div class="card-footer">
-          <a href="/insights/ai-native-engineering-intent-debt/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Thought Leadership</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">3 min read</span>
-        </div>
-        <h3>Review Is Not Governance</h3>
-        <p>CodeRabbit helps review AI-generated code. Mneme helps govern what the AI generates in the first place. Two different layers of the same problem.</p>
-        <div class="card-footer">
-          <a href="/insights/review-is-not-governance/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Thought Leadership</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">9 min read</span>
-        </div>
-        <h3>Memory Is Not Governance</h3>
-        <p>The category conflates memory, context, retrieval, and governance into one word. Memory systems optimize recall. Governance systems optimize constraint enforcement. Different jobs, different math, different failure modes.</p>
-        <div class="card-footer">
-          <a href="/insights/memory-is-not-governance/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-      <div class="insight-card">
-        <div class="card-meta">
-          <span class="card-tag">Category Education</span>
-          <span class="card-dot"></span>
-          <span class="card-read-time">6 min read</span>
-        </div>
-        <h3>Prompt Engineering Is Not Governance</h3>
-        <p>Prompt templates can nudge an LLM toward better output. They cannot enforce architectural invariants, resolve decision conflicts, or prevent drift across a multi-engineer codebase.</p>
-        <div class="card-footer">
-          <a href="/insights/prompt-engineering-is-not-governance/" class="read-link">Read &rarr;</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Group 1 -->
-  <div class="cards-section">
+  <!-- Section: The governance problem -->
+  <div class="cards-section" id="governance-problem">
     <div class="section-divider"><span class="section-label">The governance problem</span></div>
     <div class="cards-grid">
+
+      <a href="/insights/governance-perimeter-is-moving-to-the-endpoint/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Infrastructure</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">11 min read</span>
+          </div>
+          <h3>The Governance Perimeter Is Moving to the Endpoint</h3>
+          <p>On-device agents are usually framed as a latency or privacy story. The deeper shift is architectural &mdash; as autonomous execution moves onto the endpoint, the centralized control plane that hosted-AI governance assumed quietly disappears. Enforcement has to collapse toward the repository.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/html-is-not-the-point-structure-is/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Analysis</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">12 min read</span>
+          </div>
+          <h3>HTML Is Not the Point. Structure Is.</h3>
+          <p>The industry is reading AI&rsquo;s shift toward HTML and richly structured outputs as a UX evolution. The deeper shift is architectural: software artifacts are turning into machine-operable execution surfaces, and that dramatically expands the surface area governance has to cover.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/runtime-verification-is-not-architectural-verification/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Infrastructure</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">13 min read</span>
+          </div>
+          <h3>Runtime Verification Is Not Architectural Verification</h3>
+          <p>The AI infrastructure market is converging on sandboxes, traces, approvals, and policy enforcement. Those protect a single agent run. They do not prevent systems from drifting architecturally over time. Architectural verification is a different infrastructure category.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/ai-roi-problem-is-about-systems-not-models/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Economics</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">14 min read</span>
+          </div>
+          <h3>The AI ROI Problem Is Not About Models. It Is About Systems.</h3>
+          <p>Weak enterprise AI ROI is not evidence that AI fails to create value. It is evidence that organizations matured generation capability faster than the governance and verification infrastructure needed to operationalize it. Generation is commoditizing. Verification is not.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/anthropic-research-system-coordination-infrastructure/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Analysis</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">14 min read</span>
+          </div>
+          <h3>Anthropic&rsquo;s Research System Reveals the Next Layer of AI Infrastructure</h3>
+          <p>Anthropic&rsquo;s engineering breakdown of its multi-agent research system reads as a preview of the infrastructure layer emerging between orchestration and execution. Coordination infrastructure is becoming a category of its own.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/pr-review-is-becoming-incident-response/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Operations</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">12 min read</span>
+          </div>
+          <h3>PR Review Is Becoming an Incident Response Layer for AI Development</h3>
+          <p>Under agentic development, the PR queue is quietly turning into the place organizations detect governance failures that should have been prevented upstream. Generation accelerates exponentially. Reviewer attention does not. That mismatch is governance collapse, not reviewer fatigue.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
 
       <a href="/insights/why-context-alone-doesnt-prevent-architectural-drift/" class="insight-card-link">
         <div class="insight-card">
@@ -511,6 +551,66 @@
           </div>
           <h3>Agent Skills vs Architectural Governance</h3>
           <p>Agent skills teach agents how to perform tasks. Architectural governance constrains what agents are allowed to do to the system. These are complementary layers &mdash; and conflating them leaves system integrity unaddressed.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/goal-driven-agents-architectural-governance/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Agentic Development</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">10 min read</span>
+          </div>
+          <h3>Goal-Driven Agents Need Architectural Governance</h3>
+          <p>Claude&rsquo;s <code>/goal</code> command, Karpathy&rsquo;s AutoResearch, and Shopify&rsquo;s metric-driven loops point to a shift from prompt-based coding to objective-driven development. Tests verify outcomes. Governance preserves architectural intent while the loop runs.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/llm-wiki-library-not-law/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Category Distinction</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">8 min read</span>
+          </div>
+          <h3>Your LLM Wiki Is a Library, Not a Law</h3>
+          <p>LLM wikis, NotebookLM corpora, AGENTS.md files, and Cursor rules help agents read project knowledge. They do not enforce architectural decisions. Documentation is context. Governance is constraint &mdash; and the difference shows up at generation time.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/ai-is-becoming-the-operating-layer-for-software-execution/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Worldview</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">12 min read</span>
+          </div>
+          <h3>AI Is Becoming the Operating Layer for Software Execution</h3>
+          <p>Operating systems coordinate hardware. Cloud platforms coordinate infrastructure. AI is becoming the coordination layer for execution itself &mdash; intent, tools, agents, memory, and execution chains. Once that shift completes, governance stops being a policy concern and becomes infrastructure.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/models-are-temporary-architectural-intent-is-not/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Worldview</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">8 min read</span>
+          </div>
+          <h3>Models Are Temporary. Architectural Intent Is Not.</h3>
+          <p>Models change. Agents change. IDEs change. Architectural intent should not. The case for keeping AI governance outside the model &mdash; and the second kind of lock-in (governance lock-in) that most teams discover too late.</p>
           <div class="card-footer">
             <span class="read-pill">Read insight</span>
           </div>
@@ -622,21 +722,6 @@
         </div>
       </a>
 
-      <a href="/insights/review-is-not-governance/" class="insight-card-link">
-        <div class="insight-card">
-          <div class="card-meta">
-            <span class="card-tag">Thought Leadership</span>
-            <span class="card-dot"></span>
-            <span class="card-read-time">3 min read</span>
-          </div>
-          <h3>Review Is Not Governance</h3>
-          <p>CodeRabbit helps review AI-generated code. Mneme helps govern what the AI generates in the first place. Two different layers of the same problem.</p>
-          <div class="card-footer">
-            <span class="read-pill">Read insight</span>
-          </div>
-        </div>
-      </a>
-
       <a href="/insights/why-prompt-memory-fails-at-scale/" class="insight-card-link">
         <div class="insight-card">
           <div class="card-meta">
@@ -682,36 +767,6 @@
         </div>
       </a>
 
-      <a href="/insights/memory-is-not-governance/" class="insight-card-link">
-        <div class="insight-card">
-          <div class="card-meta">
-            <span class="card-tag">Thought Leadership</span>
-            <span class="card-dot"></span>
-            <span class="card-read-time">9 min read</span>
-          </div>
-          <h3>Memory Is Not Governance</h3>
-          <p>The category conflates memory, context, retrieval, and governance into one word. Memory systems optimize recall. Governance systems optimize constraint enforcement. Different jobs, different math, different failure modes &mdash; and the conflation is what most current AI coding governance is silently paying for.</p>
-          <div class="card-footer">
-            <span class="read-pill">Read insight</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="/insights/prompt-engineering-is-not-governance/" class="insight-card-link">
-        <div class="insight-card">
-          <div class="card-meta">
-            <span class="card-tag">Category Education</span>
-            <span class="card-dot"></span>
-            <span class="card-read-time">6 min read</span>
-          </div>
-          <h3>Prompt Engineering Is Not Governance</h3>
-          <p>Prompt templates can nudge an LLM toward better output. They cannot enforce architectural invariants, resolve decision conflicts, or prevent drift across a multi-engineer codebase.</p>
-          <div class="card-footer">
-            <span class="read-pill">Read insight</span>
-          </div>
-        </div>
-      </a>
-
       <a href="/insights/why-rag-fails-for-architectural-governance/" class="insight-card-link">
         <div class="insight-card">
           <div class="card-meta">
@@ -727,11 +782,71 @@
         </div>
       </a>
 
+      <a href="/insights/long-running-agents-need-governance/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Analysis</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">7 min read</span>
+          </div>
+          <h3>Long-Running Agents Need More Than Memory</h3>
+          <p>Anthropic&rsquo;s managed-agent harness solves continuity: progress logs, feature lists, git checkpoints. But continuity is not governance. As agents work across sessions, codebases need enforceable architectural contracts that define what must remain true.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/autonomous-code-remediation-requires-architectural-governance/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Analysis</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">9 min read</span>
+          </div>
+          <h3>Autonomous Code Remediation Requires Architectural Governance</h3>
+          <p>Autonomous remediation loops cannot stabilise without deterministic architectural constraints. Faster generation accelerates drift. Governance must become infrastructure.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/agentic-infrastructure-attack-surface/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Thought Leadership</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">10 min read</span>
+          </div>
+          <h3>The New Attack Surface Is Agentic Infrastructure</h3>
+          <p>The npm and developer-tooling compromises persisted by writing themselves into Claude Code hooks, VS Code tasks, and CI automation. The attack surface is no longer code &mdash; it is the execution fabric surrounding autonomous agents.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/insights/rag-is-not-memory/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Category Education</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">7 min read</span>
+          </div>
+          <h3>RAG Is Not Memory</h3>
+          <p>RAG retrieves similar text. Memory preserves durable identity. Most products labelled "AI memory" implement the first and are sold as if they implemented the second &mdash; and the failure modes are showing up in production.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
     </div>
   </div>
 
-  <!-- Group 2 -->
-  <div class="cards-section">
+  <!-- Section: Market context -->
+  <div class="cards-section" id="market-context">
     <div class="section-divider"><span class="section-label">Market context</span></div>
     <div class="cards-grid">
 
@@ -795,11 +910,26 @@
         </div>
       </a>
 
+      <a href="/insights/acceleration-whiplash-governance-gap/" class="insight-card-link">
+        <div class="insight-card">
+          <div class="card-meta">
+            <span class="card-tag">Industry Analysis</span>
+            <span class="card-dot"></span>
+            <span class="card-read-time">8 min read</span>
+          </div>
+          <h3>The Acceleration Whiplash and the Governance Gap</h3>
+          <p>The Faros AI Engineering Report 2026 measured what AI adoption actually produces. Throughput is up. So are incidents, review times, and unreviewed merges. The data names the governance problem.</p>
+          <div class="card-footer">
+            <span class="read-pill">Read insight</span>
+          </div>
+        </div>
+      </a>
+
     </div>
   </div>
 
-  <!-- Group 3 -->
-  <div class="cards-section">
+  <!-- Section: Mneme in practice -->
+  <div class="cards-section" id="mneme-in-practice">
     <div class="section-divider"><span class="section-label">Mneme in practice</span></div>
     <div class="cards-grid">
 
@@ -896,8 +1026,8 @@
     </div>
   </div>
 
-  <!-- Group 4 -->
-  <div class="cards-section">
+  <!-- Section: Reference -->
+  <div class="cards-section" id="reference">
     <div class="section-divider"><span class="section-label">Reference</span></div>
     <div class="cards-grid">
 
@@ -957,6 +1087,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>
@@ -1045,6 +1176,30 @@
   window.addEventListener('resize', function(){
     if (window.innerWidth > 900 && links.classList.contains('open')) setOpen(false);
   });
+})();
+</script>
+<script><!-- section-nav-active -->
+(function(){
+  var nav = document.querySelector('.section-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  var links = Array.from(nav.querySelectorAll('a'));
+  var sections = links
+    .map(function(a){ return document.querySelector(a.getAttribute('href')); })
+    .filter(Boolean);
+  if (!sections.length) return;
+  function setActive(id){
+    var hash = '#' + id;
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === hash);
+    });
+  }
+  var io = new IntersectionObserver(function(entries){
+    var visible = entries
+      .filter(function(e){ return e.isIntersecting; })
+      .sort(function(a,b){ return a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top; });
+    if (visible[0]) setActive(visible[0].target.id);
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+  sections.forEach(function(s){ io.observe(s); });
 })();
 </script>
 </body>

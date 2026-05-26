@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -177,9 +177,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -257,9 +257,9 @@
         "@type": "FAQPage",
         "mainEntity": [
           {"@type": "Question", "name": "Does Mneme HQ govern Copilot suggestions in VS Code today?", "acceptedAnswer": {"@type": "Answer", "text": "Not yet. Copilot inline suggestions land in the editor through a different surface than Claude Code's tool calls, so the PreToolUse hook does not intercept them. Mneme catches Copilot-generated code at the next layer: the GitHub Actions enforcement gate on every PR diff. A native Copilot integration is on the roadmap; until then, CI is the enforcement point for Copilot output."}},
-          {"@type": "Question", "name": "Do I install a VS Code extension to enable Mneme?", "acceptedAnswer": {"@type": "Answer", "text": "No. Mneme runs as a Claude Code PreToolUse hook configured in .claude/settings.json â€” the hook fires regardless of whether Claude Code is launched from the VS Code integrated terminal, the standalone terminal, or any other host. There is no Mneme VS Code extension to install."}},
+          {"@type": "Question", "name": "Do I install a VS Code extension to enable Mneme?", "acceptedAnswer": {"@type": "Answer", "text": "No. Mneme runs as a Claude Code PreToolUse hook configured in .claude/settings.json — the hook fires regardless of whether Claude Code is launched from the VS Code integrated terminal, the standalone terminal, or any other host. There is no Mneme VS Code extension to install."}},
           {"@type": "Question", "name": "Does the hook work in WSL or remote VS Code sessions?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The hook runs wherever Claude Code runs. In WSL or a VS Code Remote-SSH session, install mneme inside the remote environment (the same one Claude Code is invoked from) and the hook works identically. The .mneme/project_memory.json file lives in the repo, so it travels with the project."}},
-          {"@type": "Question", "name": "Why route enforcement through Claude Code instead of VS Code directly?", "acceptedAnswer": {"@type": "Answer", "text": "VS Code does not generate code on its own â€” humans and AI agents do. Mneme governs the agent. Claude Code exposes a PreToolUse hook that intercepts every Edit, Write, and MultiEdit before disk; that is the deterministic enforcement point. A VS Code-level extension would only see what the user types directly, missing the bulk of AI-generated change."}}
+          {"@type": "Question", "name": "Why route enforcement through Claude Code instead of VS Code directly?", "acceptedAnswer": {"@type": "Answer", "text": "VS Code does not generate code on its own — humans and AI agents do. Mneme governs the agent. Claude Code exposes a PreToolUse hook that intercepts every Edit, Write, and MultiEdit before disk; that is the deterministic enforcement point. A VS Code-level extension would only see what the user types directly, missing the bulk of AI-generated change."}}
         ]
       }
     ]
@@ -276,8 +276,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -299,7 +301,7 @@
     <div class="article-eyebrow">
       <span class="eyebrow-tag">Integration &middot; VS Code</span>
       <span class="eyebrow-dot"></span>
-      <span class="eyebrow-meta">5 min read &nbsp;Â·&nbsp; May 2026</span>
+      <span class="eyebrow-meta">5 min read &nbsp;·&nbsp; May 2026</span>
     </div>
     <h1>Mneme HQ + VS Code</h1>
     <p class="article-lede">VS Code is where most engineering teams already write code &mdash; and where Claude Code and Copilot now write code too. Mneme HQ governs the AI agent running inside the editor, not the editor itself. Every Edit, Write, and MultiEdit a Claude Code session attempts inside VS Code passes through the same PreToolUse hook before it reaches disk.</p>
@@ -472,6 +474,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>

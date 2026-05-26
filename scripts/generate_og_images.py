@@ -85,6 +85,10 @@ TEMPLATE_MAP = {
     "og-insights-agent-infrastructure-stack.html": "insights/emerging-ai-agent-infrastructure-stack/og.png",
     "og-insights-context-drift.html": "insights/why-context-alone-doesnt-prevent-architectural-drift/og.png",
     "og-insights-agent-skills.html": "insights/agent-skills-vs-architectural-governance/og.png",
+    "og-insights-goal-driven-agents.html": "insights/goal-driven-agents-architectural-governance/og.png",
+    "og-insights-llm-wiki.html": "insights/llm-wiki-library-not-law/og.png",
+    "og-insights-ai-operating-layer.html": "insights/ai-is-becoming-the-operating-layer-for-software-execution/og.png",
+    "og-insights-models-are-temporary.html": "insights/models-are-temporary-architectural-intent-is-not/og.png",
     # Concepts
     "og-concepts-index.html": "concepts/og.png",
     "og-concepts-agentic-development.html": "concepts/agentic-development/og.png",
@@ -107,6 +111,10 @@ TEMPLATE_MAP = {
     "og-concepts-governance-provenance.html": "concepts/governance-provenance/og.png",
     "og-concepts-execution-surfaces.html": "concepts/execution-surfaces/og.png",
     "og-concepts-reliable-delegation.html": "concepts/reliable-delegation/og.png",
+    "og-concepts-objective-driven-development.html": "concepts/objective-driven-development/og.png",
+    "og-concepts-executable-architectural-intent.html": "concepts/executable-architectural-intent/og.png",
+    "og-concepts-ai-operating-layer.html": "concepts/ai-operating-layer/og.png",
+    "og-concepts-model-independent-governance.html": "concepts/model-independent-governance/og.png",
     # Docs
     "og-docs.html": "docs/og.png",
     # Architecture
@@ -127,6 +135,14 @@ TEMPLATE_MAP = {
     "og-privacy.html": "privacy/og.png",
     "og-works-with.html": "works-with/og.png",
     "og-integration-claude-agent-sdk.html": "integrations/claude-agent-sdk/og.png",
+
+    # Insights — new
+    "og-insights-governance-perimeter-endpoint.html": "insights/governance-perimeter-is-moving-to-the-endpoint/og.png",
+    "og-insights-html-not-the-point.html": "insights/html-is-not-the-point-structure-is/og.png",
+    "og-insights-runtime-vs-architectural.html": "insights/runtime-verification-is-not-architectural-verification/og.png",
+    "og-insights-ai-roi-systems.html": "insights/ai-roi-problem-is-about-systems-not-models/og.png",
+    "og-insights-anthropic-coordination.html": "insights/anthropic-research-system-coordination-infrastructure/og.png",
+    "og-insights-pr-review-incident.html": "insights/pr-review-is-becoming-incident-response/og.png",
 }
 
 PORT = 8765

@@ -17,11 +17,11 @@
   <meta property="og:title" content="Agent Skills vs Architectural Governance" />
   <meta property="og:description" content="Agent skills teach agents how to perform tasks. Architectural governance constrains what agents are allowed to do. These are different layers." />
   <meta property="og:url" content="https://mnemehq.com/insights/agent-skills-vs-architectural-governance/" />
-  <meta property="og:image" content="https://mnemehq.com/insights/agent-skills-vs-architectural-governance/og.png" />
+  <meta property="og:image" content="https://mnemehq.com/insights/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Agent Skills vs Architectural Governance" />
   <meta name="twitter:description" content="Agent skills teach agents how to perform tasks. Architectural governance constrains what agents are allowed to do. These are different layers." />
-  <meta name="twitter:image" content="https://mnemehq.com/insights/agent-skills-vs-architectural-governance/og.png" />
+  <meta name="twitter:image" content="https://mnemehq.com/insights/og.png" />
   <meta name="author" content="Theo Valmis" />
   <meta property="article:published_time" content="2026-05-20T00:00:00Z" />
   <meta property="article:author" content="https://mnemehq.com/founder/" />
@@ -182,9 +182,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -274,8 +274,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -429,6 +431,8 @@
     <aside class="related-panel" aria-labelledby="related-essays-label" style="margin-top:1.5rem;padding-top:0;border-top:none;">
       <div class="related-panel-label" id="related-essays-label">Related operational essays</div>
       <ul class="related-list">
+        <li><a href="/insights/goal-driven-agents-architectural-governance/"><div class="rel-title">Goal-Driven Agents Need Architectural Governance</div><p class="rel-desc">Claude /goal, AutoResearch, and Shopify&rsquo;s metric-driven loops point to a shift from prompt-based coding to objective-driven development. Tests verify outcomes. Governance preserves intent.</p></a></li>
+        <li><a href="/insights/llm-wiki-library-not-law/"><div class="rel-title">Your LLM Wiki Is a Library, Not a Law</div><p class="rel-desc">LLM wikis help agents read project knowledge. They do not enforce architectural decisions. Documentation is context. Governance is constraint.</p></a></li>
         <li><a href="/insights/why-context-alone-doesnt-prevent-architectural-drift/"><div class="rel-title">Why Context Alone Doesn&rsquo;t Prevent Architectural Drift</div><p class="rel-desc">Context engineering and governance solve different problems. The missing layer between orchestration and verification is enforcement.</p></a></li>
         <li><a href="/insights/memory-is-not-governance/"><div class="rel-title">Memory Is Not Governance</div><p class="rel-desc">Context persistence cannot enforce architectural invariants. Recall is not constraint.</p></a></li>
       </ul>
@@ -465,6 +469,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>
