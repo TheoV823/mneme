@@ -60,6 +60,16 @@
         "isPartOf": {"@type": "WebPage", "@id": "https://mnemehq.com/demo/"}
       },
       {
+        "@type": "VideoObject",
+        "name": "Project Memory Is Not Just Context. It Is Enforcement.",
+        "description": "Project memory as enforcement policy. The approved dependency list lives in project_memory.json as a structured, version-controlled rule, and Mneme returns a WARN verdict when an AI agent introduces an unapproved package during a refactor.",
+        "thumbnailUrl": "https://i.ytimg.com/vi/pBJSpN8d9FU/hqdefault.jpg",
+        "uploadDate": "2026-05-09",
+        "contentUrl": "https://www.youtube.com/watch?v=pBJSpN8d9FU",
+        "embedUrl": "https://www.youtube-nocookie.com/embed/pBJSpN8d9FU",
+        "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/", "logo": {"@type": "ImageObject", "url": "https://mnemehq.com/logo-v2.png"}}
+      },
+      {
         "@type": "FAQPage",
         "mainEntity": [
           {"@type": "Question", "name": "Why is this a WARN and not a FAIL?", "acceptedAnswer": {"@type": "Answer", "text": "Dependency introductions are policy decisions that often have legitimate reasons — a security audit may approve a previously rejected library, or the team may have updated the approved list and not yet pushed it. Mneme returns WARN so the diff is flagged for review without hard-blocking the work. Teams that want strict enforcement can configure dependency-policy as FAIL via mneme check --mode strict."}},
