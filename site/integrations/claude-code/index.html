@@ -267,7 +267,7 @@
         "name": "Wire Mneme HQ into Claude Code",
         "description": "Install Mneme, register the PreToolUse hook with Claude Code, and verify enforcement on a test diff.",
         "step": [
-          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme && mneme init scaffolds project_memory.json at the repo root."},
+          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme-hq && mneme init scaffolds project_memory.json at the repo root."},
           {"@type": "HowToStep", "name": "Register the hook", "text": "Add the mneme-hook command as a PreToolUse hook in your Claude Code hooks configuration so Edit, Write, and MultiEdit operations check the corpus before applying changes."},
           {"@type": "HowToStep", "name": "Populate decisions", "text": "Replace the placeholder ADRs in project_memory.json with the team's real decisions, including scope (file globs), status, and rationale."},
           {"@type": "HowToStep", "name": "Verify enforcement", "text": "Trigger a test edit that violates one of the decisions. The hook should block the edit and surface the decision id as feedback. Adjust mode (warn / strict) per environment."}
@@ -351,7 +351,7 @@
     <ol>
       <li>
         <strong>Install the package</strong>
-        <pre><code>pip install mneme</code></pre>
+        <pre><code>pip install mneme-hq</code></pre>
       </li>
       <li>
         <strong>Initialise project memory (if you don't have one yet)</strong>

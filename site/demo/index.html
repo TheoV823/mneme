@@ -388,7 +388,7 @@
         <!-- Mid-page install + pilot -->
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
           <span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);">Try it on your own repo:</span>
-          <code style="font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--text);background:var(--term-bg);border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;">pip install mneme &amp;&amp; mneme init &amp;&amp; mneme check</code>
+          <code style="font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--text);background:var(--term-bg);border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;">pip install mneme-hq &amp;&amp; mneme init &amp;&amp; mneme check</code>
           <a href="/pilot/" style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--accent);text-decoration:none;white-space:nowrap;">or request a pilot &rarr;</a>
         </div>
 
@@ -523,7 +523,7 @@
       <h3>Three lines to wire this up on your own repo</h3>
       <p>Open source, MIT. Same decision corpus drives the editor hook, the CI gate, and the ADR compiler.</p>
       <div class="snippet-wrap">
-        <code id="snippet-text">pip install mneme &amp;&amp; mneme init &amp;&amp; mneme check</code>
+        <code id="snippet-text">pip install mneme-hq &amp;&amp; mneme init &amp;&amp; mneme check</code>
         <button class="copy-btn" id="copy-btn" onclick="copySnippet()">Copy</button>
       </div>
       <p style="margin-top:1.25rem;margin-bottom:0;font-size:0.82rem;color:var(--muted);">Want help wiring it up? <a href="/pilot/" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(200,240,96,0.3);">Request a pilot</a> &mdash; we'll compile your ADRs and walk the enforcement trace on your own repo.</p>
@@ -644,7 +644,7 @@
 
   <script>
     function copySnippet() {
-      const text = 'pip install mneme && mneme init && mneme check';
+      const text = 'pip install mneme-hq && mneme init && mneme check';
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('copy-btn');
         btn.textContent = 'Copied!';

@@ -72,7 +72,10 @@ In code-bearing contexts, the only acceptable spellings are:
 | CLI entrypoint | `mneme` | `Mneme HQ`, `mneme-hq` |
 | Module invocation | `python -m mneme.cli` | `python -m Mneme HQ.cli` |
 | Repo slug | `TheoV823/mneme` | `TheoV823/mneme-hq` |
-| PyPI install | `pip install mneme` | `pip install mneme-hq` |
+| PyPI distribution name | `mneme-hq` | `mneme` (name taken by unrelated package) |
+| pip install command | `pip install mneme-hq` | `pip install mneme` |
+
+**Note on distribution name vs import name:** The PyPI distribution name (`mneme-hq`) intentionally diverges from the Python import root and CLI command (both `mneme`). This follows the standard Python packaging pattern where distribution and import names differ (e.g. `pip install scikit-learn` → `import sklearn`, `pip install Pillow` → `import PIL`). The PyPI name `mneme` is occupied by an unrelated note-taking package (mneme 0.201, uploaded 2014). Users install with `pip install mneme-hq` but import and invoke as `mneme`.
 
 ## Required Fixes (this ADR's acceptance criteria)
 

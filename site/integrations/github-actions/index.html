@@ -338,7 +338,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install mneme
+      - run: pip install mneme-hq
       - name: Check changed files
         run: |
           git diff --name-only origin/main...HEAD | \
@@ -348,7 +348,7 @@ jobs:
 
     <ul>
       <li>CI enforcement gate is Phase 1 current focus — see the <a href="/roadmap/" style="color:var(--accent);text-decoration:none;">roadmap</a></li>
-      <li>The <code>mneme check</code> command is available today via <code>pip install mneme</code></li>
+      <li>The <code>mneme check</code> command is available today via <code>pip install mneme-hq</code></li>
       <li>The GitHub Actions workflow above is the reference integration pattern</li>
       <li>Managed GitHub Actions workflow artifact coming in Q3 2026</li>
     </ul>

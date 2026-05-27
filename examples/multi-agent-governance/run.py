@@ -27,7 +27,7 @@ Run from this directory:
 
     python run.py
 
-No API key required. Requires the mneme package (pip install mneme or
+No API key required. Requires the mneme package (pip install mneme-hq or
 pip install -e ../../mneme-project-memory).
 """
 
