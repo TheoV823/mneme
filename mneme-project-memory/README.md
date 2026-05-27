@@ -14,7 +14,7 @@ Architectural governance for [Claude Code](https://docs.anthropic.com/en/docs/cl
 Enforce ADRs and engineering constraints automatically — before drift reaches your repo.
 
 ```bash
-pip install mneme
+pip install mneme-hq
 python scripts/install_claude_code.py        # project-scoped: writes to ./.claude/
 # or: python scripts/install_claude_code.py --user   # writes to ~/.claude/
 ```

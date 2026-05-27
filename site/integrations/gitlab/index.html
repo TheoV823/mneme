@@ -326,7 +326,7 @@ mneme-governance:
   stage: test
   image: python:3.11-slim
   script:
-    - pip install mneme
+    - pip install mneme-hq
     - git diff --name-only $CI_MERGE_REQUEST_DIFF_BASE_SHA...HEAD | xargs -I{} mneme check {}
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"</code></pre>
@@ -335,7 +335,7 @@ mneme-governance:
 
     <ul>
       <li>CI enforcement gate is Phase 1 current focus &mdash; see the <a href="/roadmap/" style="color:var(--accent);text-decoration:none;">roadmap</a></li>
-      <li>The <code>mneme check</code> command is available today via <code>pip install mneme</code></li>
+      <li>The <code>mneme check</code> command is available today via <code>pip install mneme-hq</code></li>
       <li>The GitLab CI job above is the reference integration pattern</li>
       <li>Managed GitLab CI template artifact coming in Q3 2026</li>
     </ul>

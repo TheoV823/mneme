@@ -265,7 +265,7 @@
         "name": "Run Mneme HQ alongside CodeRabbit",
         "description": "Use Mneme as the pre-generation enforcement layer and CodeRabbit as the post-generation review layer. The two operate on different stages and do not conflict.",
         "step": [
-          {"@type": "HowToStep", "name": "Install Mneme on the developer side", "text": "pip install mneme && mneme init seeds project_memory.json. Add the mneme-hook entry to Claude Code or wire the Cursor rules export."},
+          {"@type": "HowToStep", "name": "Install Mneme on the developer side", "text": "pip install mneme-hq && mneme init seeds project_memory.json. Add the mneme-hook entry to Claude Code or wire the Cursor rules export."},
           {"@type": "HowToStep", "name": "Add Mneme to CI", "text": "Add a mneme check --mode strict step to the CI pipeline so PRs are blocked on hard FAIL verdicts before they reach review."},
           {"@type": "HowToStep", "name": "Keep CodeRabbit as the review layer", "text": "Leave CodeRabbit's PR review running as-is. With Mneme catching architectural violations pre-generation, CodeRabbit's review surface shrinks to correctness, security, and stylistic concerns — the load decreases per PR."},
           {"@type": "HowToStep", "name": "Track override events", "text": "When a Mneme rule is overridden via an explicit decision record, that override is itself tracked. CodeRabbit reviewers can see the override rationale in the diff history when evaluating the PR."}
