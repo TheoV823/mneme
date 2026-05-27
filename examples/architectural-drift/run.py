@@ -23,7 +23,7 @@ Run from this directory:
     python run.py
 
 No API key required. Requires the mneme package (pip install -e
-../../mneme-project-memory or pip install mneme).
+../../mneme-project-memory or pip install mneme-hq).
 """
 
 from __future__ import annotations

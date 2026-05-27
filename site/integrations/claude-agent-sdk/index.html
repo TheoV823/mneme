@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Govern architectural constraints in Claude Agent SDK workflows â€” Mneme HQ</title>
+  <title>Govern architectural constraints in Claude Agent SDK workflows — Mneme HQ</title>
   <link rel="preload" href="/assets/fonts/InstrumentSerif-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Inter-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css">
@@ -68,17 +68,17 @@
           {
             "@type": "Question",
             "name": "Does the governance hook add meaningful latency to agent tool calls?",
-            "acceptedAnswer": {"@type": "Answer", "text": "Mneme's retriever is deterministic keyword scoring with no embedding model and no vector store. For typical projects with a corpus under 200 decisions, per-check latency is in the low milliseconds. The check runs in-process with a subprocess call, not over a network. Retrieval is bounded by K=3 â€” the top three decisions by score are returned regardless of corpus size."}
+            "acceptedAnswer": {"@type": "Answer", "text": "Mneme's retriever is deterministic keyword scoring with no embedding model and no vector store. For typical projects with a corpus under 200 decisions, per-check latency is in the low milliseconds. The check runs in-process with a subprocess call, not over a network. Retrieval is bounded by K=3 — the top three decisions by score are returned regardless of corpus size."}
           },
           {
             "@type": "Question",
-            "name": "What if my agent uses non-file tools â€” API calls, shell commands?",
+            "name": "What if my agent uses non-file tools — API calls, shell commands?",
             "acceptedAnswer": {"@type": "Answer", "text": "The pre-execution hook pattern applies to any tool call, not just file writes. You can intercept tool calls by name and run mneme check against the proposed operation text. The check is most precise when the proposed change involves identifiable architectural surface (file paths, dependency names, module patterns). For generic API calls, you can still inject relevant decisions as context so the agent reasons from the corpus rather than from training defaults."}
           },
           {
             "@type": "Question",
             "name": "Does Mneme support long-running or multi-turn agent sessions?",
-            "acceptedAnswer": {"@type": "Answer", "text": "The governance corpus is stateless and idempotent â€” each check is independent. For long-running sessions, the enforcement trace (PASS / WARN / FAIL records with decision IDs) is designed to be persisted alongside the agent's run log, giving you an auditable record of which decisions were evaluated at each tool call. Persistent trace support across workflow IDs is on the roadmap."}
+            "acceptedAnswer": {"@type": "Answer", "text": "The governance corpus is stateless and idempotent — each check is independent. For long-running sessions, the enforcement trace (PASS / WARN / FAIL records with decision IDs) is designed to be persisted alongside the agent's run log, giving you an auditable record of which decisions were evaluated at each tool call. Persistent trace support across workflow IDs is on the roadmap."}
           }
         ]
       }
@@ -232,9 +232,9 @@
     h2#related-reading + ul li a:hover::after { opacity: 1; transform: translateX(3px); }
 
     @media (max-width: 900px) {
-      html, body { overflow-x: hidden; }
+      html, body { overflow-x: clip; }
       body.menu-open { overflow: hidden; }
-      nav { position: relative; padding: 1rem 1.25rem; }
+      nav { padding: 1rem 1.25rem; }
       .nav-hamburger { display: flex; }
       .nav-links { display: flex !important; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; gap: 0; background: rgba(12,12,13,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 1.25rem; z-index: 99; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.28s ease, opacity 0.2s ease, padding 0.28s ease, visibility 0s linear 0.28s; }
       .nav-links.open { max-height: 80vh; opacity: 1; visibility: visible; padding: 0.5rem 1.25rem 1.25rem; transition: max-height 0.32s ease, opacity 0.25s ease, padding 0.32s ease, visibility 0s; overflow-y: auto; }
@@ -256,8 +256,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -520,7 +522,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Mneme
-        run: pip install mneme
+        run: pip install mneme-hq
 
       - name: Run agent workflow
         run: python scripts/agent_workflow.py
@@ -629,7 +631,9 @@ jobs:
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Learn</div>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
         <li><a href="/architecture/" style="color:var(--muted);text-decoration:none;">Architecture</a></li>
+        <li><a href="/concepts/" style="color:var(--muted);text-decoration:none;">Concepts</a></li>
         <li><a href="/insights/" style="color:var(--muted);text-decoration:none;">Insights</a></li>
+        <li><a href="/qa-glossary/" style="color:var(--muted);text-decoration:none;">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/" style="color:var(--muted);text-decoration:none;">Standards</a></li>
         <li><a href="/benchmark/" style="color:var(--muted);text-decoration:none;">Benchmark</a></li>
         <li><a href="/docs/" style="color:var(--muted);text-decoration:none;">Docs</a></li>

@@ -10,7 +10,7 @@ Enforce ADRs and engineering constraints automatically — before drift reaches 
 > failed checks could return exit 0 and allow violating edits through.
 > v0.4.2 is the first fully reliable hook release.
 
-1. `pip install mneme>=0.4.2`  (or `pip install -e .` from this repo)
+1. `pip install mneme-hq>=0.4.2`  (or `pip install -e .` from this repo)
 2. Run the installer: `python scripts/install_claude_code.py`
 3. Confirm: edit a file in Claude Code that violates a decision in
    `.mneme/project_memory.json` — Claude Code should be blocked with

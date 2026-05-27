@@ -23,7 +23,7 @@ adjusts its approach without you having to intervene.
 ### 1. Install the package
 
 ```bash
-pip install mneme
+pip install mneme-hq
 ```
 
 ### 2. Initialise project memory (if you don't have one yet)

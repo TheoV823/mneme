@@ -40,7 +40,7 @@ python run.py
 ```
 
 Requires the `mneme` package on `PYTHONPATH`. Either install it from
-this repo's `mneme-project-memory/` directory, or `pip install mneme`.
+this repo's `mneme-project-memory/` directory, or `pip install mneme-hq`.
 
 ## Files
 

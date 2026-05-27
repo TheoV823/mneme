@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -163,9 +163,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -265,7 +265,7 @@
         "name": "Migrate from Cursor Rules to Mneme HQ",
         "description": "Convert an existing .cursorrules file into a structured Mneme decision corpus and enable hook-level enforcement.",
         "step": [
-          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme && mneme init — scaffolds project_memory.json at the repo root."},
+          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme-hq && mneme init — scaffolds project_memory.json at the repo root."},
           {"@type": "HowToStep", "name": "Convert each rule", "text": "For every rule in .cursorrules, create a typed entry: id, type (architectural_pattern / dependency_policy / etc.), scope (file glob), status (active), rationale, and supersedes (if it replaces an earlier rule)."},
           {"@type": "HowToStep", "name": "Enable Claude Code hook", "text": "Add the mneme-hook entry to your Claude Code hooks configuration so Edit, Write, and MultiEdit operations check the decision corpus before applying changes."},
           {"@type": "HowToStep", "name": "Wire CI", "text": "Add mneme check --mode strict to your CI pipeline so PRs are blocked on hard FAIL verdicts — see the GitHub Actions integration for the canonical setup."}
@@ -285,8 +285,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -525,6 +527,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>

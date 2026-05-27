@@ -25,6 +25,8 @@
   <meta property="article:published_time" content="2026-05-20T00:00:00Z" />
   <meta property="article:author" content="https://mnemehq.com/founder/" />
   <meta property="article:section" content="Engineering" />
+  <!-- Consent defaults -->
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'analytics_storage':'granted','ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied'});</script>
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KL7FB67N');</script>
   <!-- End Google Tag Manager -->
@@ -175,9 +177,9 @@
     .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     @media (max-width: 900px) {
-      html, body { overflow-x: hidden; }
+      html, body { overflow-x: clip; }
       body.menu-open { overflow: hidden; }
-      nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+      nav, nav.site-nav { padding: 1rem 1.25rem; }
       .nav-hamburger { display: flex; }
       .nav-links {
         display: flex !important;
@@ -286,8 +288,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -592,6 +596,8 @@
 
   <h2 id="related-reading">Related reading</h2>
   <ul>
+    <li><a href="/insights/ai-is-becoming-the-operating-layer-for-software-execution/">AI Is Becoming the Operating Layer for Software Execution</a></li>
+    <li><a href="/concepts/ai-operating-layer/">AI Operating Layer (concept)</a></li>
     <li><a href="/insights/harness-engineering-still-needs-governance/">Harness Engineering Still Needs Governance</a></li>
     <li><a href="/insights/why-observability-is-not-governance/">Why Observability Is Not Governance</a></li>
     <li><a href="/insights/memory-is-not-governance/">Memory Is Not Governance</a></li>
@@ -631,6 +637,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>

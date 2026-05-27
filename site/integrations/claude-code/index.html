@@ -1,26 +1,26 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Governing Claude Code Workflows — Mneme HQ</title>
+  <title>Claude Code Governance: Hook-Level Architectural Enforcement — Mneme HQ</title>
   <link rel="preload" href="/assets/fonts/InstrumentSerif-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Inter-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css">
-  <meta name="description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. Zero setup." />
+  <meta name="description" content="Claude Code governance via PreToolUse hooks. Mneme HQ intercepts every Edit, Write, and MultiEdit Claude Code attempts and blocks architectural violations before they reach your codebase. Zero setup." />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0c0c0d" />
   <link rel="canonical" href="https://mnemehq.com/integrations/claude-code/" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Mneme HQ" />
-  <meta property="og:title" content="Governing Claude Code Workflows" />
-  <meta property="og:description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. Zero setup." />
+  <meta property="og:title" content="Claude Code Governance — Mneme HQ" />
+  <meta property="og:description" content="Claude Code governance via PreToolUse hooks. Mneme HQ intercepts every Edit, Write, and MultiEdit Claude Code attempts and blocks architectural violations before they reach your codebase. Zero setup." />
   <meta property="og:url" content="https://mnemehq.com/integrations/claude-code/" />
   <meta property="og:image" content="https://mnemehq.com/integrations/claude-code/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Governing Claude Code Workflows" />
-  <meta name="twitter:description" content="Mneme HQ hooks into every Edit, Write, and MultiEdit Claude Code attempts — intercepting architectural violations before they reach your codebase. Zero setup." />
+  <meta name="twitter:title" content="Claude Code Governance — Mneme HQ" />
+  <meta name="twitter:description" content="Claude Code governance via PreToolUse hooks. Mneme HQ intercepts every Edit, Write, and MultiEdit Claude Code attempts and blocks architectural violations before they reach your codebase. Zero setup." />
   <meta name="twitter:image" content="https://mnemehq.com/integrations/claude-code/og.png" />
   <meta name="author" content="Theo Valmis" />
   <meta property="article:published_time" content="2026-05-07T00:00:00Z" />
@@ -177,9 +177,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -267,7 +267,7 @@
         "name": "Wire Mneme HQ into Claude Code",
         "description": "Install Mneme, register the PreToolUse hook with Claude Code, and verify enforcement on a test diff.",
         "step": [
-          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme && mneme init scaffolds project_memory.json at the repo root."},
+          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme-hq && mneme init scaffolds project_memory.json at the repo root."},
           {"@type": "HowToStep", "name": "Register the hook", "text": "Add the mneme-hook command as a PreToolUse hook in your Claude Code hooks configuration so Edit, Write, and MultiEdit operations check the corpus before applying changes."},
           {"@type": "HowToStep", "name": "Populate decisions", "text": "Replace the placeholder ADRs in project_memory.json with the team's real decisions, including scope (file globs), status, and rationale."},
           {"@type": "HowToStep", "name": "Verify enforcement", "text": "Trigger a test edit that violates one of the decisions. The hook should block the edit and surface the decision id as feedback. Adjust mode (warn / strict) per environment."}
@@ -287,8 +287,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -312,7 +314,7 @@
       <span class="eyebrow-dot"></span>
       <span class="eyebrow-meta">6 min read &nbsp;·&nbsp; May 2026</span>
     </div>
-    <h1>Governing Claude Code Workflows</h1>
+    <h1>Claude Code Governance</h1>
     <p class="article-lede">Mneme HQ registers a PreToolUse hook with Claude Code. Every Edit, Write, and MultiEdit is intercepted before it reaches disk &mdash; violations surface the decision id as feedback and exit 2 (block). Claude Code adjusts its approach without manual intervention.</p>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.85;margin-top:1rem;max-width:680px;">Claude Code is a harness &mdash; it coordinates execution, tool use, and the agent loop. Mneme is the governance layer that runs alongside it, enforcing the architectural intent the harness has no opinion about. They are different layers of the runtime stack, and they run side by side. The argument in full: <a href="/insights/harness-engineering-still-needs-governance/" style="color:var(--teal);">Harness Engineering Still Needs Governance</a>.</p>
     <p class="byline">
@@ -349,7 +351,7 @@
     <ol>
       <li>
         <strong>Install the package</strong>
-        <pre><code>pip install mneme</code></pre>
+        <pre><code>pip install mneme-hq</code></pre>
       </li>
       <li>
         <strong>Initialise project memory (if you don't have one yet)</strong>
@@ -554,6 +556,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>

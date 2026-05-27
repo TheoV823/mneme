@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -492,9 +492,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -662,13 +662,19 @@
 </head>
 <body>
 
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
 <nav>
   <a href="/" class="logo"><img src="/logo-v2.png" alt="Mneme HQ" height="36" style="display:block;"></a>
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -1034,6 +1040,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>
@@ -1083,8 +1090,6 @@
   </div>
 </footer>
 
-<!-- GTM noscript -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KL7FB67N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
   // Hamburger nav (upgraded — ESC, outside-click, body-scroll lock, X morph)

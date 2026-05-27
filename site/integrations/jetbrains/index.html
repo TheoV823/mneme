@@ -267,7 +267,7 @@
         "name": "Use Mneme HQ as the constraint layer for JetBrains AI Assistant",
         "description": "Install Mneme HQ, attach the decision corpus as shared context in JetBrains AI Assistant, and run mneme check in CI to enforce constraints at the merge boundary.",
         "step": [
-          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme and scaffold .mneme/project_memory.json at the repo root using examples/project_memory.json as a template."},
+          {"@type": "HowToStep", "name": "Install", "text": "pip install mneme-hq and scaffold .mneme/project_memory.json at the repo root using examples/project_memory.json as a template."},
           {"@type": "HowToStep", "name": "Populate the corpus", "text": "Record real architectural decisions in project_memory.json â€” each with scope (file globs), status, and rationale. Commit the file to the repo so every IDE on every machine reads the same corpus."},
           {"@type": "HowToStep", "name": "Attach to JetBrains AI Assistant", "text": "In JetBrains AI Assistant settings, add .mneme/project_memory.json to the AI context (project context or pinned files). The model now treats recorded decisions as authoritative when generating code."},
           {"@type": "HowToStep", "name": "Enforce in CI", "text": "Add mneme check --mode strict to your GitHub Actions or other CI workflow. Any PR diff that violates a recorded decision fails the build â€” regardless of which IDE or model produced it."}
@@ -384,7 +384,7 @@
     <ol>
       <li>
         <strong>Install the package</strong>
-        <pre><code>pip install mneme</code></pre>
+        <pre><code>pip install mneme-hq</code></pre>
       </li>
       <li>
         <strong>Initialise project memory</strong>
@@ -400,7 +400,7 @@
         <p>Add <code>mneme check --mode strict</code> as a step in your GitHub Actions workflow (or your CI of choice). The corpus is now enforced at the merge boundary regardless of which IDE produced the diff.</p>
         <pre><code>- name: mneme check
   run: |
-    pip install mneme
+    pip install mneme-hq
     mneme check --mode strict</code></pre>
       </li>
     </ol>

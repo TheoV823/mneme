@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -212,9 +212,9 @@
 .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 900px) {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   body.menu-open { overflow: hidden; }
-  nav, nav.site-nav { position: relative; padding: 1rem 1.25rem; }
+  nav, nav.site-nav { padding: 1rem 1.25rem; }
   .nav-hamburger { display: flex; }
   .nav-links {
     display: flex !important;
@@ -287,8 +287,10 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
     <a href="/insights/">Insights</a>
+    <a href="/qa-glossary/">Q&amp;A</a>
     <a href="/roadmap/">Roadmap</a>
     <a href="/demo/">Demo</a>
     <a href="/benchmark/">Benchmark</a>
@@ -396,7 +398,7 @@
 
     <h2>How to wire this up in your repo</h2>
     <p>Three lines of setup:</p>
-    <p><code>pip install mneme &amp;&amp; mneme init &amp;&amp; mneme check</code></p>
+    <p><code>pip install mneme-hq &amp;&amp; mneme init &amp;&amp; mneme check</code></p>
     <p><code>mneme init</code> seeds <code>project_memory.json</code> with placeholder ADRs. Replace them with your own decisions. The <a href="/integrations/claude-code/">Claude Code hook</a> picks up the file automatically; the <a href="/integrations/cursor/">Cursor integration</a> exports the same corpus into <code>.cursor/rules/</code> so your editor session sees identical constraints.</p>
 
     <p>For the architectural argument behind a single tool-agnostic decision store, see <a href="/insights/architectural-governance-across-heterogeneous-ai-coding-agents/">architectural governance across heterogeneous AI coding agents</a>. For how Mneme aligns with NIST CAISI, MCP, and AGENTS.md, see <a href="/standards/">the standards landscape</a>.</p>
@@ -455,6 +457,7 @@
         <li><a href="/concepts/">Concepts</a></li>
         <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
+        <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
         <li><a href="/standards/">Standards</a></li>
         <li><a href="/benchmark/">Benchmark</a></li>
         <li><a href="/docs/">Docs</a></li>

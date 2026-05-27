@@ -26,7 +26,10 @@ are both forbidden in import paths and CLI invocations.
 | Import root | `mneme` | `mneme_hq`, `MnemeHQ`, `Mneme HQ` |
 | CLI entrypoint | `mneme` | `mneme-hq`, `Mneme HQ` |
 | Module invocation | `python -m mneme.cli` | `python -m MnemeHQ.cli` |
-| PyPI install | `pip install mneme` | `pip install mneme-hq` |
+| PyPI distribution name | `mneme-hq` | `mneme` (taken by unrelated package) |
+| pip install command | `pip install mneme-hq` | `pip install mneme` |
+
+Note: the PyPI distribution name (`mneme-hq`) diverges from the import root and CLI (`mneme`) because the name `mneme` is occupied on PyPI by an unrelated package. This follows the standard Python pattern where distribution and import names differ.
 
 # Enforcement
 
