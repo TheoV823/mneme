@@ -179,6 +179,7 @@ TEMPLATE_MAP = {
     "og-insights-liskov-python.html": "insights/barbara-liskov-python-encapsulation-ai-governance/og.png",
     "og-insights-cursor-habits.html": "insights/cursor-developer-habits-report-governance-infrastructure/og.png",
     "og-insights-dora-metrics.html": "insights/dora-metrics-insufficient-for-agentic-development/og.png",
+    "og-insights-gemini-deep-research.html": "insights/google-gemini-deep-research-agent-governance/og.png",
     # Concepts
     "og-concepts-runtime-governance.html": "concepts/runtime-governance/og.png",
     "og-concepts-autonomous-se-governance.html": "concepts/autonomous-software-engineering-governance/og.png",

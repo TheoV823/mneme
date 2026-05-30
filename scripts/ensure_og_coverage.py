@@ -609,6 +609,7 @@ TEMPLATES = [
     # === BATCH: Cursor Developer Habits Report (May 2026) ===
     ("og-insights-cursor-habits.html", "Insights", "The Cursor Developer Habits Report", "52px", "Why AI coding now needs governance infrastructure.", "insights/cursor-developer-habits-report-governance-infrastructure"),
     ("og-insights-dora-metrics.html", "Insights", "DORA Metrics Are Necessary But Insufficient for Agentic Development", "40px", "Delivery metrics can stay green while the architecture degrades. Governance is the missing layer.", "insights/dora-metrics-insufficient-for-agentic-development"),
+    ("og-insights-gemini-deep-research.html", "Insights", "Google Gemini Deep Research Agent", "52px", "Why managed AI agents still need governance.", "insights/google-gemini-deep-research-agent-governance"),
     # === BATCH: New concepts ===
     ("og-concepts-runtime-governance.html", "Concept", "Runtime Governance", "62px", "Enforcement across long-running autonomous execution environments.", "concepts/runtime-governance"),
     ("og-concepts-autonomous-se-governance.html", "Concept", "Autonomous Software Engineering Governance", "44px", "The enforcement layer for AI-driven software execution systems.", "concepts/autonomous-software-engineering-governance"),
@@ -718,6 +719,7 @@ NEW_MAP_ENTRIES = {
     "og-insights-liskov-python.html": "insights/barbara-liskov-python-encapsulation-ai-governance/og.png",
     "og-insights-cursor-habits.html": "insights/cursor-developer-habits-report-governance-infrastructure/og.png",
     "og-insights-dora-metrics.html": "insights/dora-metrics-insufficient-for-agentic-development/og.png",
+    "og-insights-gemini-deep-research.html": "insights/google-gemini-deep-research-agent-governance/og.png",
     # Batch May 2026: concepts
     "og-concepts-runtime-governance.html": "concepts/runtime-governance/og.png",
     "og-concepts-autonomous-se-governance.html": "concepts/autonomous-software-engineering-governance/og.png",
