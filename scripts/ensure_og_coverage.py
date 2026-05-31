@@ -606,6 +606,15 @@ TEMPLATES = [
     ("og-insights-agent-first-ides.html", "Insights", "Why Agent-First IDEs Need Architectural Invariants", "42px", "Delegated tasks need shared constraints, encoded and enforced.", "insights/agent-first-ides-need-architectural-invariants"),
     ("og-insights-governance-category.html", "Insights", "The Next AI Infrastructure Category Is Governance", "42px", "Every infrastructure wave creates a governance layer. AI coding is next.", "insights/ai-infrastructure-governance-category"),
     ("og-insights-liskov-python.html", "Insights", "Liskov's Python Critique Predicts the Governance Problem", "40px", "Encapsulation that's advisory holds at human pace. It does not survive agent velocity.", "insights/barbara-liskov-python-encapsulation-ai-governance"),
+    # === BATCH: Cursor Developer Habits Report (May 2026) ===
+    ("og-insights-cursor-habits.html", "Insights", "The Cursor Developer Habits Report", "52px", "Why AI coding now needs governance infrastructure.", "insights/cursor-developer-habits-report-governance-infrastructure"),
+    ("og-insights-dora-metrics.html", "Insights", "DORA Metrics Are Necessary But Insufficient for Agentic Development", "40px", "Delivery metrics can stay green while the architecture degrades. Governance is the missing layer.", "insights/dora-metrics-insufficient-for-agentic-development"),
+    ("og-insights-gemini-deep-research.html", "Insights", "Google Gemini Deep Research Agent", "52px", "Why managed AI agents still need governance.", "insights/google-gemini-deep-research-agent-governance"),
+    # === BATCH: Harness engineering cluster + two-markets (May 2026) ===
+    ("og-insights-harness-engineering.html", "Insights", "Harness Engineering", "62px", "The execution layer between models and production.", "insights/what-is-harness-engineering"),
+    ("og-insights-prompt-vs-harness.html", "Insights", "Prompt Engineering vs Harness Engineering", "44px", "From optimizing inputs to designing systems.", "insights/prompt-engineering-vs-harness-engineering"),
+    ("og-insights-harness-verification.html", "Insights", "Harness Engineering Needs Verification", "46px", "Successful execution is not verifiable execution.", "insights/harness-engineering-verification-layer"),
+    ("og-insights-two-markets.html", "Insights", "AI Agent Governance, Two Markets", "46px", "Runtime governance vs architectural governance.", "insights/ai-agent-governance-two-markets"),
     # === BATCH: New concepts ===
     ("og-concepts-runtime-governance.html", "Concept", "Runtime Governance", "62px", "Enforcement across long-running autonomous execution environments.", "concepts/runtime-governance"),
     ("og-concepts-autonomous-se-governance.html", "Concept", "Autonomous Software Engineering Governance", "44px", "The enforcement layer for AI-driven software execution systems.", "concepts/autonomous-software-engineering-governance"),
@@ -713,6 +722,13 @@ NEW_MAP_ENTRIES = {
     "og-insights-agent-first-ides.html": "insights/agent-first-ides-need-architectural-invariants/og.png",
     "og-insights-governance-category.html": "insights/ai-infrastructure-governance-category/og.png",
     "og-insights-liskov-python.html": "insights/barbara-liskov-python-encapsulation-ai-governance/og.png",
+    "og-insights-cursor-habits.html": "insights/cursor-developer-habits-report-governance-infrastructure/og.png",
+    "og-insights-dora-metrics.html": "insights/dora-metrics-insufficient-for-agentic-development/og.png",
+    "og-insights-gemini-deep-research.html": "insights/google-gemini-deep-research-agent-governance/og.png",
+    "og-insights-harness-engineering.html": "insights/what-is-harness-engineering/og.png",
+    "og-insights-prompt-vs-harness.html": "insights/prompt-engineering-vs-harness-engineering/og.png",
+    "og-insights-harness-verification.html": "insights/harness-engineering-verification-layer/og.png",
+    "og-insights-two-markets.html": "insights/ai-agent-governance-two-markets/og.png",
     # Batch May 2026: concepts
     "og-concepts-runtime-governance.html": "concepts/runtime-governance/og.png",
     "og-concepts-autonomous-se-governance.html": "concepts/autonomous-software-engineering-governance/og.png",
