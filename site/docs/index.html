@@ -45,6 +45,7 @@
         "url": "https://mnemehq.com/docs/",
         "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/", "logo": {"@type": "ImageObject", "url": "https://mnemehq.com/logo-v2.png"}},
         "hasPart": [
+          {"@type": "WebPage", "name": "How enforcement works", "url": "https://mnemehq.com/docs/how-enforcement-works/"},
           {"@type": "WebPage", "name": "CLI reference", "url": "https://mnemehq.com/docs/cli/"},
           {"@type": "WebPage", "name": "Governance violations", "url": "https://mnemehq.com/docs/governance-violations/"},
           {"@type": "WebPage", "name": "Supported languages", "url": "https://mnemehq.com/docs/supported-languages/"},
@@ -125,15 +126,12 @@
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/#how-it-works">How it works</a>
-    <a href="/concepts/">Concepts</a>
     <a href="/use-cases/">Use cases</a>
+    <a href="/concepts/">Concepts</a>
     <a href="/insights/">Insights</a>
-    <a href="/qa-glossary/">Q&amp;A</a>
-    <a href="/roadmap/">Roadmap</a>
-    <a href="/demo/">Demo</a>
-    <a href="/benchmark/">Benchmark</a>
+    <a href="/docs/">Docs</a>
     <a href="https://github.com/TheoV823/mneme">GitHub</a>
-    <a href="https://github.com/TheoV823/mneme" class="btn-nav-cta">Get started</a>
+    <a href="/pilot/" class="btn-nav-cta">Request a pilot</a>
   </div>
 </nav>
 
@@ -157,6 +155,11 @@
   <p style="font-size:0.92rem;color:var(--muted);line-height:1.75;max-width:780px;margin:0 0 2rem;">Mneme HQ's documentation is intentionally narrow. We document the surfaces that engineers actually need to operate the governance layer: the CLI you run, the violations Mneme catches, the languages Mneme governs today, and the methodology behind the benchmark. Everything else lives in the source repository.</p>
 
   <div class="doc-grid">
+    <a class="doc-card" href="/docs/how-enforcement-works/">
+      <div class="dh"><span class="dname">How enforcement works</span><span class="dtag">Explainer</span></div>
+      <p>How Mneme turns human-authored architectural decisions into deterministic enforcement rules checked before AI generation. ADR authoring, structured governance, explainable verdicts.</p>
+      <span class="read">How enforcement works &rarr;</span>
+    </a>
     <a class="doc-card" href="/docs/cli/">
       <div class="dh"><span class="dname">CLI reference</span><span class="dtag">Reference</span></div>
       <p>Commands, flags, and exit codes for <code>mneme</code>: <code>list_decisions</code>, <code>add_decision</code>, <code>test_query</code>, <code>check</code>, <code>cursor generate</code>, and <code>benchmark</code>. GitHub Actions and pre-commit CI patterns.</p>
@@ -192,47 +195,54 @@
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Product</div>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
+        <li><a href="/#how-it-works">How it works</a></li>
         <li><a href="/use-cases/">Use cases</a></li>
         <li><a href="/works-with/">Works with</a></li>
         <li><a href="/platforms/">Platforms</a></li>
         <li><a href="/integrations/">Integrations</a></li>
         <li><a href="/compare/">Compare</a></li>
         <li><a href="/demo/">Demo</a></li>
+        <li><a href="/benchmark/">Benchmark</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Developers</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
+        <li><a href="/docs/">Docs</a></li>
+        <li><a href="/docs/cli/">CLI reference</a></li>
+        <li><a href="/docs/governance-violations/">Governance violations</a></li>
+        <li><a href="/supported-languages/">Supported languages</a></li>
+        <li><a href="/architecture/">Architecture</a></li>
+        <li><a href="/standards/">Standards</a></li>
       </ul>
     </div>
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Learn</div>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
         <li><a href="/concepts/">Concepts</a></li>
-        <li><a href="/architecture/">Architecture</a></li>
         <li><a href="/insights/">Insights</a></li>
         <li><a href="/qa-glossary/">Q&amp;A and Glossary</a></li>
-        <li><a href="/standards/">Standards</a></li>
-        <li><a href="/benchmark/">Benchmark</a></li>
-        <li><a href="/docs/">Docs</a></li>
-        <li><a href="/docs/cli/">CLI reference</a></li>
-        <li><a href="/docs/governance-violations/">Governance violations</a></li>
-        <li><a href="/supported-languages/">Supported languages</a></li>
       </ul>
     </div>
     <div>
       <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Company</div>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
-        <li><a href="/pilot/" style="color:var(--accent);">Request pilot</a></li>
+        <li><a href="/pilot/" style="color:var(--accent);">Request a pilot</a></li>
         <li><a href="/for/">For teams</a></li>
         <li><a href="/founder/">Founder</a></li>
         <li><a href="/about/">About</a></li>
         <li><a href="/roadmap/">Roadmap</a></li>
         <li><a href="/contact/">Contact</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
       </ul>
     </div>
     <div>
-      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Code</div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;">Connect</div>
       <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.82rem;">
         <li><a href="https://github.com/TheoV823/mneme">GitHub</a></li>
         <li><a href="https://www.linkedin.com/company/mnemehq" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://dev.to/mnemehq" target="_blank" rel="noopener">DEV.to</a></li>
-        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="https://www.youtube.com/@MnemeHQ" target="_blank" rel="noopener">YouTube</a></li>
       </ul>
     </div>
   </div>
