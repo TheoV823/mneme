@@ -634,6 +634,10 @@ TEMPLATES = [
     ("og-insights-cursor-habits.html", "Insights", "The Cursor Developer Habits Report", "52px", "Why AI coding now needs governance infrastructure.", "insights/cursor-developer-habits-report-governance-infrastructure"),
     ("og-insights-dora-metrics.html", "Insights", "DORA Metrics Are Necessary But Insufficient for Agentic Development", "40px", "Delivery metrics can stay green while the architecture degrades. Governance is the missing layer.", "insights/dora-metrics-insufficient-for-agentic-development"),
     ("og-insights-gemini-deep-research.html", "Insights", "Google Gemini Deep Research Agent", "52px", "Why managed AI agents still need governance.", "insights/google-gemini-deep-research-agent-governance"),
+    # === BATCH: Agentic strategy reports (June 2026) ===
+    ("og-insights-convergence-trap.html", "Insights", "The Agentic Convergence Trap", "56px", "When rivals run the same agents on the same defaults, governance is the only moat left.", "insights/agentic-convergence-trap-architectural-governance"),
+    ("og-insights-table-stakes-advantage.html", "Insights", "From AI Table Stakes to AI Advantage", "46px", "Models are table stakes. The edge competitors can't copy is the architecture you enforce.", "insights/mckinsey-ai-table-stakes-to-advantage"),
+    ("og-insights-agents-not-employees.html", "Insights", "AI Agents Are Not Employees", "56px", "You can't delegate accountability to something that can't hold it. Constrain, don't trust.", "insights/ai-agents-are-not-employees-governance"),
     # === BATCH: Harness engineering cluster + two-markets (May 2026) ===
     ("og-insights-harness-engineering.html", "Insights", "Harness Engineering", "62px", "The execution layer between models and production.", "insights/what-is-harness-engineering"),
     ("og-insights-prompt-vs-harness.html", "Insights", "Prompt Engineering vs Harness Engineering", "44px", "From optimizing inputs to designing systems.", "insights/prompt-engineering-vs-harness-engineering"),
@@ -754,6 +758,9 @@ NEW_MAP_ENTRIES = {
     "og-insights-cursor-habits.html": "insights/cursor-developer-habits-report-governance-infrastructure/og.png",
     "og-insights-dora-metrics.html": "insights/dora-metrics-insufficient-for-agentic-development/og.png",
     "og-insights-gemini-deep-research.html": "insights/google-gemini-deep-research-agent-governance/og.png",
+    "og-insights-convergence-trap.html": "insights/agentic-convergence-trap-architectural-governance/og.png",
+    "og-insights-table-stakes-advantage.html": "insights/mckinsey-ai-table-stakes-to-advantage/og.png",
+    "og-insights-agents-not-employees.html": "insights/ai-agents-are-not-employees-governance/og.png",
     "og-insights-harness-engineering.html": "insights/what-is-harness-engineering/og.png",
     "og-insights-prompt-vs-harness.html": "insights/prompt-engineering-vs-harness-engineering/og.png",
     "og-insights-harness-verification.html": "insights/harness-engineering-verification-layer/og.png",

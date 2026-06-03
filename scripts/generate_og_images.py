@@ -213,6 +213,11 @@ TEMPLATE_MAP = {
     "og-insights-spec-driven-dev.html": "insights/spec-driven-development-still-needs-governance/og.png",
     # Concepts
     "og-concepts-spec-driven-development.html": "concepts/spec-driven-development/og.png",
+
+    # Insights — new
+    "og-insights-convergence-trap.html": "insights/agentic-convergence-trap-architectural-governance/og.png",
+    "og-insights-table-stakes-advantage.html": "insights/mckinsey-ai-table-stakes-to-advantage/og.png",
+    "og-insights-agents-not-employees.html": "insights/ai-agents-are-not-employees-governance/og.png",
 }
 
 PORT = 8765
