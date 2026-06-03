@@ -6,7 +6,7 @@
   <title>AI Governance Infrastructure &mdash; Mneme HQ Concepts</title>
   <link rel="preload" href="/assets/fonts/InstrumentSerif-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css">
-  <meta name="description" content="AI governance infrastructure is the deterministic enforcement layer that preserves architectural intent across AI-assisted software development. It is the inevitable next category in the AI engineering stack — the same shape every previous infrastructure wave produced once it became autonomous enough to need it." />
+  <meta name="description" content="AI governance infrastructure, also called AI code governance: the deterministic enforcement layer that preserves architectural intent across AI-assisted development." />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0c0c0d" />
   <link rel="canonical" href="https://mnemehq.com/concepts/ai-governance-infrastructure/" />
@@ -36,8 +36,8 @@
       {"@type": "ListItem", "position": 2, "name": "Concepts", "item": "https://mnemehq.com/concepts/"},
       {"@type": "ListItem", "position": 3, "name": "AI Governance Infrastructure", "item": "https://mnemehq.com/concepts/ai-governance-infrastructure/"}
     ]},
-    {"@type": "DefinedTerm", "name": "AI Governance Infrastructure", "description": "The deterministic enforcement layer that preserves architectural intent across AI-assisted software development. The category that emerges once AI coding agents reach the velocity and autonomy at which human review can no longer carry the governance load alone.", "url": "https://mnemehq.com/concepts/ai-governance-infrastructure/", "inDefinedTermSet": "https://mnemehq.com/concepts/"},
-    {"@type": "TechArticle", "headline": "AI Governance Infrastructure", "url": "https://mnemehq.com/concepts/ai-governance-infrastructure/", "datePublished": "2026-05-28", "author": {"@type": "Person", "name": "Theo Valmis", "url": "https://mnemehq.com/founder/"}, "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/"}}
+    {"@type": "DefinedTerm", "name": "AI Governance Infrastructure", "alternateName": ["AI code governance", "AI coding governance"], "description": "The deterministic enforcement layer that preserves architectural intent across AI-assisted software development. The category that emerges once AI coding agents reach the velocity and autonomy at which human review can no longer carry the governance load alone.", "url": "https://mnemehq.com/concepts/ai-governance-infrastructure/", "inDefinedTermSet": "https://mnemehq.com/concepts/"},
+    {"@type": "TechArticle", "headline": "AI Governance Infrastructure", "url": "https://mnemehq.com/concepts/ai-governance-infrastructure/", "datePublished": "2026-05-28", "dateModified": "2026-06-03", "author": {"@type": "Person", "name": "Theo Valmis", "url": "https://mnemehq.com/founder/"}, "publisher": {"@type": "Organization", "name": "Mneme HQ", "url": "https://mnemehq.com/"}}
   ]}
   </script>
 
@@ -157,8 +157,11 @@
 
     <div class="definition-card">
       <div class="def-label">Definition</div>
-      <p><strong>AI governance infrastructure</strong> is the deterministic enforcement layer that preserves architectural intent across AI-assisted software development. It compiles architectural decisions into machine-evaluable constraints, applies them at every execution surface an AI agent touches, and produces structured verdicts that travel with the codebase regardless of which agent or tool produced the change.</p>
+      <p><strong>AI governance infrastructure</strong> is the deterministic enforcement layer that preserves architectural intent across AI-assisted software development. It compiles architectural decisions into machine-evaluable constraints, applies them at every execution surface an AI agent touches, and produces structured verdicts that travel with the codebase regardless of which agent or tool produced the change. Teams also call this <strong>AI code governance</strong>: the layer that decides whether AI-generated code is allowed to ship, given everything the codebase has already decided.</p>
     </div>
+
+    <h2>AI code governance, named for the surface</h2>
+    <p><strong>AI code governance</strong> is the same layer described here, named for where it bites &mdash; the code an AI agent generates. The question it answers is binary: is this change allowed, given everything the codebase has already decided? That is an enforcement question, not a retrieval one, which is why AI code governance lives in deterministic constraints rather than prompts, memory, or after-the-fact review.</p>
 
     <h2>Why the category emerges</h2>
     <p>Every previous infrastructure wave produced a governance layer once the underlying capability became autonomous enough to outpace manual oversight. Cloud computing produced security and compliance infrastructure. CI/CD produced observability. Data platforms produced lineage and data governance. The pattern is consistent: when the capability layer scales past human-paced review, a specialized governance layer arrives to carry the load.</p>
