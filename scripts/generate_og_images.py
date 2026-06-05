@@ -220,6 +220,19 @@ TEMPLATE_MAP = {
     "og-insights-agents-not-employees.html": "insights/ai-agents-are-not-employees-governance/og.png",
     # Compare — new
     "og-compare-claude-md.html": "compare/claude-md/og.png",
+
+    # Insights — new
+    "og-insights-rule-files-retrieval.html": "insights/rule-files-vs-retrieval-memory/og.png",
+    "og-insights-governance-by-design.html": "insights/beyond-security-by-design-governance-by-design/og.png",
+    "og-insights-agents-launch-database.html": "insights/when-agents-launch-the-database/og.png",
+    "og-insights-ms-execution-containers.html": "insights/microsoft-execution-containers-ai-agent-runtime-governance/og.png",
+    "og-insights-agent-governance-sdlc.html": "insights/agent-governance-in-the-sdlc/og.png",
+    "og-insights-cloud-agents-durable.html": "insights/cloud-agents-need-architectural-governance/og.png",
+    "og-insights-latent-space-comms.html": "insights/latent-space-agent-communication-governance/og.png",
+    "og-insights-runtime-harnesses.html": "insights/runtime-harnesses-for-ai-agents/og.png",
+    "og-insights-search-as-code.html": "insights/search-as-code-agent-execution-surface/og.png",
+    # Misc
+    "og-integration-opencode.html": "integrations/opencode/og.png",
 }
 
 PORT = 8765
