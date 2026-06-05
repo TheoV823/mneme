@@ -664,6 +664,17 @@ TEMPLATES = [
     ("og-compare-devin-vs-architectural-governance.html", "Compare", "Devin vs Architectural Governance", "52px", "Why autonomous coding agents still need deterministic enforcement.", "compare/devin-vs-architectural-governance"),
     ("og-compare-google-antigravity-vs-mneme.html", "Compare", "Google Antigravity vs Mneme", "52px", "Agentic IDEs vs architectural governance. Different layers; they compose.", "compare/google-antigravity-vs-mneme"),
     ("og-compare-claude-md.html", "Compare", "Mneme HQ vs CLAUDE.md", "56px", "A CLAUDE.md tells the model your rules. Mneme enforces the ones that must hold.", "compare/claude-md"),
+    ("og-integration-opencode.html", "Integration", "Architectural Governance for OpenCode", "44px", "OpenCode runs the agent across terminal, IDE, and desktop. Mneme keeps architectural decisions enforced across all three.", "integrations/opencode"),
+    # === BATCH: June 2026 Post- insights ===
+    ("og-insights-rule-files-retrieval.html", "Insights", "Rule Files vs Retrieval Memory", "52px", "Static instructions are an always-on prompt prefix. Prefixes do not scale past token budget, precedence, and scope.", "insights/rule-files-vs-retrieval-memory"),
+    ("og-insights-governance-by-design.html", "Insights", "Beyond Security by Design: Governance by Design", "44px", "Critical properties get designed in, not bolted on. AI agents make governance the next 'by design' discipline.", "insights/beyond-security-by-design-governance-by-design"),
+    ("og-insights-agents-launch-database.html", "Insights", "When Agents Launch the Database", "52px", "Agents now provision infrastructure, not just code. Repository-level governance cannot see past the repo.", "insights/when-agents-launch-the-database"),
+    ("og-insights-ms-execution-containers.html", "Insights", "Microsoft Execution Containers", "52px", "OS-enforced isolation is one layer. Architectural governance is the layer it cannot replace.", "insights/microsoft-execution-containers-ai-agent-runtime-governance"),
+    ("og-insights-agent-governance-sdlc.html", "Insights", "Agent Governance in the SDLC", "52px", "Multi-agent orchestration shifts software delivery from a generation problem to a governance problem.", "insights/agent-governance-in-the-sdlc"),
+    ("og-insights-cloud-agents-durable.html", "Insights", "Cloud Agents Need More Than Durable Execution", "42px", "Durable execution keeps the agent running. Architectural governance keeps the system coherent.", "insights/cloud-agents-need-architectural-governance"),
+    ("og-insights-latent-space-comms.html", "Insights", "Latent-Space Agent Communication", "52px", "Natural language is an accidental governance layer. Latent communication removes the surface we govern through.", "insights/latent-space-agent-communication-governance"),
+    ("og-insights-runtime-harnesses.html", "Insights", "Runtime Harnesses for AI Agents", "52px", "Reliability comes from the harness around the model, not the model alone. Better models are not enough.", "insights/runtime-harnesses-for-ai-agents"),
+    ("og-insights-search-as-code.html", "Insights", "Search as Code Is an Execution Surface", "48px", "When agents compose executable workflows instead of calling tools, tool governance becomes code-execution governance.", "insights/search-as-code-agent-execution-surface"),
 ]
 
 # ---------------------------------------------------------------------------
@@ -787,6 +798,17 @@ NEW_MAP_ENTRIES = {
     "og-compare-devin-vs-architectural-governance.html": "compare/devin-vs-architectural-governance/og.png",
     "og-compare-google-antigravity-vs-mneme.html": "compare/google-antigravity-vs-mneme/og.png",
     "og-compare-claude-md.html": "compare/claude-md/og.png",
+    # June 2026 Post- batch
+    "og-insights-rule-files-retrieval.html": "insights/rule-files-vs-retrieval-memory/og.png",
+    "og-insights-governance-by-design.html": "insights/beyond-security-by-design-governance-by-design/og.png",
+    "og-insights-agents-launch-database.html": "insights/when-agents-launch-the-database/og.png",
+    "og-insights-ms-execution-containers.html": "insights/microsoft-execution-containers-ai-agent-runtime-governance/og.png",
+    "og-insights-agent-governance-sdlc.html": "insights/agent-governance-in-the-sdlc/og.png",
+    "og-insights-cloud-agents-durable.html": "insights/cloud-agents-need-architectural-governance/og.png",
+    "og-insights-latent-space-comms.html": "insights/latent-space-agent-communication-governance/og.png",
+    "og-insights-runtime-harnesses.html": "insights/runtime-harnesses-for-ai-agents/og.png",
+    "og-insights-search-as-code.html": "insights/search-as-code-agent-execution-surface/og.png",
+    "og-integration-opencode.html": "integrations/opencode/og.png",
 }
 
 # ---------------------------------------------------------------------------
