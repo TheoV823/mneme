@@ -294,7 +294,7 @@
 
 
     <h2>The case for dropping natural language</h2>
-    <p>When two agents coordinate by exchanging natural-language messages, they pay a tax. Language is lossy and slow: a model compresses its internal state into tokens, the other model re-expands those tokens into its own state, and information is lost at both ends. Research into recursive multi-agent systems argues that agents could instead communicate directly in latent space &mdash; passing internal representations rather than translating them into English first. The promise is faster, more capable multi-agent systems that are not bottlenecked by the inefficiency of human language.</p>
+    <p>When two agents coordinate by exchanging natural-language messages, they pay a tax. Language is lossy and slow: a model compresses its internal state into tokens, the other model re-expands those tokens into its own state, and information is lost at both ends. A 2026 paper, <a href="https://arxiv.org/abs/2604.25917">Recursive Multi-Agent Systems</a>, proposes exactly that: agents collaborate entirely in latent space through a lightweight cross-agent link, decoding to text only after the final recursion round &mdash; and report token-usage reductions of 35 to 76 percent against text-passing baselines. The promise is faster, more capable multi-agent systems that are not bottlenecked by the inefficiency of human language.</p>
     <p>As an efficiency argument, it is sound. Language is an abstraction designed for humans, and there is no law that says agents must use it to talk to each other.</p>
     <div class="callout"><p><strong>The performance gain is not the interesting part.</strong> The interesting part is what we lose when agents stop coordinating in a language we can read.</p></div>
 

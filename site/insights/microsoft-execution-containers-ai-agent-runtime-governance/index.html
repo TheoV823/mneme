@@ -294,7 +294,7 @@
 
 
     <h2>Agents are becoming a first-class OS workload</h2>
-    <p>For most of the last two years, AI agents lived inside chat interfaces and IDE extensions. Microsoft Execution Containers signal a different phase: agents treated as workloads the operating system has to identify, isolate, and govern, the same way it treats processes and containers. Microsoft describes MXC as an early-preview, policy-driven execution layer for agents across Windows and WSL, where developers declare what an agent may access and the OS enforces those boundaries at runtime.</p>
+    <p>For most of the last two years, AI agents lived inside chat interfaces and IDE extensions. Microsoft Execution Containers, announced at Build 2026, signal a different phase: agents treated as workloads the operating system has to identify, isolate, and govern, the same way it treats processes and containers. <a href="https://blogs.windows.com/windowsdeveloper/2026/06/02/windows-platform-security-for-ai-agents/">Microsoft describes MXC</a> as an early-preview, policy-driven execution layer for agents across Windows and WSL, where developers declare what an agent may access and the OS enforces those boundaries at runtime &mdash; built on AppContainer isolation, capability-based access control, and integrity levels. GitHub Copilot CLI has already adopted its process isolation.</p>
     <p>The framing matters. When an operating-system vendor builds containment primitives specifically for agents, it is conceding that agents are now persistent actors on real machines &mdash; not transient assistants generating text for a human to paste.</p>
     <div class="callout"><p><strong>This is a strong signal, not a product you need to chase.</strong> The lasting point is structural: governing what an agent can touch has moved into the runtime, because the agent now acts in the runtime.</p></div>
 
@@ -309,6 +309,7 @@
     <h2>Runtime isolation is not architectural governance</h2>
     <p>An agent can operate entirely within its permitted blast radius and still introduce a duplicate abstraction, bypass the repository pattern, violate a dependency policy, or break an architectural invariant. The container allowed the file write &mdash; correctly, it was an allowed file. What the container cannot evaluate is whether the <em>content</em> of that change respects the architecture.</p>
     <p>This is the distinction between <a href="/insights/runtime-verification-is-not-architectural-verification/">runtime verification and architectural verification</a>. Runtime isolation protects a single agent run from doing forbidden things to the machine. Architectural governance protects the system, over many runs, from drifting away from its intended design.</p>
+    <p>Microsoft is candid that MXC is early: it cautions that current profiles should not yet be treated as security boundaries, with some policies still permissive and stronger isolation modes on the roadmap. That caveat cuts both ways. Even once the containment hardens, it will answer the blast-radius question, not the architectural one &mdash; so a team that leans on runtime isolation alone is under-governed twice over.</p>
 
     <div style="overflow-x:auto;margin:2rem 0;">
     <table class="gov-table">

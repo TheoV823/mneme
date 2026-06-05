@@ -295,7 +295,7 @@
 
     <h2>What is a runtime harness for an AI agent?</h2>
     <p>Between a model and a useful agent sits a layer that does not get enough credit: the harness. It is the runtime that mediates everything the model does in the world &mdash; how tools are exposed and called, how actions are executed, how environment constraints are applied, how feedback is interpreted, and how the agent&rsquo;s trajectory is steered when it goes wrong. The model proposes; the harness is what actually turns proposals into bounded, recoverable action.</p>
-    <p>Research into agent reliability increasingly locates the bottleneck here rather than in the model. The core finding is blunt: when you want a more reliable agent, the highest-leverage move is often to adapt the interface around the model, not to wait for a better model.</p>
+    <p>Research into agent reliability increasingly locates the bottleneck here rather than in the model. A 2026 paper makes the point in its title &mdash; <a href="https://arxiv.org/abs/2605.22166">Adapting the Interface, Not the Model: Runtime Harness Adaptation for Deterministic LLM Agents</a> &mdash; and shows a lifecycle-aware harness improving frozen models across 116 of 126 model-environment settings without changing a single weight. The blunt finding: when you want a more reliable agent, the highest-leverage move is often to adapt the interface around the model, not to wait for a better model.</p>
     <div class="callout"><p><strong>Adapt the interface, not the model.</strong> Reliability is a property of the system around the model at least as much as the model itself.</p></div>
 
     <h2>Why agent failures occur at the model-environment boundary</h2>
