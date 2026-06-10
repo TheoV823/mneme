@@ -684,6 +684,7 @@ TEMPLATES = [
     ("og-insights-bain-ai-dlc.html", "Insights", "Bain's AI Development Lifecycle Report", "46px", "The AI-DLC makes risk a first-class constraint — and governance an engineering surface.", "insights/bain-ai-development-lifecycle-governance"),
     ("og-insights-project-solara.html", "Insights", "Microsoft Project Solara", "56px", "Devices that run agents instead of apps. Governance has to follow the agent.", "insights/microsoft-project-solara-post-app-governance"),
     ("og-insights-ms-agent-platform.html", "Insights", "Microsoft's Agent Platform and the Governance Layer", "42px", "Agent HQ, ACS, Agent 365: governance is now a named layer of the agent stack.", "insights/microsoft-agent-platform-governance-layer"),
+    ("og-insights-verification-tax.html", "Insights", "The Verification Tax of AI Coding Agents", "48px", "Generation is becoming abundant. Verification is becoming the scarce resource.", "insights/ai-coding-agent-verification-tax"),
 ]
 
 # ---------------------------------------------------------------------------
@@ -724,6 +725,7 @@ NEW_MAP_ENTRIES = {
     "og-insights-bain-ai-dlc.html": "insights/bain-ai-development-lifecycle-governance/og.png",
     "og-insights-project-solara.html": "insights/microsoft-project-solara-post-app-governance/og.png",
     "og-insights-ms-agent-platform.html": "insights/microsoft-agent-platform-governance-layer/og.png",
+    "og-insights-verification-tax.html": "insights/ai-coding-agent-verification-tax/og.png",
     # Concepts
     "og-concepts-index.html": "concepts/og.png",
     "og-concepts-agentic-development.html": "concepts/agentic-development/og.png",

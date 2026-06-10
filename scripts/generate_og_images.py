@@ -243,6 +243,9 @@ TEMPLATE_MAP = {
     "og-insights-bain-ai-dlc.html": "insights/bain-ai-development-lifecycle-governance/og.png",
     "og-insights-project-solara.html": "insights/microsoft-project-solara-post-app-governance/og.png",
     "og-insights-ms-agent-platform.html": "insights/microsoft-agent-platform-governance-layer/og.png",
+
+    # Insights — new
+    "og-insights-verification-tax.html": "insights/ai-coding-agent-verification-tax/og.png",
 }
 
 PORT = 8765
