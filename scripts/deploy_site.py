@@ -297,8 +297,6 @@ print(f"\n[OK] {len(files_to_upload)} files uploaded")
 if not full_deploy:
     purge_urls = [u for u in (label_to_url(label) for _, _, label in files_to_upload) if u]
 
-tag_deployed()
-
 # ── Purge Cloudflare cache BEFORE verification ────────────────────────────────
 # Purge first so verification hits fresh server responses, not stale CF cache.
 # A cached 404 for a newly uploaded URL would otherwise cause verification to
@@ -341,6 +339,16 @@ if verify_failures:
     raise SystemExit(1)
 
 print(f"\n[OK] All {len(sitemap_urls)} sitemap URLs verified - deploy complete")
+
+# Advance the deploy marker ONLY after every sitemap URL has verified 200.
+# Previously tag_deployed() ran right after upload, before this verification --
+# so a deploy whose pages never actually served (silent upload miss, or an
+# "optimistic" flaky upload) still moved the marker, and the next delta deploy
+# skipped re-uploading them. That left 9 pages 404 on the origin for ~3 days
+# while the marker claimed they were deployed. Tagging here means a failed
+# verification leaves the marker behind, so the next deploy retries the same
+# delta and re-uploads the missing pages.
+tag_deployed()
 
 
 # -- IndexNow: notify search engines of updated pages --
