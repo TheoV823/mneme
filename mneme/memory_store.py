@@ -156,6 +156,7 @@ class MemoryStore:
                 memory_path=str(self.path.resolve()),
                 created_at=d.get("created_at", ""),
                 updated_at=d.get("updated_at", ""),
+                status=d.get("status", "active"),
             )
             for d in data.get("decisions", [])
         ]

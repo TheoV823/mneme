@@ -230,6 +230,9 @@ class Decision:
                        its own canonical storage file without self-enforcement.
         created_at:    ISO 8601 timestamp of creation.
         updated_at:    ISO 8601 timestamp of last update.
+        status:        Lifecycle state — "active", "superseded", or
+                       "deprecated". Only active decisions count toward
+                       protection-relevant metrics (P1.2 audit).
     """
 
     id: str
@@ -243,6 +246,7 @@ class Decision:
     rules: list[Rule] = field(default_factory=list)
     source_path: str = ""
     memory_path: str = ""
+    status: str = "active"
 
 
 # ── Pipeline models ───────────────────────────────────────────────────────────
