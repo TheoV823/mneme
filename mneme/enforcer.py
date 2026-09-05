@@ -444,7 +444,8 @@ def assess_governability(decision: "Decision") -> GovernabilityAssessment:
 # Frozen tier contract (docs/plans/p1-2-architecture-audit-redesign.md):
 #   protected          deterministic intent WITH verified enforcement — a
 #                      typed FORBID_LITERAL rule, or external CI evidence
-#                      that fails on the forbidden token.
+#                      whose failure is deterministically linked to
+#                      detecting the forbidden token.
 #   mneme_ready        deterministic intent with a concrete safe Mneme
 #                      guardrail identified today (single-term anti-pattern
 #                      or single-term "no X" constraint).
@@ -505,6 +506,65 @@ class ArchitectureProtectionReport:
 
 _NO_CONSTRAINT_RE = re.compile(r"^no\s+(.+)$", re.IGNORECASE)
 _CI_ENFORCEMENT_RE = re.compile(r"exit\s+1")
+# A guard runs only when detection SUCCEEDS: "<detect> && exit 1". The
+# inverted form "<detect> || exit 1" fails when the token is ABSENT — an
+# allow-list/requirement, not a prohibition — and must never verify.
+_CI_LINKED_FAIL_RE = re.compile(r"&&\s*exit\s+1")
+_CI_GUARD_OPENER_RE = re.compile(r"^\s*if\b")
+_CI_GUARD_NEGATION_RE = re.compile(
+    r"!\s*(?:grep|rg|findstr)|\bunless\b", re.IGNORECASE
+)
+_CI_GUARD_CLOSER = ("fi", "endif")
+_CI_GUARD_WINDOW = 30
+
+
+def _ci_verified_linkage(text: str, tokens: list[str]) -> bool:
+    """True when failing the check is deterministically linked to detecting a token.
+
+    Three conservative linkage shapes are recognised; anything else is
+    candidate at best:
+
+    - same line: ``<detection involving token> && exit 1`` — the guard runs
+      only when the token is found. ``|| exit 1`` requires the token's
+      PRESENCE (an allow-list) and is deliberately never verified.
+    - single-line guard: ``if <detect token>; then ... exit 1 ...``.
+    - guarded block: an ``if`` line whose condition involves the token opens
+      a block and ``exit 1`` appears before the matching ``fi``/``endif``.
+
+    Negated guards (``if ! grep ...``, ``unless ...``) fail when the token is
+    absent — a requirement, not a prohibition — so they are never verified.
+    An ``exit 1`` elsewhere in the workflow that no token line reaches is
+    unrelated and never verifies.
+    """
+    lines = text.splitlines()
+    for idx, line in enumerate(lines):
+        if not any(_word_in_text(token, line) for token in tokens):
+            continue
+
+        # Same line: detection chained by && into a failing exit.
+        if _CI_LINKED_FAIL_RE.search(line):
+            return True
+
+        # Single-line guard: `if <detect>; then ... exit 1 ...`.
+        if (
+            re.search(r"\bif\b", line, re.IGNORECASE)
+            and re.search(r";\s*then\b", line, re.IGNORECASE)
+            and _CI_ENFORCEMENT_RE.search(line)
+            and not _CI_GUARD_NEGATION_RE.search(line)
+        ):
+            return True
+
+        # Multi-line guard: `if <detect>; then` opens; exit 1 before `fi`.
+        if _CI_GUARD_OPENER_RE.match(line) and not _CI_GUARD_NEGATION_RE.search(line):
+            for follow in lines[idx + 1 : idx + 1 + _CI_GUARD_WINDOW]:
+                stripped = follow.strip().lower()
+                if stripped in _CI_GUARD_CLOSER:
+                    break
+                if _CI_GUARD_OPENER_RE.match(follow):
+                    break
+                if _CI_ENFORCEMENT_RE.search(follow):
+                    return True
+    return False
 
 
 def _split_no_constraints(
@@ -532,24 +592,17 @@ def _split_no_constraints(
     return single, multi
 
 
-def _protection_tokens(decision: "Decision") -> list[str]:
-    """Tokens a CI scan would look for: the literalizable forbidden terms."""
-    single_aps = [ap for ap in decision.anti_patterns if _is_literal_rule(ap)]
-    single_ap_terms = [t for ap in single_aps for t in _rule_terms(ap)]
-    single_nos, _ = _split_no_constraints(decision.constraints)
-    return single_ap_terms + single_nos
-
-
 def _scan_ci_evidence(
     tokens: list[str],
     repo_root: str | Path | None,
 ) -> tuple[str, list[str]]:
     """Scan CI workflow files for enforcement evidence of the tokens.
 
-    A workflow file mentioning a token counts as evidence. When the same
-    file also fails the build on match (``exit 1``) the evidence is
-    ``verified``; a bare mention is ``candidate`` — annotated, never a
-    tier upgrade on its own.
+    A workflow file mentioning a token counts as evidence. Evidence is
+    ``verified`` only when failure of the check is deterministically linked
+    to detecting the token (see ``_ci_verified_linkage``); a bare mention —
+    including a token near an unrelated ``exit 1`` — is ``candidate``:
+    annotated, never a tier upgrade on its own.
     """
     if repo_root is None or not tokens:
         return "none", []
@@ -574,7 +627,7 @@ def _scan_ci_evidence(
             continue
         if not any(_word_in_text(token, text) for token in tokens):
             continue
-        if _CI_ENFORCEMENT_RE.search(text):
+        if _ci_verified_linkage(text, tokens):
             verified = True
             sources.append(f"ci:verified:{workflow.name}")
         else:

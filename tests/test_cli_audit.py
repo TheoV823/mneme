@@ -307,6 +307,167 @@ jobs:
         assert decision["evidence_confidence"] == "candidate"
         assert any("ci:candidate:" in e for e in decision["evidence_sources"])
 
+    def test_audit_guarded_block_ci_verified(self, tmp_path):
+        """Guarded if/then block failing on token detection -> verified/Protected."""
+        decisions = [
+            Decision(
+                id="ADR-001",
+                decision="No psycopg2",
+                anti_patterns=["psycopg2"],
+            )
+        ]
+        mem = _create_test_memory(tmp_path, decisions)
+
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        workflows = repo / ".github" / "workflows"
+        workflows.mkdir(parents=True)
+        (workflows / "ci.yml").write_text("""
+name: CI
+on: [push]
+jobs:
+  test:
+    steps:
+      - run: |
+          if grep -r "psycopg2" .; then
+            echo "forbidden dependency detected"
+            exit 1
+          fi
+""")
+
+        json_out = tmp_path / "audit.json"
+        exit_code = main(["audit", "--memory", str(mem), "--repo-root", str(repo), "--json", str(json_out)])
+        assert exit_code == 0
+
+        data = json.loads(json_out.read_text(encoding="utf-8"))
+        assert data["summary"]["protected"] == 1
+        assert data["summary"]["current_protection_pct"] == 100.0
+        decision = data["decisions"][0]
+        assert decision["evidence_confidence"] == "verified"
+        assert any("ci:verified:" in e for e in decision["evidence_sources"])
+
+    def test_audit_unrelated_exit_stays_candidate(self, tmp_path):
+        """Token mention plus unrelated exit 1 elsewhere -> candidate, not Protected.
+
+        The exit 1 lives in a different step and no token line reaches it;
+        file-level co-occurrence must not upgrade to verified.
+        """
+        decisions = [
+            Decision(
+                id="ADR-001",
+                decision="No psycopg2",
+                anti_patterns=["psycopg2"],
+            )
+        ]
+        mem = _create_test_memory(tmp_path, decisions)
+
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        workflows = repo / ".github" / "workflows"
+        workflows.mkdir(parents=True)
+        (workflows / "deploy.yml").write_text("""
+name: Deploy
+on: [push]
+jobs:
+  build:
+    steps:
+      - run: echo "using psycopg2 in production"
+      - run: exit 1
+""")
+
+        json_out = tmp_path / "audit.json"
+        exit_code = main(["audit", "--memory", str(mem), "--repo-root", str(repo), "--json", str(json_out)])
+        assert exit_code == 1  # candidate evidence remains a warning
+
+        data = json.loads(json_out.read_text(encoding="utf-8"))
+        assert data["summary"]["protected"] == 0
+        assert data["summary"]["mneme_ready"] == 1
+        assert data["summary"]["current_protection_pct"] == 0.0
+        decision = data["decisions"][0]
+        assert decision["evidence_confidence"] == "candidate"
+        assert any("ci:candidate:" in e for e in decision["evidence_sources"])
+        assert not any("ci:verified:" in e for e in decision["evidence_sources"])
+
+    def test_audit_ci_without_token_no_evidence(self, tmp_path):
+        """Workflow fails on something else; token never mentioned -> no evidence."""
+        decisions = [
+            Decision(
+                id="ADR-001",
+                decision="No psycopg2",
+                anti_patterns=["psycopg2"],
+            )
+        ]
+        mem = _create_test_memory(tmp_path, decisions)
+
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        workflows = repo / ".github" / "workflows"
+        workflows.mkdir(parents=True)
+        (workflows / "ci.yml").write_text("""
+name: CI
+on: [push]
+jobs:
+  test:
+    steps:
+      - run: exit 1
+""")
+
+        json_out = tmp_path / "audit.json"
+        exit_code = main(["audit", "--memory", str(mem), "--repo-root", str(repo), "--json", str(json_out)])
+        assert exit_code == 0  # no candidate evidence either
+
+        data = json.loads(json_out.read_text(encoding="utf-8"))
+        assert data["summary"]["protected"] == 0
+        assert data["summary"]["mneme_ready"] == 1
+        assert data["summary"]["current_protection_pct"] == 0.0
+        decision = data["decisions"][0]
+        assert decision["evidence_confidence"] == "none"
+        assert decision["evidence_sources"] == []
+
+    def test_audit_inverted_failure_stays_candidate(self, tmp_path):
+        """|| exit 1 and negated guards require token PRESENCE -> candidate.
+
+        "<detect> || exit 1" and "if ! grep ..." fail when the token is
+        ABSENT — an allow-list/requirement, not a prohibition — so neither
+        may verify a FORBID-style decision.
+        """
+        decisions = [
+            Decision(
+                id="ADR-001",
+                decision="No psycopg2",
+                anti_patterns=["psycopg2"],
+            )
+        ]
+        mem = _create_test_memory(tmp_path, decisions)
+
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        workflows = repo / ".github" / "workflows"
+        workflows.mkdir(parents=True)
+        (workflows / "ci.yml").write_text("""
+name: CI
+on: [push]
+jobs:
+  test:
+    steps:
+      - run: grep -q "psycopg2" ./required.txt || exit 1
+      - run: |
+          if ! grep -q "psycopg2" ./flagship.txt; then
+            exit 1
+          fi
+""")
+
+        json_out = tmp_path / "audit.json"
+        exit_code = main(["audit", "--memory", str(mem), "--repo-root", str(repo), "--json", str(json_out)])
+        assert exit_code == 1  # candidate evidence warning
+
+        data = json.loads(json_out.read_text(encoding="utf-8"))
+        assert data["summary"]["protected"] == 0
+        assert data["summary"]["mneme_ready"] == 1
+        decision = data["decisions"][0]
+        assert decision["evidence_confidence"] == "candidate"
+        assert not any("ci:verified:" in e for e in decision["evidence_sources"])
+
     def test_audit_terminal_output_contains_key_fields(self, tmp_path, capsys):
         """Terminal output shows all required fields."""
         decisions = [
