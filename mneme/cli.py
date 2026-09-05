@@ -52,7 +52,12 @@ from mneme.benchmark_report import format_json, format_markdown, format_terminal
 from mneme.context_builder import DEFAULT_MAX_DECISIONS, format_decisions
 from mneme.cursor_generator import generate_mdc
 from mneme.decision_retriever import DecisionRetriever
-from mneme.enforcer import EnforcementResult, Severity, check_prompt
+from mneme.enforcer import (
+    EnforcementResult,
+    Severity,
+    check_prompt,
+    generate_protection_report,
+)
 from mneme.memory_store import MemoryStore
 
 
@@ -377,6 +382,99 @@ def _print_freshness_issue(issue: FreshnessIssue) -> None:
         print(f"      source: {issue.path}")
 
 
+# ── Subcommand: audit (P1.2 Architecture Protection Audit) ───────────────────
+
+def _audit_payload(report) -> dict:
+    """Build the machine-readable mneme.audit/v1 report payload."""
+    return {
+        "schema": report.schema,
+        "memory": report.memory_path,
+        "summary": {
+            "total_decisions": report.total_decisions,
+            "protection_relevant": report.protection_relevant,
+            "protected": report.protected,
+            "mneme_ready": report.mneme_ready,
+            "requires_modelling": report.requires_modelling,
+            "guidance": report.guidance,
+            "current_protection_pct": report.current_protection_pct,
+            "identified_mneme_potential_pct": report.identified_mneme_potential_pct,
+            "protection_gap_pct": report.protection_gap_pct,
+        },
+        "decisions": [
+            {
+                "id": d.id,
+                "decision": d.decision,
+                "status": d.status,
+                "intent": d.intent,
+                "protection_tier": d.protection_tier,
+                "mneme_guardrail": d.mneme_guardrail,
+                "evidence_confidence": d.evidence_confidence,
+                "evidence_sources": list(d.evidence_sources),
+            }
+            for d in report.decisions
+        ],
+    }
+
+
+def _cmd_audit(args: argparse.Namespace) -> int:
+    """Run the P1.2 Architecture Protection Audit over a memory file.
+
+    Exit codes:
+        0 = report generated, no open warnings
+        1 = candidate (unverified) enforcement evidence found — a CI file
+            mentions a forbidden token without failing the build
+        2 = usage error (missing memory file or repo root)
+    """
+    memory_path = Path(args.memory)
+    if not memory_path.exists():
+        return _error_exit(f"memory file {memory_path} does not exist")
+    repo_root = Path(args.repo_root) if args.repo_root else None
+    if repo_root is not None and not repo_root.exists():
+        return _error_exit(f"repo root {repo_root} does not exist")
+
+    store = MemoryStore(args.memory)
+    store.load()
+    report = generate_protection_report(store.decisions(), repo_root=repo_root)
+
+    if args.json:
+        out = Path(args.json)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(
+            json.dumps(_audit_payload(report), indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(f"Audit report written: {out}")
+    else:
+        s = report
+        print("Architecture Protection Audit")
+        print("=" * 60)
+        print(f"Decisions discovered:         {s.total_decisions}")
+        print(f"Protection-relevant:          {s.protection_relevant}")
+        print(f"Protected today:              {s.protected}")
+        print(f"Mneme-ready:                  {s.mneme_ready}")
+        print(f"Requires further modelling:   {s.requires_modelling}")
+        print(f"Guidance-only:                {s.guidance}")
+        print(f"Current Protection:           {s.current_protection_pct}%")
+        print(f"Identified Mneme Potential:   {s.identified_mneme_potential_pct}%")
+        print()
+        print("Per-decision breakdown:")
+        for d in s.decisions:
+            print(f"  [{d.protection_tier}] {d.id}: {d.decision}")
+            if d.mneme_guardrail:
+                print(f"      guardrail: {d.mneme_guardrail}")
+            for src in d.evidence_sources:
+                print(f"      evidence: {src}")
+        print()
+
+    if any(d.evidence_confidence == "candidate" for d in report.decisions):
+        print(
+            "WARN: candidate enforcement evidence found; "
+            "the CI mention does not fail the build"
+        )
+        return 1
+    return 0
+
+
 # ── Subcommand: cursor generate ──────────────────────────────────────────────
 
 def _cmd_cursor_generate(args: argparse.Namespace) -> int:
@@ -628,6 +726,27 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     p_check.set_defaults(func=_cmd_check)
+
+    # audit (P1.2 Architecture Protection Audit)
+    p_audit = sub.add_parser(
+        "audit",
+        help="Run the P1.2 Architecture Protection Audit over project memory",
+    )
+    p_audit.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_audit.add_argument(
+        "--repo-root", dest="repo_root", default=None,
+        help=(
+            "Repository root to scan for external enforcement evidence "
+            "(.github/workflows, .gitlab-ci.yml). Verified CI evidence "
+            "upgrades a literalizable decision to protected; a bare token "
+            "mention is candidate evidence and exits 1 as a warning."
+        ),
+    )
+    p_audit.add_argument(
+        "--json", metavar="FILE", default=None,
+        help="Write the mneme.audit/v1 JSON report to FILE",
+    )
+    p_audit.set_defaults(func=_cmd_audit)
 
     # cursor (parent for cursor subcommands)
     p_cursor = sub.add_parser("cursor", help="Cursor.ai integration commands")

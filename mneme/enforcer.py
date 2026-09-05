@@ -434,6 +434,338 @@ def assess_governability(decision: "Decision") -> GovernabilityAssessment:
     )
 
 
+# ── P1.2 Architecture Protection Audit ───────────────────────────────────────
+#
+# Classification of a Decision's protection state, distinct from runtime
+# governability (assess_governability above). Governability asks "can Mneme
+# enforce this today?"; the P1.2 audit asks "how much of this repository's
+# deterministic architectural intent is already protected, and what remains?".
+#
+# Frozen tier contract (docs/plans/p1-2-architecture-audit-redesign.md):
+#   protected          deterministic intent WITH verified enforcement — a
+#                      typed FORBID_LITERAL rule, or external CI evidence
+#                      whose failure is deterministically linked to
+#                      detecting the forbidden token.
+#   mneme_ready        deterministic intent with a concrete safe Mneme
+#                      guardrail identified today (single-term anti-pattern
+#                      or single-term "no X" constraint).
+#   requires_modelling deterministic intent that exists but has no safe
+#                      concrete guardrail (multi-term anti-patterns, multi-
+#                      term "no X" constraints needing interpretation).
+#   guidance           intent not appropriate for deterministic enforcement.
+#
+# Semantic invariants:
+#   - Guidance is evidence-independent: external enforcement-like evidence
+#     never upgrades a guidance decision.
+#   - Guidance decisions never enter the protection-relevant denominator.
+#   - mneme_ready always carries an explicit FORBID_LITERAL guardrail
+#     description; a decision cannot be mneme_ready without one.
+#   - Candidate external evidence (token mentioned in CI without failure
+#     semantics) annotates but never upgrades a tier by itself.
+
+AUDIT_SCHEMA = "mneme.audit/v1"
+
+ProtectionTier = Literal["protected", "mneme_ready", "requires_modelling", "guidance"]
+
+
+@dataclass(frozen=True)
+class ProtectionDecisionReport:
+    """P1.2 protection assessment of a single Decision."""
+
+    id: str
+    decision: str
+    status: str
+    intent: str  # "deterministic" | "guidance"
+    protection_tier: ProtectionTier
+    mneme_guardrail: str | None
+    evidence_confidence: str  # "verified" | "candidate" | "none"
+    evidence_sources: list[str]
+
+
+@dataclass(frozen=True)
+class ArchitectureProtectionReport:
+    """Aggregate P1.2 report over a decision corpus.
+
+    Percentages are exactly recomputable from ``decisions`` filtered to
+    ``status == "active"``.
+    """
+
+    schema: str
+    memory_path: str
+    total_decisions: int
+    decisions: list[ProtectionDecisionReport]
+    protection_relevant: int
+    protected: int
+    mneme_ready: int
+    requires_modelling: int
+    guidance: int
+    current_protection_pct: float
+    identified_mneme_potential_pct: float
+    protection_gap_pct: float
+
+
+_NO_CONSTRAINT_RE = re.compile(r"^no\s+(.+)$", re.IGNORECASE)
+_CI_ENFORCEMENT_RE = re.compile(r"exit\s+1")
+# A guard runs only when detection SUCCEEDS: "<detect> && exit 1". The
+# inverted form "<detect> || exit 1" fails when the token is ABSENT — an
+# allow-list/requirement, not a prohibition — and must never verify.
+_CI_LINKED_FAIL_RE = re.compile(r"&&\s*exit\s+1")
+_CI_GUARD_OPENER_RE = re.compile(r"^\s*if\b")
+_CI_GUARD_NEGATION_RE = re.compile(
+    r"!\s*(?:grep|rg|findstr)|\bunless\b", re.IGNORECASE
+)
+_CI_GUARD_CLOSER = ("fi", "endif")
+_CI_GUARD_WINDOW = 30
+
+
+def _ci_verified_linkage(text: str, tokens: list[str]) -> bool:
+    """True when failing the check is deterministically linked to detecting a token.
+
+    Three conservative linkage shapes are recognised; anything else is
+    candidate at best:
+
+    - same line: ``<detection involving token> && exit 1`` — the guard runs
+      only when the token is found. ``|| exit 1`` requires the token's
+      PRESENCE (an allow-list) and is deliberately never verified.
+    - single-line guard: ``if <detect token>; then ... exit 1 ...``.
+    - guarded block: an ``if`` line whose condition involves the token opens
+      a block and ``exit 1`` appears before the matching ``fi``/``endif``.
+
+    Negated guards (``if ! grep ...``, ``unless ...``) fail when the token is
+    absent — a requirement, not a prohibition — so they are never verified.
+    An ``exit 1`` elsewhere in the workflow that no token line reaches is
+    unrelated and never verifies.
+    """
+    lines = text.splitlines()
+    for idx, line in enumerate(lines):
+        if not any(_word_in_text(token, line) for token in tokens):
+            continue
+
+        # Same line: detection chained by && into a failing exit.
+        if _CI_LINKED_FAIL_RE.search(line):
+            return True
+
+        # Single-line guard: `if <detect>; then ... exit 1 ...`.
+        if (
+            re.search(r"\bif\b", line, re.IGNORECASE)
+            and re.search(r";\s*then\b", line, re.IGNORECASE)
+            and _CI_ENFORCEMENT_RE.search(line)
+            and not _CI_GUARD_NEGATION_RE.search(line)
+        ):
+            return True
+
+        # Multi-line guard: `if <detect>; then` opens; exit 1 before `fi`.
+        if _CI_GUARD_OPENER_RE.match(line) and not _CI_GUARD_NEGATION_RE.search(line):
+            for follow in lines[idx + 1 : idx + 1 + _CI_GUARD_WINDOW]:
+                stripped = follow.strip().lower()
+                if stripped in _CI_GUARD_CLOSER:
+                    break
+                if _CI_GUARD_OPENER_RE.match(follow):
+                    break
+                if _CI_ENFORCEMENT_RE.search(follow):
+                    return True
+    return False
+
+
+def _split_no_constraints(
+    constraints: list[str],
+) -> tuple[list[str], list[str]]:
+    """Split "no X" constraints into (single-term literals, multi-term phrases).
+
+    The single-term half yields the forbidden term itself — the token a
+    FORBID_LITERAL guardrail would carry. Multi-term phrases need
+    interpretation before they can be literalized.
+    """
+    single: list[str] = []
+    multi: list[str] = []
+    for constraint in constraints:
+        m = _NO_CONSTRAINT_RE.match(constraint.strip())
+        if not m:
+            continue
+        phrase = m.group(1).strip()
+        if _is_literal_rule(phrase):
+            terms = _rule_terms(phrase)
+            if terms:
+                single.append(terms[0])
+        else:
+            multi.append(phrase)
+    return single, multi
+
+
+def _scan_ci_evidence(
+    tokens: list[str],
+    repo_root: str | Path | None,
+) -> tuple[str, list[str]]:
+    """Scan CI workflow files for enforcement evidence of the tokens.
+
+    A workflow file mentioning a token counts as evidence. Evidence is
+    ``verified`` only when failure of the check is deterministically linked
+    to detecting the token (see ``_ci_verified_linkage``); a bare mention —
+    including a token near an unrelated ``exit 1`` — is ``candidate``:
+    annotated, never a tier upgrade on its own.
+    """
+    if repo_root is None or not tokens:
+        return "none", []
+
+    root = Path(repo_root)
+    workflow_files: list[Path] = []
+    gh_workflows = root / ".github" / "workflows"
+    if gh_workflows.is_dir():
+        workflow_files.extend(sorted(gh_workflows.glob("*.yml")))
+        workflow_files.extend(sorted(gh_workflows.glob("*.yaml")))
+    gitlab_ci = root / ".gitlab-ci.yml"
+    if gitlab_ci.is_file():
+        workflow_files.append(gitlab_ci)
+
+    sources: list[str] = []
+    verified = False
+    candidate = False
+    for workflow in workflow_files:
+        try:
+            text = workflow.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        if not any(_word_in_text(token, text) for token in tokens):
+            continue
+        if _ci_verified_linkage(text, tokens):
+            verified = True
+            sources.append(f"ci:verified:{workflow.name}")
+        else:
+            candidate = True
+            sources.append(f"ci:candidate:{workflow.name}")
+
+    if verified:
+        return "verified", sources
+    if candidate:
+        return "candidate", sources
+    return "none", []
+
+
+def assess_protection(
+    decision: "Decision",
+    repo_root: str | Path | None = None,
+) -> ProtectionDecisionReport:
+    """Assess one Decision's P1.2 protection state.
+
+    Tier resolution order (highest wins):
+      1. typed FORBID_LITERAL rule  -> protected (verified enforcement)
+      2. verified external CI evidence on a literalizable token -> protected
+      3. single-term anti-pattern or single-term "no X" constraint
+         -> mneme_ready with an explicit FORBID_LITERAL guardrail
+      4. remaining deterministic intent -> requires_modelling
+      5. no deterministic intent -> guidance (evidence-independent)
+    """
+    literal_rules = [
+        rule for rule in decision.rules if rule.type == "FORBID_LITERAL"
+    ]
+    single_aps = [ap for ap in decision.anti_patterns if _is_literal_rule(ap)]
+    multi_aps = [ap for ap in decision.anti_patterns if not _is_literal_rule(ap)]
+    single_nos, multi_nos = _split_no_constraints(decision.constraints)
+
+    has_deterministic_intent = bool(
+        literal_rules or single_aps or multi_aps or single_nos or multi_nos
+    )
+
+    if not has_deterministic_intent:
+        return ProtectionDecisionReport(
+            id=decision.id,
+            decision=decision.decision,
+            status=decision.status,
+            intent="guidance",
+            protection_tier="guidance",
+            mneme_guardrail=None,
+            evidence_confidence="none",
+            evidence_sources=[],
+        )
+
+    if literal_rules:
+        return ProtectionDecisionReport(
+            id=decision.id,
+            decision=decision.decision,
+            status=decision.status,
+            intent="deterministic",
+            protection_tier="protected",
+            mneme_guardrail=f"FORBID_LITERAL: {literal_rules[0].value}",
+            evidence_confidence="verified",
+            evidence_sources=[],
+        )
+
+    tokens = [t for ap in single_aps for t in _rule_terms(ap)] + single_nos
+    tier: ProtectionTier = "mneme_ready" if tokens else "requires_modelling"
+    proposed_guardrail = f"FORBID_LITERAL: {tokens[0]}" if tokens else None
+
+    evidence_confidence, evidence_sources = "none", []
+    if repo_root is not None:
+        evidence_confidence, evidence_sources = _scan_ci_evidence(
+            tokens, repo_root
+        )
+        if evidence_confidence == "verified":
+            tier = "protected"
+
+    return ProtectionDecisionReport(
+        id=decision.id,
+        decision=decision.decision,
+        status=decision.status,
+        intent="deterministic",
+        protection_tier=tier,
+        mneme_guardrail=proposed_guardrail,
+        evidence_confidence=evidence_confidence,
+        evidence_sources=evidence_sources,
+    )
+
+
+def generate_protection_report(
+    decisions: list["Decision"],
+    repo_root: str | Path | None = None,
+) -> ArchitectureProtectionReport:
+    """Assess a corpus and aggregate the P1.2 summary.
+
+    Only active decisions count toward any tier or the protection-relevant
+    denominator; superseded and deprecated decisions appear in ``decisions``
+    for provenance but are excluded from all counts.
+    """
+    reports = [
+        assess_protection(decision, repo_root=repo_root)
+        for decision in decisions
+    ]
+    active = [r for r in reports if r.status == "active"]
+    protected = sum(1 for r in active if r.protection_tier == "protected")
+    mneme_ready = sum(1 for r in active if r.protection_tier == "mneme_ready")
+    requires_modelling = sum(
+        1 for r in active if r.protection_tier == "requires_modelling"
+    )
+    guidance = sum(1 for r in active if r.protection_tier == "guidance")
+    protection_relevant = protected + mneme_ready + requires_modelling
+
+    current_protection = round(protected / protection_relevant * 100, 1) if protection_relevant else 0.0
+    identified_potential = (
+        round((protected + mneme_ready) / protection_relevant * 100, 1)
+        if protection_relevant
+        else 0.0
+    )
+    protection_gap = (
+        round((mneme_ready + requires_modelling) / protection_relevant * 100, 1)
+        if protection_relevant
+        else 0.0
+    )
+
+    memory_path = decisions[0].memory_path if decisions else ""
+    return ArchitectureProtectionReport(
+        schema=AUDIT_SCHEMA,
+        memory_path=memory_path,
+        total_decisions=len(reports),
+        decisions=reports,
+        protection_relevant=protection_relevant,
+        protected=protected,
+        mneme_ready=mneme_ready,
+        requires_modelling=requires_modelling,
+        guidance=guidance,
+        current_protection_pct=current_protection,
+        identified_mneme_potential_pct=identified_potential,
+        protection_gap_pct=protection_gap,
+    )
+
+
 # Export for external consumers
 __all__ = [
     "Severity",
@@ -443,4 +775,9 @@ __all__ = [
     "GovernabilityAssessment",
     "GovernabilityTier",
     "assess_governability",
+    "ProtectionTier",
+    "ProtectionDecisionReport",
+    "ArchitectureProtectionReport",
+    "assess_protection",
+    "generate_protection_report",
 ]
