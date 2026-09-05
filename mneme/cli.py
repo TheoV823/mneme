@@ -136,7 +136,25 @@ def _print_setup_summary(outcome: SetupOutcome) -> None:
         print(f"  Found {outcome.memory_path}")
     print()
     print("Architecture baseline")
-    if outcome.audit_ref:
+    if outcome.baseline:
+        repository = (
+            outcome.baseline.get("repository")
+            or outcome.baseline.get("repository_url")
+            or "repository not identified"
+        )
+        print(f"  Connected: {outcome.baseline.get('project_name') or 'Audit project'} ({repository})")
+        print(f"  Audit: {outcome.baseline.get('audit_id')}")
+        print(f"  Commit: {outcome.baseline.get('commit_sha')}")
+        print(
+            f"  Mneme (audit): {outcome.baseline.get('mneme_version')}"
+            f", schema {outcome.baseline.get('audit_schema')}"
+        )
+        completion = outcome.baseline.get("completion")
+        if completion:
+            print("  Setup recorded with the Audit service")
+        else:
+            print("  Setup recording pending (rerun `mneme setup` to retry)")
+    elif outcome.audit_ref:
         print(f"  Audit reference recorded: {outcome.audit_ref}")
     else:
         print("  Not connected (no audit reference provided)")
