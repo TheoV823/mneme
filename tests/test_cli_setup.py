@@ -1,13 +1,64 @@
-"""CLI — `mneme setup` (M1.3a: safe setup flow, G1/G2/G4/G5 evidence)."""
+﻿"""CLI — `mneme setup` (M1.3a setup flow; M1.3b pairing; G1/G2/G3/G4/G5)."""
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
 
+from mneme.audit_pairing import PairingError
 from mneme.cli import main
 
 
 MEMORY_REL = Path(".mneme") / "project_memory.json"
+
+RESOLVE_RESPONSE = {
+    "reference": "ref-abc",
+    "audit_id": "00000000-0000-0000-0000-000000000001",
+    "project_id": "00000000-0000-0000-0000-000000000002",
+    "project_name": "contract-fixture",
+    "repository": "example/contract-fixture",
+    "repository_url": "https://github.com/example/contract-fixture",
+    "commit_sha": "abc123def456",
+    "mneme_version": "0.6.0",
+    "schema_version": 1,
+    "audit_schema": "mneme.audit/v1",
+    "summary": {"protected": 2, "mneme_ready": 3},
+}
+
+
+class FakePairing:
+    """In-memory stand-in for the Architecture Audit pairing client."""
+
+    def __init__(self):
+        self.resolve_calls: list[str] = []
+        self.resolve_error: str | None = None
+        self.resolve_response: dict = dict(RESOLVE_RESPONSE)
+        self.complete_error: str | None = None
+        self.complete_calls: list[dict] = []
+
+    def resolve(self, reference: str) -> dict:
+        self.resolve_calls.append(reference)
+        if self.resolve_error:
+            raise PairingError(self.resolve_error, status=410)
+        return dict(self.resolve_response)
+
+    def complete(self, reference: str, repository, mneme_version: str) -> dict:
+        self.complete_calls.append({
+            "reference": reference,
+            "repository": repository,
+            "mneme_version": mneme_version,
+        })
+        if self.complete_error:
+            raise PairingError(self.complete_error, status=503)
+        return {"activation_state": "setup", "already_redeemed": False}
+
+
+@pytest.fixture(autouse=True)
+def fake_pairing(monkeypatch):
+    """No test talks to the network: the CLI pairing client is always faked."""
+    fake = FakePairing()
+    monkeypatch.setattr("mneme.setup.default_pairing", lambda: fake)
+    return fake
 
 
 def _make_repo(tmp_path: Path) -> Path:
@@ -267,7 +318,9 @@ def test_setup_rerun_with_new_audit_ref_updates_ref_only(tmp_path, monkeypatch, 
     second = _read_memory(root)["activation"]
     assert second["audit_ref"] == "ref-999"
     assert second["setup_completed_at"] == first["setup_completed_at"]
-    assert "Audit reference recorded: ref-999" in captured.out
+    # A fresh reference resolves to a connected baseline.
+    assert second["baseline"]["audit_id"] == RESOLVE_RESPONSE["audit_id"]
+    assert "Connected: contract-fixture" in captured.out
 
 
 def test_setup_on_corrupt_memory_fails_without_mutation(tmp_path, monkeypatch, capsys):
@@ -443,17 +496,31 @@ def test_detection_creates_no_files(tmp_path, monkeypatch):
 
 # ── Audit reference consumption (M1.3a scope) ────────────────────────────────
 
-def test_setup_records_audit_ref_verbatim(tmp_path, monkeypatch, capsys):
+def test_setup_resolves_reference_and_records_baseline(tmp_path, monkeypatch, capsys, fake_pairing):
     root = _make_repo(tmp_path)
     monkeypatch.chdir(root)
 
-    exit_code = main(["setup", "--audit-ref", "a1b2c3-opaque"])
+    exit_code = main(["setup", "--audit-ref", "ref-abc"])
     captured = capsys.readouterr()
 
     assert exit_code == 0
     record = _read_memory(root)["activation"]
-    assert record["audit_ref"] == "a1b2c3-opaque"
-    assert "Audit reference recorded: a1b2c3-opaque" in captured.out
+    assert record["audit_ref"] == "ref-abc"
+    baseline = record["baseline"]
+    assert baseline["audit_id"] == RESOLVE_RESPONSE["audit_id"]
+    assert baseline["project_id"] == RESOLVE_RESPONSE["project_id"]
+    assert baseline["commit_sha"] == RESOLVE_RESPONSE["commit_sha"]
+    assert baseline["mneme_version"] == RESOLVE_RESPONSE["mneme_version"]
+    assert baseline["schema_version"] == RESOLVE_RESPONSE["schema_version"]
+    assert baseline["audit_schema"] == "mneme.audit/v1"
+    assert baseline["summary"] == RESOLVE_RESPONSE["summary"]
+    assert baseline["resolved_at"]
+    # G7: setup completion reported back to the Audit service.
+    assert fake_pairing.complete_calls[0]["reference"] == "ref-abc"
+    assert fake_pairing.complete_calls[0]["mneme_version"]
+    assert baseline["completion"]["reported_at"]
+    assert "Connected: contract-fixture (example/contract-fixture)" in captured.out
+    assert "Setup recorded with the Audit service" in captured.out
 
 
 def test_setup_without_audit_ref_reports_not_connected(tmp_path, monkeypatch, capsys):
@@ -531,16 +598,138 @@ def test_setup_rejects_overlong_audit_ref(tmp_path, monkeypatch):
     assert not (root / MEMORY_REL).exists()
 
 
-def test_setup_preserves_existing_audit_ref_when_rerun_without_one(tmp_path, monkeypatch, capsys):
+def test_setup_preserves_existing_baseline_when_rerun_without_ref(tmp_path, monkeypatch, capsys, fake_pairing):
     root = _make_repo(tmp_path)
     monkeypatch.chdir(root)
 
     assert main(["setup", "--audit-ref", "keep-me"]) == 0
+    fake_pairing.resolve_calls.clear()
     exit_code = main(["setup"])
     captured = capsys.readouterr()
     assert exit_code == 0
 
     record = _read_memory(root)["activation"]
     assert record["audit_ref"] == "keep-me"
-    # The summary reflects the persisted linkage, not this run's arguments.
-    assert "Audit reference recorded: keep-me" in captured.out
+    # No network activity on a plain rerun; the connected baseline survives.
+    assert fake_pairing.resolve_calls == []
+    assert record["baseline"]["audit_id"] == RESOLVE_RESPONSE["audit_id"]
+    assert "Connected: contract-fixture" in captured.out
+
+
+# ── Pairing failure safety (G3) ───────────────────────────────────────────────
+
+def test_setup_invalid_reference_fails_closed_before_writes(tmp_path, monkeypatch, capsys, fake_pairing):
+    root = _make_repo(tmp_path)
+    fake_pairing.resolve_error = "Setup reference has expired."
+    monkeypatch.chdir(root)
+
+    exit_code = main(["setup", "--audit-ref", "expired-ref"])
+    captured = capsys.readouterr()
+
+    assert exit_code == 2
+    assert "expired" in captured.err
+    assert not (root / MEMORY_REL).exists()
+    assert not (root / ".mneme").exists()
+
+
+def test_setup_invalid_reference_on_existing_project_leaves_it_untouched(
+    tmp_path, monkeypatch, fake_pairing
+):
+    root = _make_repo(tmp_path)
+    _write_memory_with_decisions(root)
+    memory_file = root / MEMORY_REL
+    before = memory_file.read_text(encoding="utf-8")
+    fake_pairing.resolve_error = "Unknown setup reference"
+
+    monkeypatch.chdir(root)
+    exit_code = main(["setup", "--audit-ref", "unknown"])
+
+    assert exit_code == 2
+    assert memory_file.read_text(encoding="utf-8") == before
+
+
+def test_setup_incomplete_resolution_payload_fails_closed(tmp_path, monkeypatch, capsys, fake_pairing):
+    root = _make_repo(tmp_path)
+    fake_pairing.resolve_response = {"audit_id": "x"}  # no project_id/commit_sha
+    monkeypatch.chdir(root)
+
+    exit_code = main(["setup", "--audit-ref", "ref-abc"])
+    captured = capsys.readouterr()
+
+    assert exit_code == 2
+    assert "incomplete" in captured.err
+    assert not (root / MEMORY_REL).exists()
+
+
+def test_setup_completion_report_failure_warns_but_setup_succeeds(
+    tmp_path, monkeypatch, capsys, fake_pairing
+):
+    root = _make_repo(tmp_path)
+    fake_pairing.complete_error = "service unavailable"
+    monkeypatch.chdir(root)
+
+    exit_code = main(["setup", "--audit-ref", "ref-abc"])
+    captured = capsys.readouterr()
+
+    assert exit_code == 0
+    record = _read_memory(root)["activation"]
+    assert record["baseline"]["completion"] is None
+    assert "could not be recorded" in captured.out
+
+
+def test_setup_rerun_retries_pending_completion(tmp_path, monkeypatch, fake_pairing):
+    root = _make_repo(tmp_path)
+    monkeypatch.chdir(root)
+
+    fake_pairing.complete_error = "service unavailable"
+    assert main(["setup", "--audit-ref", "ref-abc"]) == 0
+    assert _read_memory(root)["activation"]["baseline"]["completion"] is None
+
+    fake_pairing.complete_error = None
+    exit_code = main(["setup"])
+    assert exit_code == 0
+
+    record = _read_memory(root)["activation"]
+    assert record["baseline"]["completion"]["reported_at"]
+    assert len(fake_pairing.complete_calls) == 2
+
+
+def test_setup_complete_receives_origin_remote(tmp_path, monkeypatch, fake_pairing):
+    root = tmp_path / "real-repo"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+    subprocess.run(
+        ["git", "remote", "add", "origin", "https://github.com/example/contract-fixture.git"],
+        cwd=root, check=True,
+    )
+    monkeypatch.chdir(root)
+
+    exit_code = main(["setup", "--audit-ref", "ref-abc"])
+    assert exit_code == 0
+    assert fake_pairing.complete_calls[0]["repository"] == (
+        "https://github.com/example/contract-fixture.git"
+    )
+
+
+def test_setup_offline_mode_records_reference_verbatim(tmp_path, monkeypatch):
+    """pairing=None records the opaque reference without resolution."""
+    from mneme.setup import run_setup
+
+    root = _make_repo(tmp_path)
+    outcome = run_setup(root=root, audit_ref="opaque-token", pairing=None)
+
+    assert outcome.state == "setup"
+    assert outcome.baseline is None
+    record = _read_memory(root)["activation"]
+    assert record["audit_ref"] == "opaque-token"
+    assert record["baseline"] is None
+
+
+def test_setup_without_audit_ref_never_calls_pairing(tmp_path, monkeypatch, capsys, fake_pairing):
+    root = _make_repo(tmp_path)
+    monkeypatch.chdir(root)
+    assert main(["setup"]) == 0
+    out = capsys.readouterr().out
+    assert "Not connected" in out
+    assert fake_pairing.resolve_calls == []
+    assert fake_pairing.complete_calls == []

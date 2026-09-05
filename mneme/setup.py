@@ -1,5 +1,5 @@
 """
-setup.py — The ``mneme setup`` flow (M1.3a).
+setup.py — The ``mneme setup`` flow (M1.3a + M1.3b pairing).
 
 Initializes Mneme project state in *setup mode* under the frozen M1.3
 contract (docs/plans/m1-3-audit-to-setup-activation.md):
@@ -15,10 +15,13 @@ contract (docs/plans/m1-3-audit-to-setup-activation.md):
 All validation happens before the first write, so any pre-execution failure
 leaves the repository exactly as it was.
 
-Audit reference handling in M1.3a: ``--audit-ref`` is consumed and recorded
-verbatim as an opaque string. Resolution against the Architecture Audit
-service is the M1.3b pairing mechanism; recording an opaque reference is
-inert — no enforcement or classification follows from it.
+Audit reference handling (M1.3b): when ``--audit-ref`` is supplied, the
+reference is resolved against the Architecture Audit service BEFORE any
+local write; resolution failures (unknown/expired/mismatched/unreachable)
+abort with no mutation. The resolved baseline provenance is recorded in the
+activation record, and setup completion is reported back (idempotently) so
+the setup is attributable to the audit/project. Passing ``pairing=None``
+skips resolution and records the reference verbatim (offline/embedded use).
 """
 
 from __future__ import annotations
@@ -29,6 +32,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from mneme.adr_diagnostics import collect_adr_diagnostics
+from mneme.audit_pairing import AuditPairingClient, PairingError, detect_origin_remote
 from mneme.integrations.detect import DetectedIntegration, detect_integrations
 from mneme.memory_store import MemoryStore
 from mneme.enforcer import ProtectionTier
@@ -53,15 +57,37 @@ GIT_MARKER = ".git"
 DEFAULT_ADR_DIR = "docs/adr"
 
 # The reference is opaque, but it must be a sane opaque token: a single
-# non-empty chunk with no internal whitespace and a bounded length. Any real
-# reference format introduced by M1.3b pairing must remain valid under these
-# constraints.
+# non-empty chunk with no internal whitespace and a bounded length. Server
+# references (token_urlsafe) must remain valid under these constraints.
 MAX_AUDIT_REF_LENGTH = 256
 _AUDIT_REF_PATTERN = re.compile(r"^\S+$")
+
+# Whitelisted baseline provenance persisted from a resolution payload. Only
+# these keys are recorded — never the raw server response.
+_BASELINE_KEYS = (
+    "audit_id",
+    "project_id",
+    "project_name",
+    "repository",
+    "repository_url",
+    "commit_sha",
+    "mneme_version",
+    "schema_version",
+    "audit_schema",
+    "summary",
+)
 
 
 class SetupError(Exception):
     """A pre-execution setup failure. No filesystem mutation has occurred."""
+
+
+def default_pairing() -> AuditPairingClient:
+    """Pairing client used by the CLI (overridable in tests)."""
+    return AuditPairingClient()
+
+
+_UNSET = object()
 
 
 @dataclass
@@ -80,6 +106,7 @@ class SetupOutcome:
     readiness: dict[ProtectionTier, int] = field(default_factory=dict)
     adr_diagnostics: int = 0
     adr_diagnostics_present: bool = False
+    baseline: dict | None = None
     warnings: list[str] = field(default_factory=list)
 
 
@@ -148,13 +175,20 @@ def run_setup(
     root: Path | None = None,
     memory: Path | None = None,
     audit_ref: str = "",
+    pairing: AuditPairingClient | None | object = _UNSET,
 ) -> SetupOutcome:
     """Run the setup flow and return its outcome.
 
     Raises :class:`SetupError` before any write on invalid context. On
     success the repository contains a project memory with an activation
     record in ``setup`` state and nothing else has changed.
+
+    ``pairing`` resolves/reports an ``--audit-ref`` against the Architecture
+    Audit service. ``None`` skips resolution and records the reference
+    verbatim (offline use). Unset resolves via :func:`default_pairing`.
     """
+    if pairing is _UNSET:
+        pairing = default_pairing()
     start = Path(root) if root is not None else Path.cwd()
     project_root = find_project_root(start)
     if project_root is None:
@@ -171,6 +205,14 @@ def run_setup(
         memory_path = project_root / DEFAULT_MEMORY_PATH
 
     ref = validate_audit_ref(audit_ref) if audit_ref.strip() else ""
+
+    # Resolution happens before any local write: an unverifiable reference
+    # (unknown, expired, mismatched, or unreachable service) must never be
+    # recorded silently (G3 fail-safety).
+    baseline: dict | None = None
+    if ref and pairing is not None:
+        resolved = _resolve_reference(pairing, ref)
+        baseline = _baseline_from_resolution(resolved, utc_now())
 
     integrations = detect_integrations(project_root)
 
@@ -211,6 +253,14 @@ def run_setup(
         )
         decisions = _load_validated_decisions(memory_path)
 
+    if baseline is None and previous_record is not None and not ref:
+        # Rerun without a reference: keep the previously connected baseline.
+        baseline = previous_record.baseline
+
+    pending_completion = bool(
+        baseline is not None and baseline.get("completion") is None
+    )
+
     outcome = SetupOutcome(
         project_root=project_root,
         memory_path=memory_path,
@@ -224,6 +274,7 @@ def run_setup(
         # P1.2 frozen semantics with CI-evidence scanning over this
         # repository — exactly what `mneme audit --repo-root` reports.
         readiness=readiness_counts(decisions, repo_root=project_root),
+        baseline=baseline,
     )
 
     record = ActivationRecord(
@@ -242,7 +293,7 @@ def run_setup(
         audit_ref=ref
         if ref
         else (previous_record.audit_ref if previous_record is not None else ""),
-        baseline=None,
+        baseline=baseline,
         integrations_detected=[i.key for i in integrations],
         integrations_configured=[],
         enforcement=ENFORCEMENT_NOT_ENABLED,
@@ -279,7 +330,70 @@ def run_setup(
     # ADR diagnostics run after the memory is on disk so they observe the
     # post-setup state (and a freshly created memory file does exist).
     _attach_adr_diagnostics(outcome)
+
+    # Report setup completion so the setup is attributable back to the
+    # audit/project (G7). The server is idempotent; a failed report leaves
+    # completion pending and is retried on the next setup run.
+    if ref and pairing is not None:
+        remote = detect_origin_remote(project_root)
+        try:
+            pairing.complete(ref, remote, record.mneme_version)
+        except PairingError as exc:
+            outcome.warnings.append(
+                "setup completed locally, but completion could not be "
+                f"recorded with the Architecture Audit service: {exc}; "
+                "rerun `mneme setup` to retry"
+            )
+        else:
+            baseline["completion"] = {
+                "reported_at": utc_now(),
+                "mneme_version": record.mneme_version,
+            }
+            write_activation(memory_path, record)
+    elif pending_completion and pairing is not None and baseline is not None:
+        remote = detect_origin_remote(project_root)
+        try:
+            pairing.complete(record.audit_ref, remote, record.mneme_version)
+        except PairingError as exc:
+            outcome.warnings.append(
+                "baseline connected, but setup completion could not be "
+                f"recorded with the Architecture Audit service: {exc}; "
+                "rerun `mneme setup` to retry"
+            )
+        else:
+            baseline["completion"] = {
+                "reported_at": utc_now(),
+                "mneme_version": record.mneme_version,
+            }
+            write_activation(memory_path, record)
+
     return outcome
+
+
+def _resolve_reference(pairing: AuditPairingClient, ref: str) -> dict:
+    """Resolve a reference, converting pairing failures to SetupError."""
+    try:
+        payload = pairing.resolve(ref)
+    except PairingError as exc:
+        raise SetupError(f"audit reference could not be verified: {exc}") from exc
+    missing = [
+        key for key in ("audit_id", "project_id", "commit_sha")
+        if not payload.get(key)
+    ]
+    if missing:
+        raise SetupError(
+            "Audit service returned an incomplete baseline payload "
+            f"(missing {', '.join(missing)})"
+        )
+    return payload
+
+
+def _baseline_from_resolution(payload: dict, resolved_at: str) -> dict:
+    """Whitelist resolution payload into the persisted baseline block."""
+    baseline: dict = {key: payload.get(key) for key in _BASELINE_KEYS}
+    baseline["resolved_at"] = resolved_at
+    baseline["completion"] = None
+    return baseline
 
 
 def _attach_adr_diagnostics(outcome: SetupOutcome) -> None:
