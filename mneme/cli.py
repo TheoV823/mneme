@@ -4,6 +4,8 @@ cli.py — Command-line interface for Mneme.
 Subcommands
 -----------
   init              Scaffold an empty project_memory.json.
+  setup             Initialize Mneme project state in setup mode (no
+                    enforcement). See docs/plans/m1-3-audit-to-setup-activation.md.
   add_decision      Append a new Decision to a project_memory.json file.
   list_decisions    Print every Decision in the memory file.
   test_query        Run a query through the retriever and show scores + injected.
@@ -33,8 +35,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from mneme.adr_freshness import FreshnessIssue, check_freshness
-from mneme.adr_lifecycle import analyze_lifecycle
+from mneme.adr_diagnostics import collect_adr_diagnostics
+from mneme.adr_freshness import FreshnessIssue
 from mneme.adr_import import (
     apply_import,
     compile_for_import,
@@ -59,6 +61,9 @@ from mneme.enforcer import (
     generate_protection_report,
 )
 from mneme.memory_store import MemoryStore
+from mneme.readiness import READINESS_LABELS, READINESS_ORDER
+from mneme.setup import SetupError, SetupOutcome, run_setup
+from mneme.setup_state import STATE_ACTIVE, scaffold_project_memory
 
 
 def _utc_now() -> str:
@@ -91,17 +96,7 @@ def _scaffold_memory() -> dict:
     enforce). meta.name and meta.description are the only fields the loader
     requires; created_by is recorded for provenance.
     """
-    return {
-        "meta": {
-            "name": "",
-            "description": "",
-            "created_by": "mneme init",
-            "created": _utc_now(),
-        },
-        "items": [],
-        "examples": [],
-        "decisions": [],
-    }
+    return scaffold_project_memory(created_by="mneme init")
 
 
 def _cmd_init(args: argparse.Namespace) -> int:
@@ -122,6 +117,78 @@ def _cmd_init(args: argparse.Namespace) -> int:
     print(f"  mneme add_decision --memory {path} \\")
     print('      --id my_001 --decision "..." --scope <area> --constraint "..."')
     print(f"  mneme check --memory {path} --input <file> --query <context>")
+    return 0
+
+
+# ── Subcommand: setup ────────────────────────────────────────────────────────
+
+def _print_setup_summary(outcome: SetupOutcome) -> None:
+    """Render the human-readable setup summary (ASCII, existing CLI style)."""
+    print("Mneme setup")
+    print()
+    print("Repository")
+    print(f"  OK {outcome.project_root.name} ({outcome.project_root})")
+    print()
+    print("Project memory")
+    if outcome.created_memory:
+        print(f"  Created {outcome.memory_path}")
+    else:
+        print(f"  Found {outcome.memory_path}")
+    print()
+    print("Architecture baseline")
+    if outcome.audit_ref:
+        print(f"  Audit reference recorded: {outcome.audit_ref}")
+    else:
+        print("  Not connected (no audit reference provided)")
+    print()
+    print("Integrations")
+    if outcome.integrations:
+        for item in outcome.integrations:
+            surface = "native" if item.native else "rules export"
+            print(f"  {item.label} detected ({item.evidence}, {surface})")
+    else:
+        print("  None detected")
+    print()
+    print("Protection readiness")
+    for key in READINESS_ORDER:
+        print(f"  {READINESS_LABELS[key]}: {outcome.readiness.get(key, 0)}")
+    print()
+    print("Enforcement")
+    print("  Not enabled")
+    print()
+    print("Initial check")
+    check_line = f"  OK ({outcome.decision_count} decisions)"
+    if outcome.adr_diagnostics_present:
+        check_line += (
+            f" | ADR diagnostics: {outcome.adr_diagnostics} (warn-only)"
+        )
+    print(check_line)
+    if outcome.warnings:
+        print()
+        for warning in outcome.warnings:
+            print(f"WARN  {warning}")
+
+
+def _cmd_setup(args: argparse.Namespace) -> int:
+    audit_ref = args.audit_ref if args.audit_ref is not None else ""
+    if args.audit_ref is not None and not audit_ref.strip():
+        return _error_exit("audit reference must not be empty")
+    try:
+        outcome = run_setup(
+            memory=Path(args.memory) if args.memory else None,
+            audit_ref=audit_ref.strip(),
+        )
+    except SetupError as exc:
+        return _error_exit(str(exc))
+
+    _print_setup_summary(outcome)
+    print()
+    if outcome.state == STATE_ACTIVE:
+        print("Mneme remains in active mode (unchanged by setup).")
+    elif outcome.rerun:
+        print("Mneme is already in setup mode.")
+    else:
+        print("Mneme is installed in setup mode.")
     return 0
 
 
@@ -281,16 +348,7 @@ def _collect_adr_diagnostics(
     adr_dir: str | Path,
 ) -> list[FreshnessIssue]:
     """Collect ADR freshness issues and lifecycle findings (warn-only)."""
-    freshness = check_freshness(memory_path=memory_path, adr_dir=adr_dir)
-    lifecycle = analyze_lifecycle(corpus_dir=adr_dir, memory_path=memory_path)
-    seen: set[tuple[str, str, str]] = set()
-    combined: list[FreshnessIssue] = []
-    for issue in freshness + lifecycle:
-        key = (issue.code, issue.adr_id, issue.path)
-        if key not in seen:
-            seen.add(key)
-            combined.append(issue)
-    return combined
+    return collect_adr_diagnostics(memory_path=memory_path, adr_dir=adr_dir)
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
@@ -659,6 +717,30 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Overwrite an existing file at --path",
     )
     p_init.set_defaults(func=_cmd_init)
+
+    # setup
+    p_setup = sub.add_parser(
+        "setup",
+        help=(
+            "Initialize Mneme project state in setup mode "
+            "(context and non-blocking checks only; never enforcement)"
+        ),
+    )
+    p_setup.add_argument(
+        "--memory", default=None,
+        help=(
+            "Path to project_memory.json "
+            f"(default: <repo-root>/{DEFAULT_MEMORY_PATH})"
+        ),
+    )
+    p_setup.add_argument(
+        "--audit-ref", dest="audit_ref", default=None,
+        help=(
+            "Opaque Architecture Audit setup reference to record with this "
+            "setup (recorded verbatim; resolved by Audit pairing)"
+        ),
+    )
+    p_setup.set_defaults(func=_cmd_setup)
 
     # list_decisions
     p_list = sub.add_parser("list_decisions", help="List all decisions")
