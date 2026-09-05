@@ -89,6 +89,22 @@ In strict mode, the prohibited YAML proposal returns a `FAIL` verdict and exit c
 
 The CLI is the common enforcement surface. Agent integrations translate their native events into the same Mneme decision and enforcement model.
 
+## Setup mode (no enforcement)
+
+`mneme setup` initializes Mneme in a repository without changing how the team works: it creates or detects project memory, detects supported agent environments, and reports protection readiness — all without enabling any blocking enforcement. Setup never turns warn/observe behavior into blocking behavior; activation of preventive enforcement is always a separate, explicit decision.
+
+```bash
+mneme setup
+```
+
+Optionally record an opaque Architecture Audit reference so the setup can be attributed back to a saved Audit baseline:
+
+```bash
+mneme setup --audit-ref <reference>
+```
+
+Setup is idempotent: rerunning it against an existing Mneme project leaves valid configuration untouched.
+
 ## How it works
 
 ```text
