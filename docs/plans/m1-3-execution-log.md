@@ -3,133 +3,129 @@
 Contract: `docs/plans/m1-3-audit-to-setup-activation.md` (frozen).
 
 ## Current increment
-M1.3b — Audit baseline pairing (CLI side; site side in mnemehq-site#104)
+Complete — all four increments implemented. Mneme-side stack merged;
+site-side stack PR'd and awaiting merge.
 
 ## Status
-IN PROGRESS (M1.3a PR open: MnemeHQ/mneme#345; M1.3b CLI PR stacked on it)
+MNEME-SIDE MERGED — site stack awaiting human merge
+
+PRs:
+1. MnemeHQ/mneme#345 — M1.3a: setup state + CLI — **MERGED** as 24dde857
+   (includes the P1.2 reconciliation commit)
+2. MnemeHQ/mneme#347 — M1.3b CLI: audit-ref resolution + completion —
+   **MERGED** as c8c9f2b3 (rebased onto P1.2 main; full battery green)
+3. MnemeHQ/mnemehq-site#104 — M1.3b site: setup references, activation
+   state persistence, pairing endpoints — open, full battery green
+4. MnemeHQ/mnemehq-site#105 — M1.3c: audit activation UI (stacked on #104)
+5. MnemeHQ/mnemehq-site#106 — M1.3d: funnel instrumentation + pilot
+   handoff (stacked on #105)
+6. MnemeHQ/mneme#348 — this log (merged last)
 
 ## Completed
-### M1.3a (PR MnemeHQ/mneme#345)
-- Activation state model (`mneme/setup_state.py`): `not_installed → setup → active`,
-  persisted as an optional top-level `activation` key in the existing
-  `.mneme/project_memory.json` (no parallel state file; all existing writers
-  do raw read-modify-write and preserve unknown keys).
-- `mneme setup` CLI command (`mneme/setup.py` + `mneme/cli.py`):
-  git-repository context check, initialization of project memory when
-  required (scaffold reuses the init scaffold), memory validation, agent
-  environment detection (read-only), readiness view, setup summary,
-  idempotent reruns.
-- Readiness view (`mneme/readiness.py`): Protected / Mneme-ready /
-  Requires modelling / Guidance mapped from `assess_governance` semantics.
-  Protected requires typed FORBID_LITERAL evidence.
-- Integration detection (`mneme/integrations/detect.py`): Claude Code,
-  Codex CLI, Kiro, Cursor. Detection only; never writes configuration,
-  never enables enforcement.
-- Extracted shared ADR diagnostics collection to `mneme/adr_diagnostics.py`.
-- README: setup-mode section.
-
-### M1.3b (this branch + MnemeHQ/mnemehq-site#104)
-- `mneme/audit_pairing.py`: stdlib-only client for the Audit service —
-  `resolve(reference)` (non-consuming) and `complete(reference, repository,
-  mneme_version)` (idempotent server-side); base URL from
-  `MNEME_AUDIT_API_URL` (default production Cloud Run URL).
-- `mneme setup --audit-ref REF` now REQUIRES resolution before any local
-  write: unknown/expired/mismatched/unreachable → fail-closed ERROR, no
-  mutation (G3). Resolved baseline provenance (whitelisted keys only) is
-  recorded in `activation.baseline`.
-- Setup completion is reported back to the Audit service after the local
-  write; a failed report leaves completion pending with a warning and is
-  retried automatically on the next `mneme setup` run (G7).
-- Local `git remote get-url origin` is passed to completion for the
-  server-side repository mismatch check.
-- Site backend (mnemehq-site#104): `setup_references` table, reference
-  issuance/resolution/completion endpoints, project `activation_state`
-  (`not_installed`/`setup`/`active` distinct from Audit lifecycle),
-  migration 002.
-
-## Current work
-- M1.3c — Audit activation UI (mnemehq-site frontend), after M1.3a/M1.3b
-  contracts are stable.
-
-## Acceptance gates
-- G1 (safe setup): PASS — M1.3a tests unchanged and passing
-  (`test_setup_fresh_repo_initializes_in_setup_mode`,
-  `test_setup_creates_nothing_but_mneme_state`); pairing adds no
-  enforcement anywhere.
-- G2 (idempotency / existing projects): PASS — byte-identical no-op rerun,
-  existing project preservation, corrupt/invalid memory fail-safe tests;
-  rerun preserves first-completion timestamps.
-- G3 (audit linking): PASS — CLI: `test_setup_resolves_reference_and_records_baseline`
-  (provenance preserved: audit, project, commit SHA, Mneme version, schema
-  version), `test_setup_invalid_reference_fails_closed_before_writes`,
-  `test_setup_invalid_reference_on_existing_project_leaves_it_untouched`,
-  `test_setup_incomplete_resolution_payload_fails_closed`; site:
-  issuance requires saved baseline, 404 unknown / 410 expired / 409
-  mismatched repository (mnemehq-site#104 tests).
-- G4 (no protection-score inflation): PASS — readiness remains a pure view;
-  pairing records state only; site tests assert audit payload immutability
-  after completion.
-- G5 (integration detection): PASS — M1.3a detection tests unchanged.
-- G6 (audit UI activation state): PARTIAL — API surface done (project
-  endpoint exposes `activation_state`/`setup_completed_at`/`setup_audit_id`);
-  UI lands in M1.3c.
-- G7 (funnel attribution): PASS (recording + CLI reporting) —
-  `test_complete_receives_origin_remote`, completion retry
-  (`test_setup_rerun_retries_pending_completion`); site records
-  setup_audit_id/setup_completed_at/redeemed_mneme_version.
-- G8 (existing-product regression): PASS — full suite 1212 passed, 6
-  skipped (reconciled M1.3a + M1.3b on P1.2 main); frozen benchmark runs
-  byte-identical to `main` (no enforcement/retrieval code touched).
-
-## Implementation decisions
-- Activation state persisted inside `project_memory.json` (`activation` key)
-  rather than a new file — contract section 7 requires reusing existing
-  project metadata; verified every memory writer preserves unknown keys.
-- **P1.2 reconciliation (post-merge of #346)**: readiness classification is
-  NOT an independent interpretation. `mneme/readiness.py` delegates to the
-  frozen P1.2 API (`assess_protection` / `generate_protection_report`),
-  and setup passes the project root so the CI-evidence scan matches
-  `mneme audit --repo-root`. Parity regression tests
-  (`tests/test_setup_audit_parity.py`) pin that `mneme audit` and
-  `mneme setup` agree on all four tier counts for the same
-  memory/repository — including verified-CI upgrades and status
+- **M1.3a (mneme#345)**: activation state model `not_installed → setup →
+  active` persisted in `project_memory.json` (`activation` key, schema
+  `mneme.setup/v1`); `mneme setup` (git context, init, memory validation,
+  integration detection, readiness view, idempotent rerun); shared ADR
+  diagnostics extraction.
+- **P1.2 reconciliation (mneme#345, post-merge of #346)**:
+  `mneme/readiness.py` is a thin view over the canonical P1.2 API
+  (`assess_protection` / `generate_protection_report`) — no independent
+  tier interpretation from `assess_governability`. Setup passes the
+  project root so the CI-evidence scan matches `mneme audit --repo-root`.
+  Parity regression tests (`tests/test_setup_audit_parity.py`) pin that
+  `mneme audit` and `mneme setup` agree on all four tier counts for the
+  same memory/repository — including verified-CI upgrades and status
   (superseded/deprecated) exclusion — and that setup never upgrades
   anything beyond the audit.
-- Legacy memory without an activation record derives as `setup` (Mneme
-  present, enforcement never persisted as enabled); `not_installed` only
-  when no memory file exists.
-- Rerun with no material change performs no write (strongest idempotency);
-  rerun with changes (e.g. new `--audit-ref`) preserves first-completion
-  timestamps.
-- Setup on an `active` project refuses to downgrade: leaves the record
-  untouched and reports a warning (no silent state transitions).
-- M1.3a does not configure integrations (contract: setup MAY configure
-  non-blocking integration behavior; choosing detect-only minimizes risk of
-  implicit enforcement; hooks default to strict and must never be installed
-  implicitly).
-- Invalid audit refs (empty/whitespace/overlong) fail closed before any
-  write; resolution semantics build on the same guardrails.
-- Resolution is fail-closed and REQUIRED when `--audit-ref` is supplied via
-  the CLI: an unverifiable reference is never recorded (contract §4 G3).
-  `run_setup(pairing=None)` keeps verbatim recording for offline/embedded
-  use and is covered by tests.
-- Baseline provenance is whitelisted from the resolution payload — the raw
-  server response is never persisted.
-- Completion reporting happens after the local write; failure degrades to a
-  warning with automatic retry on next run (server-side completion is
-  idempotent via `already_redeemed`).
-- Rerun without a reference preserves the previously connected baseline and
-  performs no network calls.
+- **M1.3b (mneme#347 + site#104)**: opaque/scoped/expiring setup
+  references (`setup_references` table, migration 002); issuance
+  (saved-baseline required), resolution (provenance: audit, project,
+  commit SHA, Mneme version, schema version), idempotent completion;
+  project `activation_state`/`setup_completed_at`/`setup_audit_id`;
+  CLI resolve-before-write (fail-closed), baseline recording, completion
+  reporting with retry.
+- **M1.3c (site#105)**: before-setup "Install Mneme" promise + on-demand
+  copyable `pipx install "mneme-hq>=0.6.0"` / `mneme setup --audit-ref …`
+  command; after-setup "Mneme installed — Setup mode" panel with honest
+  checklist and "Start Pilot" CTA; active state rendered distinctly.
+- **M1.3d (site#106)**: `audit_setup_recognized` event (existing GTM
+  pipeline); `start_pilot` intent for the post-setup CTA; pilot handoff
+  recorded via explicit lifecycle transition (attribution preserved,
+  activation state untouched); funnel mapping documented in
+  `docs/site/gtm-tagging-requirements.md`.
+
+## Current work
+None — M1.3 implementation complete. Post-merge of the site stack, the
+deploy pipeline runs per its own lifecycle; deployment claims follow the
+canonical evidence rule.
+
+## Acceptance gates
+- **G1 Safe setup: PASS** — fresh git repo → `mneme setup` exits 0,
+  state `setup`, `enforcement: "not_enabled"`, `activated_at: null`, only
+  `.mneme/project_memory.json` created (mneme#345:
+  `test_setup_fresh_repo_initializes_in_setup_mode`,
+  `test_setup_creates_nothing_but_mneme_state`).
+- **G2 Idempotency / existing projects: PASS** — byte-identical no-op
+  rerun; existing projects preserved content-for-content; corrupt/invalid
+  memory fail-safe; active projects never downgraded (mneme#345/#347).
+- **G3 Audit linking: PASS** — CLI resolves references before any write;
+  invalid/expired/mismatched/unreachable fail closed with zero mutation
+  (mneme#347); issuance requires saved baseline; 404/410/409 failure
+  safety server-side (site#104).
+- **G4 No protection-score inflation: PASS** — readiness delegates to the
+  frozen P1.2 semantics (parity with `mneme audit` pinned by
+  `tests/test_setup_audit_parity.py`); setup never materializes rules;
+  pairing never mutates audit payloads (tests in #345/#347/#104).
+- **G5 Integration detection: PASS** — Claude Code / Codex CLI / Kiro /
+  Cursor detected read-only; detection creates nothing and activates
+  nothing (mneme#345 tests).
+- **G6 Audit UI activation state: PASS** — API + UI distinguish
+  Not installed / Setup / Active; setup state exposes correct next action
+  ("Start Pilot") (site#104 API tests, site#105 UI tests).
+- **G7 Funnel attribution: PASS** — setup attributed via `setup_audit_id`
+  + `setup_completed_at` + reference redemption; CLI reports completion
+  with origin remote + Mneme version, retry on failure; pilot handoff
+  recorded via explicit lifecycle transition with attribution intact
+  (site#106 test); funnel events emitted/recorded per the existing
+  analytics architecture.
+- **G8 Existing-product regression: PASS** — reconciled mneme stack: full
+  suite 1212 passed/6 skipped (P1.2 main baseline + M1.3 tests); frozen
+  benchmark runs byte-identical to `main`; `mneme check --mode warn`
+  PASS; site backend 90 passed/3 skipped, scripts 60 passed, root
+  fixtures 2 passed; frontend 70 passed; CI green on #345, #347, #104
+  (full batteries); existing M1/M1.2 behavior intact
+  (`test_workspace_contract.py`, `test_m1_acceptance_gates.py` green).
+
+## Implementation decisions
+- Activation state persisted inside `project_memory.json` (`activation`
+  key) — contract §7: reuse existing project metadata; verified every
+  memory writer preserves unknown keys.
+- Readiness classification is a thin P1.2 view (see reconciliation above);
+  legacy pre-P1.2 governability semantics remain untouched in the core
+  for runtime governability consumers.
+- M1.3a detects integrations but configures none (hooks default strict;
+  implicit hook installation would violate the core invariant).
+- CLI `--audit-ref` resolution is required and fail-closed;
+  `run_setup(pairing=None)` retains verbatim recording for
+  offline/embedded use.
+- Setup references: `secrets.token_urlsafe`, scoped to one audit+project,
+  expiring (14d default), single-purpose; repository mismatch checked by
+  normalized GitHub owner/repo (non-GitHub remotes skip rather than guess).
+- Integration-detection checklist item deliberately omitted from the setup
+  panel (no server-side detection data; no fabricated evidence, ADR-002
+  discipline).
+- Setup "recording pending" degrades gracefully: warning + automatic
+  retry on next `mneme setup` (server completion is idempotent).
 
 ## Verification
-- New tests: `tests/test_cli_setup.py` pairing section (10 tests) +
-  updated ref tests; `tests/test_setup_state.py` unchanged (20).
-- Full repository suite: `python -m pytest -q` → 1212 passed, 6 skipped
-  (rebased on P1.2 main; includes the setup/audit parity tests).
-- Site-side verification in mnemehq-site#104 (backend 89 passed, 3
-  skipped; root 2; scripts 60).
-- Worktree context verified via `scripts/check_worktree_context.py`.
+- mneme repo (reconciled stack): `python -m pytest -q` → 1212 passed,
+  6 skipped; `mneme benchmark examples/benchmarks` and
+  `mneme benchmark examples/benchmarks-enforcement-quality` identical to
+  `main`; CI full battery green on #345 and #347.
+- mnemehq-site: backend 90 passed/3 skipped; root fixtures 2 passed;
+  scripts 60 passed; frontend 70 passed + production build; CI full
+  battery green on #104.
+- Worktree context verified per repo policy for every task worktree.
 
 ## Escalations
 None
-
