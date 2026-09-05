@@ -77,9 +77,9 @@ IN PROGRESS (M1.3a PR open: MnemeHQ/mneme#345; M1.3b CLI PR stacked on it)
   `test_complete_receives_origin_remote`, completion retry
   (`test_setup_rerun_retries_pending_completion`); site records
   setup_audit_id/setup_completed_at/redeemed_mneme_version.
-- G8 (existing-product regression): PASS — full suite 1189 passed, 6
-  skipped; frozen benchmark runs byte-identical to `main` (verified in
-  M1.3a; no enforcement/retrieval code touched since).
+- G8 (existing-product regression): PASS — full suite 1212 passed, 6
+  skipped (reconciled M1.3a + M1.3b on P1.2 main); frozen benchmark runs
+  byte-identical to `main` (no enforcement/retrieval code touched).
 
 ## Implementation decisions
 - Activation state persisted inside `project_memory.json` (`activation` key)
@@ -124,7 +124,8 @@ IN PROGRESS (M1.3a PR open: MnemeHQ/mneme#345; M1.3b CLI PR stacked on it)
 ## Verification
 - New tests: `tests/test_cli_setup.py` pairing section (10 tests) +
   updated ref tests; `tests/test_setup_state.py` unchanged (20).
-- Full repository suite: `python -m pytest -q` → 1189 passed, 6 skipped.
+- Full repository suite: `python -m pytest -q` → 1212 passed, 6 skipped
+  (rebased on P1.2 main; includes the setup/audit parity tests).
 - Site-side verification in mnemehq-site#104 (backend 89 passed, 3
   skipped; root 2; scripts 60).
 - Worktree context verified via `scripts/check_worktree_context.py`.
