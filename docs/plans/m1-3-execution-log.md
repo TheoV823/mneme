@@ -69,6 +69,16 @@ IN PROGRESS (PR open)
 - Activation state persisted inside `project_memory.json` (`activation` key)
   rather than a new file — contract section 7 requires reusing existing
   project metadata; verified every memory writer preserves unknown keys.
+- **P1.2 reconciliation (post-merge of #346)**: readiness classification is
+  NOT an independent interpretation. `mneme/readiness.py` delegates to the
+  frozen P1.2 API (`assess_protection` / `generate_protection_report`),
+  and setup passes the project root so the CI-evidence scan matches
+  `mneme audit --repo-root`. Parity regression tests
+  (`tests/test_setup_audit_parity.py`) pin that `mneme audit` and
+  `mneme setup` agree on all four tier counts for the same
+  memory/repository — including verified-CI upgrades and status
+  (superseded/deprecated) exclusion — and that setup never upgrades
+  anything beyond the audit.
 - Legacy memory without an activation record derives as `setup` (Mneme
   present, enforcement never persisted as enabled); `not_installed` only
   when no memory file exists.

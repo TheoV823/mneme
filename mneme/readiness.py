@@ -1,43 +1,42 @@
 """
-readiness.py — Protection readiness view over project decisions.
+readiness.py — Protection readiness view for Mneme setup (M1.3a).
 
-M1.3 setup translates Audit/decision classifications into a readiness view
-(frozen contract: docs/plans/m1-3-audit-to-setup-activation.md section 5):
+Setup translates the P1.2 Architecture Protection Audit classification into
+a readiness view (frozen contract:
+docs/plans/m1-3-audit-to-setup-activation.md section 5):
 
     Protected          → existing protection detected
     Mneme-ready        → protection opportunity
     Requires modelling → needs modelling or remains guidance
     Guidance           → not appropriate for deterministic enforcement
 
+This module adds NO interpretation of its own. It delegates to the frozen
+P1.2 semantics in ``mneme.enforcer`` — ``assess_protection`` /
+``generate_protection_report`` are the single source of truth for the
+Protected / Mneme-ready / Requires modelling / Guidance tiers, so setup and
+``mneme audit`` always agree on the same memory/repository (parity is
+pinned by tests). ``repo_root`` enables the same external CI evidence scan
+the audit command performs with ``--repo-root``.
+
 Critical frozen rule:
 
     Installing Mneme does not make a Protectable decision Protected.
 
-A decision is reported ``protected`` ONLY where actual mechanical protection
-evidence exists — a typed FORBID_LITERAL rule — mirroring the frozen
-Architecture Audit metric semantics (P1.2: Protected = deterministic intent
-with verified existing enforcement). The governability tier ``enforceable``
-also covers single-term anti-patterns; those remain ``mneme_ready`` here
-because Mneme proposes that guardrail, it is not yet existing protection.
-
 Setup never mutates decisions, so readiness is a pure view: running setup
-cannot change any decision's classification and cannot inflate protection
-metrics (acceptance gate G4).
+cannot change any decision's tier and cannot inflate protection metrics
+(acceptance gate G4). Only ``active`` decisions count toward the summary,
+exactly as in ``mneme audit``; superseded/deprecated decisions are reported
+for provenance but never counted.
 """
 
 from __future__ import annotations
 
-from typing import Literal
-
-from mneme.enforcer import assess_governability
+from mneme.enforcer import (
+    ProtectionTier,
+    assess_protection,
+    generate_protection_report,
+)
 from mneme.schemas import Decision
-
-ReadinessClass = Literal[
-    "protected",
-    "mneme_ready",
-    "requires_modelling",
-    "guidance",
-]
 
 READINESS_LABELS: dict[str, str] = {
     "protected": "Protected",
@@ -46,7 +45,7 @@ READINESS_LABELS: dict[str, str] = {
     "guidance": "Guidance",
 }
 
-READINESS_ORDER: tuple[ReadinessClass, ...] = (
+READINESS_ORDER: tuple[ProtectionTier, ...] = (
     "protected",
     "mneme_ready",
     "requires_modelling",
@@ -54,33 +53,29 @@ READINESS_ORDER: tuple[ReadinessClass, ...] = (
 )
 
 
-def assess_readiness(decision: Decision) -> ReadinessClass:
-    """Classify one decision's protection readiness.
+def assess_readiness(
+    decision: Decision,
+    repo_root: str | None = None,
+) -> ProtectionTier:
+    """Classify one decision's protection readiness via frozen P1.2 semantics."""
+    return assess_protection(decision, repo_root=repo_root).protection_tier
 
-    Uses Mneme's authoritative governability assessment (``assess_governability``)
-    and maps it to the frozen readiness vocabulary without inflating it:
 
-    - ``protected``          FORBID_LITERAL typed rules exist (verified
-                             mechanical enforcement evidence).
-    - ``mneme_ready``        No typed rule, but a concrete safe guardrail
-                             exists (single-term anti-pattern).
-    - ``requires_modelling`` Deterministic intent needs interpretation
-                             (multi-term anti-patterns or "no X" constraints).
-    - ``guidance``           No deterministic intent for enforcement.
+def readiness_counts(
+    decisions: list[Decision],
+    repo_root: str | None = None,
+) -> dict[ProtectionTier, int]:
+    """Count decisions per P1.2 protection tier for the setup summary.
+
+    Uses the canonical aggregate report so the counts are exactly the
+    ``mneme audit`` summary values for the same corpus and repository:
+    only active decisions count toward any tier (guidance excluded from the
+    protection-relevant denominator by the frozen semantics).
     """
-    a = assess_governability(decision)
-    if a.has_literal_rules:
-        return "protected"
-    if a.has_single_term_anti_patterns:
-        return "mneme_ready"
-    if a.has_multi_term_anti_patterns or a.has_no_constraints:
-        return "requires_modelling"
-    return "guidance"
-
-
-def readiness_counts(decisions: list[Decision]) -> dict[ReadinessClass, int]:
-    """Count decisions per readiness class, returning all four keys."""
-    counts: dict[ReadinessClass, int] = {key: 0 for key in READINESS_ORDER}
-    for decision in decisions:
-        counts[assess_readiness(decision)] += 1
-    return counts
+    report = generate_protection_report(decisions, repo_root=repo_root)
+    return {
+        "protected": report.protected,
+        "mneme_ready": report.mneme_ready,
+        "requires_modelling": report.requires_modelling,
+        "guidance": report.guidance,
+    }

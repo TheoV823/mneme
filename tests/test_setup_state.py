@@ -165,7 +165,7 @@ def test_read_activation_invalid_record_raises(tmp_path):
         read_activation(memory)
 
 
-# ── Readiness (G4 semantics) ─────────────────────────────────────────────────
+# ── Readiness (G4 semantics — delegated to frozen P1.2) ─────────────────────
 
 def test_readiness_protected_requires_typed_rule():
     # FORBID_LITERAL typed rule = verified mechanical protection evidence.
@@ -187,8 +187,15 @@ def test_readiness_multi_term_anti_pattern_requires_modelling():
     assert assess_readiness(d) == "requires_modelling"
 
 
-def test_readiness_no_x_constraint_requires_modelling():
+def test_readiness_single_term_no_x_constraint_is_mneme_ready():
+    # Canonical P1.2: a single-term "no X" constraint carries a concrete
+    # safe guardrail (FORBID_LITERAL: <term>), so it is Mneme-ready.
     d = Decision(id="d", decision="x", constraints=["no postgres"])
+    assert assess_readiness(d) == "mneme_ready"
+
+
+def test_readiness_multi_term_no_x_constraint_requires_modelling():
+    d = Decision(id="d2", decision="x", constraints=["no shared database between services"])
     assert assess_readiness(d) == "requires_modelling"
 
 
@@ -197,14 +204,43 @@ def test_readiness_prose_only_is_guidance():
     assert assess_readiness(d) == "guidance"
 
 
-def test_readiness_counts_all_keys_present():
+def test_readiness_is_never_upgraded_without_verified_ci_evidence(tmp_path):
+    # A CI file merely MENTIONING the token is candidate evidence at best:
+    # candidate evidence annotates but never upgrades a tier (frozen P1.2).
+    root = tmp_path / "repo"
+    workflows = root / ".github" / "workflows"
+    workflows.mkdir(parents=True)
+    (workflows / "ci.yml").write_text(
+        "jobs:\n  scan:\n    steps:\n      - run: grep postgres src/\n",
+        encoding="utf-8",
+    )
+    d = Decision(id="f", decision="x", anti_patterns=["postgres"])
+    assert assess_readiness(d, repo_root=str(root)) == "mneme_ready"
+
+
+def test_readiness_counts_match_audit_report_for_active_decisions():
+    # The setup counts are exactly the canonical aggregate report values.
+    from mneme.enforcer import generate_protection_report
+
     decisions = [
         Decision(id="a", decision="x", rules=[Rule(type="FORBID_LITERAL", value="sqlite")]),
         Decision(id="b", decision="x", anti_patterns=["orm"]),
-        Decision(id="c", decision="x", constraints=["no postgres"]),
+        Decision(id="c", decision="x", anti_patterns=["share one database across services"]),
         Decision(id="d", decision="prefer clarity"),
+        # Superseded/deprecated decisions are provenance-only in P1.2.
+        Decision(id="old-1", decision="superseded rule", anti_patterns=["yaml"], status="superseded"),
+        Decision(id="old-2", decision="deprecated rule", rules=[Rule(type="FORBID_LITERAL", value="yaml")], status="deprecated"),
     ]
     counts = readiness_counts(decisions)
+    report = generate_protection_report(decisions)
+    assert counts == {
+        "protected": report.protected,
+        "mneme_ready": report.mneme_ready,
+        "requires_modelling": report.requires_modelling,
+        "guidance": report.guidance,
+    }
+    # Inactive decisions never enter the counts (G4: setup cannot inflate
+    # protection via status games either way — both views agree).
     assert counts == {
         "protected": 1,
         "mneme_ready": 1,

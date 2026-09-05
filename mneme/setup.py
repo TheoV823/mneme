@@ -31,7 +31,8 @@ from pathlib import Path
 from mneme.adr_diagnostics import collect_adr_diagnostics
 from mneme.integrations.detect import DetectedIntegration, detect_integrations
 from mneme.memory_store import MemoryStore
-from mneme.readiness import ReadinessClass, readiness_counts
+from mneme.enforcer import ProtectionTier
+from mneme.readiness import readiness_counts
 from mneme.setup_state import (
     DEFAULT_MEMORY_PATH,
     ACTIVATION_SCHEMA,
@@ -76,7 +77,7 @@ class SetupOutcome:
     audit_ref: str
     integrations: list[DetectedIntegration] = field(default_factory=list)
     decision_count: int = 0
-    readiness: dict[ReadinessClass, int] = field(default_factory=dict)
+    readiness: dict[ProtectionTier, int] = field(default_factory=dict)
     adr_diagnostics: int = 0
     adr_diagnostics_present: bool = False
     warnings: list[str] = field(default_factory=list)
@@ -220,7 +221,9 @@ def run_setup(
         audit_ref=ref,
         integrations=integrations,
         decision_count=len(decisions),
-        readiness=readiness_counts(decisions),
+        # P1.2 frozen semantics with CI-evidence scanning over this
+        # repository — exactly what `mneme audit --repo-root` reports.
+        readiness=readiness_counts(decisions, repo_root=project_root),
     )
 
     record = ActivationRecord(
