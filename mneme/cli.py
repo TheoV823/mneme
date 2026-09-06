@@ -574,8 +574,13 @@ def _require_memory(
     """Load and validate project memory for a protect subcommand.
 
     Returns ``(memory_path, decisions)`` or ``None`` after printing the
-    usage-style error, so callers can ``return _error_exit(...)``-style
-    exit 2 immediately.
+    usage-style error. Callers MUST test the tuple for ``None`` before
+    unpacking it::
+
+        loaded = _require_memory(args.memory)
+        if loaded is None:
+            return 2
+        memory_path, decisions = loaded
     """
     memory_path = Path(memory)
     if not memory_path.exists():
@@ -590,9 +595,10 @@ def _require_memory(
 
 
 def _cmd_protect_list(args: argparse.Namespace) -> int:
-    memory_path, decisions = _require_memory(args.memory)
-    if memory_path is None:
+    loaded = _require_memory(args.memory)
+    if loaded is None:
         return 2
+    memory_path, decisions = loaded
     repo_root = Path(args.repo_root) if args.repo_root else None
     if repo_root is not None and not repo_root.exists():
         return _error_exit(f"repo root {repo_root} does not exist")
@@ -638,9 +644,10 @@ def _cmd_protect_list(args: argparse.Namespace) -> int:
 
 
 def _cmd_protect_status(args: argparse.Namespace) -> int:
-    memory_path, _decisions = _require_memory(args.memory)
-    if memory_path is None:
+    loaded = _require_memory(args.memory)
+    if loaded is None:
         return 2
+    memory_path, _decisions = loaded
     repo_root = Path(args.repo_root) if args.repo_root else None
     if repo_root is not None and not repo_root.exists():
         return _error_exit(f"repo root {repo_root} does not exist")
@@ -669,9 +676,10 @@ def _cmd_protect_status(args: argparse.Namespace) -> int:
 
 
 def _cmd_protect_validate(args: argparse.Namespace) -> int:
-    memory_path, decisions = _require_memory(args.memory)
-    if memory_path is None:
+    loaded = _require_memory(args.memory)
+    if loaded is None:
         return 2
+    memory_path, decisions = loaded
     repo_root = Path(args.repo_root) if args.repo_root else None
     if repo_root is not None and not repo_root.exists():
         return _error_exit(f"repo root {repo_root} does not exist")
@@ -704,9 +712,10 @@ def _cmd_protect_validate(args: argparse.Namespace) -> int:
 
 
 def _cmd_protect_activate(args: argparse.Namespace) -> int:
-    memory_path, _decisions = _require_memory(args.memory)
-    if memory_path is None:
+    loaded = _require_memory(args.memory)
+    if loaded is None:
         return 2
+    memory_path, _decisions = loaded
     repo_root = Path(args.repo_root) if args.repo_root else None
     if repo_root is not None and not repo_root.exists():
         return _error_exit(f"repo root {repo_root} does not exist")

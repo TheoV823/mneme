@@ -50,8 +50,12 @@ re-derived from repository evidence:
   artifact (enforced by the existing `mneme check` / hook path);
 - the canonical assessment independently observes it and classifies Protected;
 - activation metadata (the `activation` record) stays separate from protection
-  truth and only carries the M1.3 `setup → active` state transition that
-  M1.3 reserved for exactly this explicit user action.
+  truth and only carries the M1.3 activation-state completion for this
+  explicit user action: a `setup` record transitions to `active`, and a
+  pre-M1.3 memory file without a record — which
+  `derive_activation_state` already interprets as `setup` — gains one valid
+  `active` record, so verified protection never coexists with a `setup`
+  project state.
 
 ## CLI surface
 
@@ -78,7 +82,9 @@ performs. Exit codes: `0` success / desired state; `1` actionable failure
 3. idempotent install: the typed rule is appended to the decision's
    `rules[]` record in `project_memory.json` via raw read-modify-write
    (atomic, everything else preserved verbatim); an identical existing rule
-   is left alone; a `setup`-state activation record transitions to `active`;
+   is left alone; a `setup`-state activation record transitions to `active`,
+   and a pre-M1.3 file without a record gains one valid `active` record with
+   `activated_at` set (via the existing M1.3 schema and transition table);
    unsupported/invalid records are refused before any write;
 4. verification: reload from disk and re-run the canonical assessment.
    Only an independently observed Protected tier is reported as verified.
@@ -130,7 +136,9 @@ existing violations, rule-authoring UI, site UX.
   fails closed with a clear error.
 - Only the canonical proposal shape (a global `FORBID_LITERAL` token) is
   activation-ready; scoped rules return `unsupported` from validation.
-- Activation flips the project `activation` record `setup → active` only when
-  that record exists; projects without one gain no invented record.
+- A rule present in memory without any Mneme activation (e.g. hand-authored
+  as a `[memory]` change) makes the decision `already_protected`; activation
+  confirms but writes nothing, so such a project's record is not rewritten —
+  the state model is only completed by activations that install evidence.
 - No `--json` output for `protect` (P0 is the human workflow; `mneme audit
   --json` remains the machine surface).

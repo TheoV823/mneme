@@ -36,6 +36,7 @@ from mneme.protection import (
     validate_proposal,
 )
 from mneme.schemas import Rule
+from mneme.setup_state import derive_activation_state, read_activation
 
 MEMORY_REL = Path(".mneme") / "project_memory.json"
 
@@ -621,11 +622,50 @@ def test_setup_still_refuses_active_projects_after_activation(tmp_path, capsys):
     assert memory.read_text(encoding="utf-8") == before
 
 
-def test_activation_without_activation_record_does_not_invent_one(tmp_path):
-    _, memory = _write_repo(tmp_path, DECISIONS)
-    assert activate_protection("d_single_no", memory).result == "verified"
-    raw = json.loads(memory.read_text(encoding="utf-8"))
-    assert "activation" not in raw
+def test_activation_persists_active_record_for_pre_m13_memory(
+    tmp_path, capsys,
+):
+    """Frozen M1.3 invariant: verified protection implies state ``active``.
+
+    A pre-M1.3 memory file with no activation record is de-facto ``setup``
+    (``derive_activation_state``). Explicit activation of the first
+    protection must leave a valid ``active`` record behind — never the
+    invalid "Protected decision + setup project" combination — while
+    reusing the existing M1.3 schema, transition table and persistence.
+    """
+    root, memory = _write_repo(tmp_path, DECISIONS)
+
+    # 1 — before activation the project derives as setup.
+    assert derive_activation_state(memory) == "setup"
+    assert read_activation(memory) is None
+
+    # 2 — explicit activation succeeds and canonical verification passes.
+    outcome = activate_protection("d_single_no", memory, repo_root=root)
+    assert outcome.result == "verified"
+    assert outcome.verification_tier == "protected"
+
+    # 3+4+5 — the project is now active with a valid, populated record.
+    assert derive_activation_state(memory) == "active"
+    record = read_activation(memory)
+    assert record is not None
+    assert record.state == "active"
+    assert record.activated_at
+    assert record.to_dict()["schema"] == "mneme.setup/v1"
+
+    # 6 — setup cannot subsequently downgrade the project.
+    before = memory.read_text(encoding="utf-8")
+    old = os.getcwd()
+    os.chdir(root)
+    try:
+        capsys.readouterr()
+        code = main(["setup"])
+        out = capsys.readouterr().out
+    finally:
+        os.chdir(old)
+    assert code == 0
+    assert "active state" in out
+    assert memory.read_text(encoding="utf-8") == before
+    assert read_activation(memory).state == "active"
 
 
 # ── Status surface ───────────────────────────────────────────────────────────
@@ -667,6 +707,67 @@ def test_errors_raise_before_any_write(tmp_path):
     with pytest.raises(ProtectionError):
         protection_status("ghost", memory)
     assert memory.read_text(encoding="utf-8") == before
+
+
+# ── CLI error paths: clean exit 2, never a traceback ─────────────────────────
+
+
+_PROTECT_SUBCOMMANDS = [
+    ("list",),
+    ("status", "d_ready"),
+    ("validate", "d_ready"),
+    ("activate", "d_ready"),
+]
+
+
+def test_protect_cli_missing_memory_is_clean_usage_error(
+    tmp_path, capsys,
+):
+    missing = tmp_path / "absent" / "project_memory.json"
+    for subcommand in _PROTECT_SUBCOMMANDS:
+        capsys.readouterr()
+        code = main([
+            "protect", *subcommand, "--memory", str(missing),
+        ])
+        captured = capsys.readouterr()
+        assert code == 2, (subcommand, captured.out, captured.err)
+        assert captured.out == ""
+        assert captured.err.startswith("ERROR: memory file"), captured.err
+        assert "Traceback" not in captured.err
+        assert not missing.exists(), "a failed protect command wrote memory"
+
+
+def test_protect_cli_invalid_memory_is_clean_usage_error(
+    tmp_path, capsys,
+):
+    malformed = tmp_path / "broken.json"
+    malformed.write_text("{ not valid json ]", encoding="utf-8")
+    invalid_schema = tmp_path / "badrule.json"
+    invalid_schema.write_text(json.dumps({
+        "meta": {"name": "x", "description": "x"},
+        "items": [],
+        "examples": [],
+        "decisions": [{
+            "id": "d_ready",
+            "decision": "No postgres in the service layer",
+            "anti_patterns": ["postgres"],
+            "rules": [{"type": "NOT_A_TYPE", "value": "postgres"}],
+        }],
+    }, indent=2) + "\n", encoding="utf-8")
+
+    for memory in (malformed, invalid_schema):
+        before = memory.read_text(encoding="utf-8")
+        for subcommand in _PROTECT_SUBCOMMANDS:
+            capsys.readouterr()
+            code = main([
+                "protect", *subcommand, "--memory", str(memory),
+            ])
+            captured = capsys.readouterr()
+            assert code == 2, (subcommand, captured.out, captured.err)
+            assert captured.out == ""
+            assert captured.err.startswith("ERROR:"), captured.err
+            assert "Traceback" not in captured.err
+            assert memory.read_text(encoding="utf-8") == before
 
 
 # ── Full product loop (realistic end-to-end fixture) ─────────────────────────

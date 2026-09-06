@@ -656,15 +656,21 @@ def _proposed_literal_tokens(decision: "Decision") -> list[str]:
 
 
 def propose_literal_rule(decision: "Decision") -> "Rule | None":
-    """The canonical deterministic protection proposal for one Decision.
+    """Materialize a decision's canonical deterministic guardrail as a Rule.
 
-    Returns the typed rule whose activation the P1.2 audit proposes for a
-    Mneme-ready decision — ``FORBID_LITERAL`` carrying the first literalizable
-    token, with global applicability (ADR-019/ADR-020 semantics) — and ``None``
-    for every other tier. This is the same primitive the audit consults, not a
-    second classifier: eligibility always comes from
-    :func:`assess_protection`, and this function only materializes the
-    guardrail string that assessment already reports.
+    Returns ``FORBID_LITERAL`` carrying the first literalizable token, with
+    global applicability (ADR-019/ADR-020 semantics), when the decision's
+    legacy intent can be literalized exactly as ``assess_protection`` does
+    for a Mneme-ready decision; ``None`` when it cannot.
+
+    This is a rule-materialization helper, not an assessor: it performs no
+    tier classification and may return a rule for a decision whose canonical
+    tier is not ``mneme_ready`` (for example one already carrying verified
+    external evidence). Every caller MUST gate eligibility through
+    :func:`assess_protection` — the single source of protection truth — and
+    consult this function only for the concrete rule shape. Kept beside the
+    assessment so the proposal and the classification are the same
+    computation, not two interpretations of it.
     """
     from mneme.schemas import Rule
 

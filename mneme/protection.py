@@ -57,6 +57,7 @@ from mneme.memory_store import MemoryStore
 from mneme.path_selectors import SelectorOutcome, policy_root
 from mneme.rule_matcher import literal_in_text
 from mneme.schemas import Decision, Rule
+from mneme.setup import mneme_version
 from mneme.setup_state import (
     ACTIVATION_SCHEMA,
     STATE_ACTIVE,
@@ -512,10 +513,17 @@ def _install_rule(
 
     Raw read-modify-write preserving every other key verbatim (meta, items,
     examples, other decisions, and any future sections). Idempotent: an
-    identical existing rule is left alone and no duplicate is created. When
-    the project activation record exists in ``setup`` state, the explicit
-    activation also performs the frozen ``setup → active`` transition the
-    M1.3 contract reserved for exactly this user action.
+    identical existing rule is left alone and no duplicate is created.
+
+    The explicit activation also completes the frozen M1.3 activation-state
+    model (``setup`` = no preventive protection, ``active`` = at least one
+    preventive protection explicitly enabled): a ``setup``-state record
+    transitions to ``active`` via the frozen transition table, and a
+    pre-M1.3 memory file without an activation record — which
+    ``derive_activation_state`` already interprets as ``setup`` — gains one
+    valid record in ``active`` state with ``activated_at`` set. An already
+    ``active`` record is left untouched; an unsupported or invalid record is
+    refused before any write.
 
     Returns ``True`` when this call wrote the file, ``False`` when the rule
     was already installed.
@@ -558,7 +566,15 @@ def _install_rule(
     entry["rules"] = [*existing, record]
 
     raw_activation = raw.get("activation")
-    if raw_activation is not None:
+    if raw_activation is None:
+        # A pre-M1.3 memory file with no activation record is de-facto
+        # ``setup`` state (``derive_activation_state``). Explicitly
+        # activating the first protection completes the frozen M1.3 state
+        # model here: persist one valid record in ``active`` state instead
+        # of leaving the invalid "Protected decision + setup project"
+        # combination.
+        record_state = ActivationRecord(state=STATE_SETUP)
+    else:
         if (
             not isinstance(raw_activation, dict)
             or raw_activation.get("schema") not in (None, ACTIVATION_SCHEMA)
@@ -574,11 +590,19 @@ def _install_rule(
             raise ProtectionError(
                 f"existing activation record in {memory_path} is invalid: {exc}"
             ) from exc
-        if record_state.state == STATE_SETUP:
+    if record_state.state != STATE_ACTIVE:
+        try:
             record_state.require_transition(STATE_ACTIVE)
-            record_state.state = STATE_ACTIVE
-            record_state.activated_at = utc_now()
-            raw["activation"] = record_state.to_dict()
+        except ActivationStateError as exc:
+            raise ProtectionError(
+                f"activation record in {memory_path} cannot transition "
+                f"from {record_state.state!r} to {STATE_ACTIVE!r}: {exc}"
+            ) from exc
+        record_state.state = STATE_ACTIVE
+        record_state.activated_at = utc_now()
+        if raw_activation is None:
+            record_state.mneme_version = mneme_version()
+        raw["activation"] = record_state.to_dict()
 
     atomic_write_json(memory_path, raw)
     return True
