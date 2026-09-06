@@ -9,6 +9,10 @@ description = "Architectural drift prevention for the agentic AI SDLC. Determini
 keywords = ["architectural-drift-prevention", "architectural-drift", "agentic-ai-sdlc", "agentic-ai", "ai-coding-agents", "adr", "architectural-governance", "ci", "codex", "claude-code"]
 readme = "README.md"
 requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
 dependencies = [
     "anthropic>=0.25.0",
     "python-dotenv>=1.0.0",

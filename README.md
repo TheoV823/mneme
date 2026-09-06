@@ -6,7 +6,7 @@ Mneme turns architectural decisions and ADRs into deterministic guardrails for t
 
 [![Tests](https://github.com/MnemeHQ/mneme/actions/workflows/tests.yml/badge.svg)](https://github.com/MnemeHQ/mneme/actions/workflows/tests.yml)
 [![PyPI](https://img.shields.io/pypi/v/mneme-hq.svg)](https://pypi.org/project/mneme-hq/)
-[![Python](https://img.shields.io/pypi/pyversions/mneme-hq.svg)](https://pypi.org/project/mneme-hq/)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://pypi.org/project/mneme-hq/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Mneme is the architectural governance layer behind that drift-prevention mechanism. It keeps recorded engineering decisions active as AI coding systems propose and modify code, instead of leaving ADRs as passive documentation.
