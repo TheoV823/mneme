@@ -50,6 +50,39 @@ cd mneme
 pip install -e ".[dev]"
 ```
 
+## Architecture Audit
+
+See where your architecture is actually protected — and where it still depends on people remembering the rules.
+
+Mneme audits your repository and shows which architectural decisions are:
+
+- **Protected** — already enforced mechanically
+- **Mneme-ready** — can be turned into a deterministic guardrail
+- **Requires modelling** — important, but not yet safe to automate
+- **Guidance** — useful context, but not something that should be enforced
+
+Run an audit:
+
+```bash
+mneme audit --memory .mneme/project_memory.json --repo-root .
+```
+
+For a Mneme-ready decision, validate the proposed protection before enabling it:
+
+```bash
+mneme protect validate <decision-id> --memory .mneme/project_memory.json
+```
+
+Then explicitly activate it:
+
+```bash
+mneme protect activate <decision-id> --memory .mneme/project_memory.json
+```
+
+Mneme only reports a decision as **Protected** after it can verify that real enforcement is in place. The full activation contract is documented in [Protection Activation](docs/protect-activation.md).
+
+[Try the Architecture Audit →](https://mnemehq.com/audit/)
+
 ## 60-second enforcement example
 
 Initialize a project-local decision corpus:
