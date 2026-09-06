@@ -641,6 +641,45 @@ def _scan_ci_evidence(
     return "none", []
 
 
+def _proposed_literal_tokens(decision: "Decision") -> list[str]:
+    """Literalizable tokens a Mneme guardrail could carry, canonical order.
+
+    Exactly the derivation ``assess_protection`` uses to classify a decision
+    ``mneme_ready``: the terms of each single-term anti-pattern, then the
+    forbidden terms of single-term "no X" constraints. Kept beside the
+    assessment so the proposal below and the classification above are the
+    same computation, not two interpretations of it.
+    """
+    single_aps = [ap for ap in decision.anti_patterns if _is_literal_rule(ap)]
+    single_nos, _ = _split_no_constraints(decision.constraints)
+    return [t for ap in single_aps for t in _rule_terms(ap)] + single_nos
+
+
+def propose_literal_rule(decision: "Decision") -> "Rule | None":
+    """Materialize a decision's canonical deterministic guardrail as a Rule.
+
+    Returns ``FORBID_LITERAL`` carrying the first literalizable token, with
+    global applicability (ADR-019/ADR-020 semantics), when the decision's
+    legacy intent can be literalized exactly as ``assess_protection`` does
+    for a Mneme-ready decision; ``None`` when it cannot.
+
+    This is a rule-materialization helper, not an assessor: it performs no
+    tier classification and may return a rule for a decision whose canonical
+    tier is not ``mneme_ready`` (for example one already carrying verified
+    external evidence). Every caller MUST gate eligibility through
+    :func:`assess_protection` — the single source of protection truth — and
+    consult this function only for the concrete rule shape. Kept beside the
+    assessment so the proposal and the classification are the same
+    computation, not two interpretations of it.
+    """
+    from mneme.schemas import Rule
+
+    tokens = _proposed_literal_tokens(decision)
+    if not tokens:
+        return None
+    return Rule(type="FORBID_LITERAL", value=tokens[0])
+
+
 def assess_protection(
     decision: "Decision",
     repo_root: str | Path | None = None,
@@ -690,7 +729,7 @@ def assess_protection(
             evidence_sources=[],
         )
 
-    tokens = [t for ap in single_aps for t in _rule_terms(ap)] + single_nos
+    tokens = _proposed_literal_tokens(decision)
     tier: ProtectionTier = "mneme_ready" if tokens else "requires_modelling"
     proposed_guardrail = f"FORBID_LITERAL: {tokens[0]}" if tokens else None
 
@@ -780,4 +819,5 @@ __all__ = [
     "ArchitectureProtectionReport",
     "assess_protection",
     "generate_protection_report",
+    "propose_literal_rule",
 ]
