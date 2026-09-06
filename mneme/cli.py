@@ -10,6 +10,10 @@ Subcommands
   list_decisions    Print every Decision in the memory file.
   test_query        Run a query through the retriever and show scores + injected.
   cursor generate   Generate a Cursor .mdc rules file from retrieved decisions.
+  audit             Run the P1.2 Architecture Protection Audit.
+  protect           M1.4 per-decision protection activation:
+                    list | status | validate | activate.
+                    See docs/protect-activation.md.
 
 Usage::
 
@@ -61,6 +65,17 @@ from mneme.enforcer import (
     generate_protection_report,
 )
 from mneme.memory_store import MemoryStore
+from mneme.protection import (
+    ENFORCEMENT_BEHAVIOR,
+    ProtectionError,
+    activate_protection,
+    activation_precheck,
+    find_candidates,
+    find_decision,
+    load_decisions,
+    protection_status,
+    validate_proposal,
+)
 from mneme.readiness import READINESS_LABELS, READINESS_ORDER
 from mneme.setup import SetupError, SetupOutcome, run_setup
 from mneme.setup_state import STATE_ACTIVE, scaffold_project_memory
@@ -551,6 +566,202 @@ def _cmd_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+# ── Subcommand: protect (M1.4 per-decision protection activation) ────────────
+
+def _require_memory(
+    memory: str,
+) -> tuple[Path, list] | None:
+    """Load and validate project memory for a protect subcommand.
+
+    Returns ``(memory_path, decisions)`` or ``None`` after printing the
+    usage-style error, so callers can ``return _error_exit(...)``-style
+    exit 2 immediately.
+    """
+    memory_path = Path(memory)
+    if not memory_path.exists():
+        _error_exit(f"memory file {memory_path} does not exist")
+        return None
+    try:
+        decisions = load_decisions(memory_path)
+    except ProtectionError as exc:
+        _error_exit(str(exc))
+        return None
+    return memory_path, decisions
+
+
+def _cmd_protect_list(args: argparse.Namespace) -> int:
+    memory_path, decisions = _require_memory(args.memory)
+    if memory_path is None:
+        return 2
+    repo_root = Path(args.repo_root) if args.repo_root else None
+    if repo_root is not None and not repo_root.exists():
+        return _error_exit(f"repo root {repo_root} does not exist")
+    discovered = find_candidates(decisions, repo_root=repo_root)
+    report = discovered.report
+
+    print("Protection activation candidates")
+    print("=" * 60)
+    print(
+        f"Protected: {report.protected}  Mneme-ready: {report.mneme_ready}  "
+        f"Requires modelling: {report.requires_modelling}  "
+        f"Guidance: {report.guidance}"
+    )
+    print(f"Candidates: {len(discovered.candidates)}")
+    print()
+    if not discovered.candidates:
+        print("(no activation candidates)")
+        return 0
+    for i, candidate in enumerate(discovered.candidates, start=1):
+        print(f"[{i}] {candidate.decision_id}: {candidate.decision_text}")
+        if candidate.source_path:
+            print(f"    source: {candidate.source_path}")
+        print(f"    guardrail: {candidate.guardrail}")
+        print(
+            f"    rule to install: {candidate.proposal.type} "
+            f"\"{candidate.proposal.value}\""
+        )
+        scope = (
+            "global applicability (canonical policy sources exempt)"
+            if candidate.proposal.include_paths is None
+            else ", ".join(candidate.proposal.include_paths)
+        )
+        print(f"    applies to: {scope}")
+        print(f"    enforcement: {ENFORCEMENT_BEHAVIOR}")
+    print()
+    print(
+        "Validate before activating:  mneme protect validate <decision-id>"
+    )
+    print(
+        "Activate (explicit):         mneme protect activate <decision-id>"
+    )
+    return 0
+
+
+def _cmd_protect_status(args: argparse.Namespace) -> int:
+    memory_path, _decisions = _require_memory(args.memory)
+    if memory_path is None:
+        return 2
+    repo_root = Path(args.repo_root) if args.repo_root else None
+    if repo_root is not None and not repo_root.exists():
+        return _error_exit(f"repo root {repo_root} does not exist")
+    try:
+        status = protection_status(
+            args.decision_id, memory_path, repo_root=repo_root
+        )
+    except ProtectionError as exc:
+        return _error_exit(str(exc))
+
+    print(f"Decision [{status.decision_id}] {status.decision_text}")
+    print(f"  lifecycle status: {status.lifecycle_status}")
+    print(f"  protection tier:  {status.tier}")
+    if status.guardrail:
+        print(f"  guardrail:        {status.guardrail}")
+    print(f"  evidence:         {status.evidence_confidence}")
+    for src in status.evidence_sources:
+        print(f"      {src}")
+    print(f"  rule installed:   {'yes' if status.rule_installed else 'no'}")
+    if status.proposal is not None:
+        print(
+            f"  proposal:         {status.proposal.type} "
+            f"\"{status.proposal.value}\""
+        )
+    return 0
+
+
+def _cmd_protect_validate(args: argparse.Namespace) -> int:
+    memory_path, decisions = _require_memory(args.memory)
+    if memory_path is None:
+        return 2
+    repo_root = Path(args.repo_root) if args.repo_root else None
+    if repo_root is not None and not repo_root.exists():
+        return _error_exit(f"repo root {repo_root} does not exist")
+    decision = find_decision(decisions, args.decision_id)
+    if decision is None:
+        return _error_exit(f"decision {args.decision_id!r} not found")
+
+    precheck = activation_precheck(decision, repo_root=repo_root)
+    if not precheck.eligible:
+        print(f"NOT ELIGIBLE: [{decision.id}] {precheck.reason}")
+        print(
+            "Protection was not validated and nothing was activated."
+        )
+        return 1
+
+    result = validate_proposal(decision, precheck.proposal)
+    print(f"Validating proposed protection for [{decision.id}]")
+    print(f"  decision:  {decision.decision}")
+    print(f"  proposal:  {result.proposal.type} \"{result.proposal.value}\"")
+    print("  checks:")
+    for check in result.checks:
+        mark = "PASS" if check.passed else "FAIL"
+        print(f"    {mark} {check.name}: {check.detail}")
+    if result.status == "valid":
+        print("Result: VALID")
+        print("Validation never activates protection.")
+        return 0
+    print(f"Result: {result.status.upper()}")
+    return 1
+
+
+def _cmd_protect_activate(args: argparse.Namespace) -> int:
+    memory_path, _decisions = _require_memory(args.memory)
+    if memory_path is None:
+        return 2
+    repo_root = Path(args.repo_root) if args.repo_root else None
+    if repo_root is not None and not repo_root.exists():
+        return _error_exit(f"repo root {repo_root} does not exist")
+    try:
+        outcome = activate_protection(
+            args.decision_id, memory_path, repo_root=repo_root
+        )
+    except ProtectionError as exc:
+        return _error_exit(str(exc))
+
+    if outcome.result == "verified":
+        state = (
+            "installed"
+            if outcome.rule_installed
+            else "already present"
+        )
+        print(
+            f"Protection activated and verified: [{outcome.decision_id}] "
+            f"(rule {state})"
+        )
+        if outcome.proposal is not None:
+            print(
+                f"  rule: {outcome.proposal.type} \"{outcome.proposal.value}\""
+            )
+        print(f"  verification: {outcome.detail}")
+        print("Re-run `mneme audit` to observe the new Protected decision.")
+        return 0
+    if outcome.result == "already_protected":
+        print(f"Already Protected: [{outcome.decision_id}]")
+        print(f"  {outcome.detail}")
+        print("  Nothing to activate.")
+        return 0
+    if outcome.result == "not_eligible":
+        print(f"NOT ELIGIBLE: [{outcome.decision_id}] {outcome.detail}")
+        return 1
+    if outcome.result == "validation_failed":
+        print(
+            f"VALIDATION FAILED: [{outcome.decision_id}] {outcome.detail}"
+        )
+        if outcome.validation is not None:
+            for check in outcome.validation.checks:
+                if not check.passed:
+                    print(f"    FAIL {check.name}: {check.detail}")
+        print("Nothing was written.")
+        return 1
+    # verification_failed
+    print(
+        f"ERROR: activation artifact written for [{outcome.decision_id}], "
+        "but canonical verification did not observe Protected — "
+        "the decision remains NOT Protected."
+    )
+    print(f"  verification: {outcome.detail}")
+    return 1
+
+
 # ── Subcommand: cursor generate ──────────────────────────────────────────────
 
 def _cmd_cursor_generate(args: argparse.Namespace) -> int:
@@ -847,6 +1058,67 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Write the mneme.audit/v1 JSON report to FILE",
     )
     p_audit.set_defaults(func=_cmd_audit)
+
+    # protect (M1.4 per-decision protection activation)
+    p_protect = sub.add_parser(
+        "protect",
+        help=(
+            "Per-decision protection activation: list Mneme-ready candidates, "
+            "deterministically validate a proposed protection, explicitly "
+            "activate it, and inspect its canonical status"
+        ),
+    )
+    protect_sub = p_protect.add_subparsers(dest="protect_cmd", required=True)
+
+    _REPO_ROOT_HELP = (
+        "Repository root to scan for external enforcement evidence, exactly "
+        "like `mneme audit --repo-root`; omitted means no CI-evidence scan"
+    )
+
+    p_protect_list = protect_sub.add_parser(
+        "list",
+        help="List Mneme-ready protection activation candidates",
+    )
+    p_protect_list.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_protect_list.add_argument("--repo-root", dest="repo_root", default=None,
+                                help=_REPO_ROOT_HELP)
+    p_protect_list.set_defaults(func=_cmd_protect_list)
+
+    p_protect_status = protect_sub.add_parser(
+        "status",
+        help="Show the canonical protection status of one decision",
+    )
+    p_protect_status.add_argument("decision_id", help="Decision id, e.g. mneme_001")
+    p_protect_status.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_protect_status.add_argument("--repo-root", dest="repo_root", default=None,
+                                  help=_REPO_ROOT_HELP)
+    p_protect_status.set_defaults(func=_cmd_protect_status)
+
+    p_protect_validate = protect_sub.add_parser(
+        "validate",
+        help=(
+            "Deterministically validate a decision's proposed protection "
+            "against the existing enforcement engine; never activates anything"
+        ),
+    )
+    p_protect_validate.add_argument("decision_id", help="Decision id, e.g. mneme_001")
+    p_protect_validate.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_protect_validate.add_argument("--repo-root", dest="repo_root", default=None,
+                                    help=_REPO_ROOT_HELP)
+    p_protect_validate.set_defaults(func=_cmd_protect_validate)
+
+    p_protect_activate = protect_sub.add_parser(
+        "activate",
+        help=(
+            "Explicitly install the proposed typed rule for one decision, "
+            "then verify via the canonical protection assessment"
+        ),
+    )
+    p_protect_activate.add_argument("decision_id", help="Decision id, e.g. mneme_001")
+    p_protect_activate.add_argument("--memory", required=True, help="Path to project_memory.json")
+    p_protect_activate.add_argument("--repo-root", dest="repo_root", default=None,
+                                    help=_REPO_ROOT_HELP)
+    p_protect_activate.set_defaults(func=_cmd_protect_activate)
 
     # cursor (parent for cursor subcommands)
     p_cursor = sub.add_parser("cursor", help="Cursor.ai integration commands")

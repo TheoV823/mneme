@@ -641,6 +641,39 @@ def _scan_ci_evidence(
     return "none", []
 
 
+def _proposed_literal_tokens(decision: "Decision") -> list[str]:
+    """Literalizable tokens a Mneme guardrail could carry, canonical order.
+
+    Exactly the derivation ``assess_protection`` uses to classify a decision
+    ``mneme_ready``: the terms of each single-term anti-pattern, then the
+    forbidden terms of single-term "no X" constraints. Kept beside the
+    assessment so the proposal below and the classification above are the
+    same computation, not two interpretations of it.
+    """
+    single_aps = [ap for ap in decision.anti_patterns if _is_literal_rule(ap)]
+    single_nos, _ = _split_no_constraints(decision.constraints)
+    return [t for ap in single_aps for t in _rule_terms(ap)] + single_nos
+
+
+def propose_literal_rule(decision: "Decision") -> "Rule | None":
+    """The canonical deterministic protection proposal for one Decision.
+
+    Returns the typed rule whose activation the P1.2 audit proposes for a
+    Mneme-ready decision — ``FORBID_LITERAL`` carrying the first literalizable
+    token, with global applicability (ADR-019/ADR-020 semantics) — and ``None``
+    for every other tier. This is the same primitive the audit consults, not a
+    second classifier: eligibility always comes from
+    :func:`assess_protection`, and this function only materializes the
+    guardrail string that assessment already reports.
+    """
+    from mneme.schemas import Rule
+
+    tokens = _proposed_literal_tokens(decision)
+    if not tokens:
+        return None
+    return Rule(type="FORBID_LITERAL", value=tokens[0])
+
+
 def assess_protection(
     decision: "Decision",
     repo_root: str | Path | None = None,
@@ -690,7 +723,7 @@ def assess_protection(
             evidence_sources=[],
         )
 
-    tokens = [t for ap in single_aps for t in _rule_terms(ap)] + single_nos
+    tokens = _proposed_literal_tokens(decision)
     tier: ProtectionTier = "mneme_ready" if tokens else "requires_modelling"
     proposed_guardrail = f"FORBID_LITERAL: {tokens[0]}" if tokens else None
 
@@ -780,4 +813,5 @@ __all__ = [
     "ArchitectureProtectionReport",
     "assess_protection",
     "generate_protection_report",
+    "propose_literal_rule",
 ]
