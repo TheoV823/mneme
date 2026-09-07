@@ -4,6 +4,75 @@
 
 ---
 
+## v0.7.0 — 2026-09-07
+
+**Architecture Audit, Audit→Setup activation, and per-decision protection — first PyPI release of the full loop**
+
+This is the first published package release containing the complete
+`Audit → Setup → Protect` journey: the P1.2 Architecture Protection Audit,
+`mneme setup` with activation state, Audit-reference setup pairing, and
+per-decision protection activation. No retrieval, enforcement-engine, or
+frozen-benchmark semantics change.
+
+### Added
+
+- `mneme audit` — P1.2 Architecture Protection Audit. Classifies every
+  decision in `project_memory.json` into Protected / Mneme-ready /
+  Requires modelling / Guidance, optionally scans the repository for
+  verified CI enforcement evidence (`--repo-root`), and writes a
+  versioned `mneme.audit/v1` JSON report via `--json`. Findings are
+  deterministic and reproducible.
+- `mneme setup` — installs Mneme in **setup mode** (M1.3a): context
+  injection and non-blocking checks only, never enforcement. Persists
+  activation state (`mneme.setup/v1`) in `project_memory.json`, records
+  git context, detects installed coding-agent integrations read-only
+  (detects, never configures), and prints a readiness view that is a
+  thin view over the canonical P1.2 protection assessment. Idempotent;
+  existing projects are preserved; enforcement stays `not_enabled`.
+- Audit-reference setup support (M1.3b) — `mneme setup --audit-ref
+  <reference>` resolves an opaque, scoped, expiring Architecture Audit
+  setup reference **before any local write** (fail-closed on invalid,
+  expired, mismatched, or unreachable references), records baseline
+  provenance, and reports setup completion back to the Audit service
+  (idempotent, with automatic retry on the next setup run).
+- `mneme protect list|status|validate|activate` — per-decision
+  protection activation (M1.4): lists Mneme-ready candidates,
+  deterministically validates a proposed protection against the existing
+  enforcement engine (no writes, no model), explicitly activates it for
+  one decision, and verifies via independent canonical re-assessment.
+  Activation is explicit and idempotent; requesting activation without
+  observable enforcement evidence never reports Protected and never
+  moves Current Protection by itself.
+- EventCatalog ADR ingestion (retrieval-only) — EventCatalog documents
+  can feed the decision corpus.
+
+### Fixed
+
+- Strict `Pipeline` verdict precedence: UNKNOWN applicability now takes
+  precedence over conflicts, so an out-of-scope conflict can no longer
+  mask an unknown-applicability failure.
+- Static PyPI Python badge replaces the broken dynamic badge.
+
+### Validation / Research
+
+- Enforcement-quality benchmark results recorded in-repo.
+- Claude Managed Agents M0 capability study remains evidence only.
+
+### Maintenance
+
+- CI: pull-request + squash-only enforcement on `main` (GitHub ruleset
+  plus local pre-push guard).
+- Docs: five-minute quickstart; README Architecture Audit section.
+
+### Compatibility
+
+- No changes to retrieval ranking, `DecisionRetriever`,
+  `ConflictDetector`, existing typed-rule semantics, or the frozen
+  enforcement benchmark. `mneme setup` and `mneme protect` are additive
+  CLI surface over the existing engine.
+
+---
+
 ## v0.6.0 — 2026-08-28
 
 **Governability API, Kiro CLI v3, LangChain/LangGraph, and ADR lifecycle analysis**
