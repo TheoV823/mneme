@@ -1,0 +1,101 @@
+name: Release smoke (published package)
+
+# Post-release verification: validates the package that was actually
+# published to PyPI — never a source checkout. Runs automatically after the
+# "Publish to PyPI" workflow completes for a v* release tag, and can be
+# dispatched manually (optionally pinning a version) to re-verify any
+# published release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Published mneme-hq version to smoke test (e.g. 0.7.0). Defaults to the latest release tag."
+        required: false
+  workflow_run:
+    workflows: ["Publish to PyPI"]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  published-package-smoke:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_repository.full_name == github.repository &&
+        startsWith(github.event.workflow_run.head_branch, 'v')
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Derive the version to smoke test
+        env:
+          DISPATCH_VERSION: ${{ inputs.version }}
+          RELEASE_REF: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+          if [ -n "${DISPATCH_VERSION}" ]; then
+            VERSION="${DISPATCH_VERSION}"
+          else
+            case "${RELEASE_REF}" in
+              v*) VERSION="${RELEASE_REF#v}" ;;
+              *) echo "::error::Publish run ref '${RELEASE_REF}' is not a v* release tag"; exit 1 ;;
+            esac
+          fi
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "Smoke-testing published mneme-hq==${VERSION}"
+
+      - name: Wait for the version to be served by PyPI
+        run: |
+          set -euo pipefail
+          for _ in $(seq 1 36); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/mneme-hq/${VERSION}/json")
+            if [ "$code" = "200" ]; then
+              echo "mneme-hq==${VERSION} is live on PyPI"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::PyPI never served mneme-hq==${VERSION} within 3 minutes"
+          exit 1
+
+      - name: Install the published package with pipx (G1)
+        run: |
+          set -euo pipefail
+          pipx install "mneme-hq==${VERSION}"
+          command -v mneme
+          command -v mneme-hook
+
+      - name: Validate installed version and CLI surface (G2)
+        run: |
+          set -euo pipefail
+          pipx runpip mneme-hq show mneme-hq | grep -Fx "Version: ${VERSION}"
+          mneme --help | grep -F "setup"
+          mneme --help | grep -F "protect"
+          mneme --help | grep -F "audit"
+          mneme setup --help | grep -F -- "--audit-ref"
+          mneme protect --help | grep -F "activate"
+
+      - name: Disposable-repo setup check (G3)
+        run: |
+          set -euo pipefail
+          repo=$(mktemp -d)
+          cd "$repo"
+          git init -q
+          git -c user.email=ci@example.com -c user.name=ci commit -q --allow-empty -m init
+          out=$(mktemp)
+          mneme setup > "$out"
+          cat "$out"
+          grep -F "Mneme is installed in setup mode." "$out"
+          grep -A1 "^Enforcement" "$out" | grep -F "Not enabled"
+          test -f .mneme/project_memory.json
+          state=$(python3 -c "import json;print(json.load(open('.mneme/project_memory.json'))['activation']['state'])")
+          enforcement=$(python3 -c "import json;print(json.load(open('.mneme/project_memory.json'))['activation']['enforcement'])")
+          test "$state" = "setup"
+          test "$enforcement" = "not_enabled"
+          echo "G3 clean-setup smoke passed (state=setup, enforcement=not_enabled)"
